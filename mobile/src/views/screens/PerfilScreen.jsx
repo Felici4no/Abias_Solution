@@ -5,23 +5,24 @@ export function PerfilScreen({ ctrl }) {
   const tierColor = reputacao >= 800 ? 'var(--color-gold)' : reputacao >= 700 ? '#c8a84b' : 'var(--text-secondary)'
   const scorePct = (reputacao / 1000) * 100
 
+  const dadosOp = membro?.dadosOperacionais || null
+  const rankingOp = membro?.rankingOperacional || null
+
   const badges = [
-    { icon: 'fa-clock', label: 'ON-TIME', sub: 'DELIVERY', color: 'var(--color-gold)' },
-    { icon: 'fa-route', label: 'SAFE', sub: 'ROUTE', color: 'var(--success)' },
-    { icon: 'fa-moon', label: 'NIGHT', sub: 'OWL', color: 'var(--color-magenta)' },
+    { icon: 'fa-box', label: 'Entregas', sub: dadosOp?.entregasRealizadas ?? '–', color: 'var(--color-gold)' },
+    { icon: 'fa-calendar-day', label: 'Dias ativos', sub: dadosOp?.diasAtivos ?? '–', color: 'var(--success)' },
+    { icon: 'fa-star', label: 'Avaliação', sub: dadosOp?.avaliacaoMedia ? `${Number(dadosOp.avaliacaoMedia).toFixed(2)} ★` : '–', color: 'var(--color-magenta)' },
   ]
 
   const validations = [
-    { icon: 'fa-handshake', label: 'Confiabilidade', sub: 'Avaliado pela rede comunitária', score: '4.9' },
-    { icon: 'fa-shield-halved', label: 'Manuseio Seguro', sub: 'Veículo sempre em ordem', score: '4.8' },
-    { icon: 'fa-map-location-dot', label: 'Roteamento Elite', sub: 'Conhece cada rua da Zona Leste', score: '5.0' },
+    { icon: 'fa-handshake', label: 'Confiabilidade', sub: 'Avaliação média iFood', score: dadosOp?.avaliacaoMedia ? Number(dadosOp.avaliacaoMedia).toFixed(2) : '–' },
+    { icon: 'fa-ban', label: 'Taxa de cancel.', sub: 'Últimos 90 dias', score: dadosOp?.taxaCancelamento ? `${(dadosOp.taxaCancelamento * 100).toFixed(1)}%` : '–' },
+    { icon: 'fa-money-bill', label: 'Ganho médio', sub: 'por semana', score: dadosOp?.ganhoMedioSemanal ? `R$ ${Number(dadosOp.ganhoMedioSemanal).toFixed(0)}` : '–' },
   ]
 
-  const history = [
-    { date: '24 MAI 2026', route: 'Zona Leste → Centro', score: '+25pts' },
-    { date: '18 MAI 2026', route: 'Aval comunitário', score: '+15pts' },
-    { date: '02 MAI 2026', route: 'Cadastro na rede', score: '+50pts' },
-  ]
+  const history = dadosOp ? [
+    { date: dadosOp.periodoFim ? new Date(dadosOp.periodoFim).toLocaleDateString() : '-', route: `${membro.regiao || 'Região'} — período`, score: dadosOp.bonusPeriodo ? `R$ ${Number(dadosOp.bonusPeriodo).toFixed(0)}` : '—' }
+  ] : []
 
   return (
     <div className="screen active" id="screen-perfil" style={{ paddingBottom: '24px' }}>
@@ -71,10 +72,10 @@ export function PerfilScreen({ ctrl }) {
         <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
             <p style={{ fontSize: '0.55rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>TOTAL DE CICLOS</p>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.8rem', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1 }}>2.842</div>
-            <p style={{ fontSize: '0.6rem', color: 'var(--text-secondary)', marginTop: '4px' }}>entregas registradas</p>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.8rem', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1 }}>{dadosOp?.entregasRealizadas ?? '–'}</div>
+            <p style={{ fontSize: '0.6rem', color: 'var(--text-secondary)', marginTop: '4px' }}>{dadosOp ? 'entregas registradas' : 'sem dados iFood'}</p>
           </div>
-          <span style={{ fontSize: '0.55rem', fontWeight: 800, padding: '4px 10px', background: 'rgba(224,36,124,0.1)', border: '1px solid rgba(224,36,124,0.3)', borderRadius: '20px', color: 'var(--color-magenta)', letterSpacing: '0.06em' }}>TOP 1% SP</span>
+          <span style={{ fontSize: '0.55rem', fontWeight: 800, padding: '4px 10px', background: 'rgba(201,154,61,0.08)', border: '1px solid rgba(201,154,61,0.15)', borderRadius: '20px', color: 'var(--color-gold)', letterSpacing: '0.06em' }}>{rankingOp ? `TOP ${Math.max(1, Math.round(100 - rankingOp.percentilRanking))}%` : '—'}</span>
         </div>
 
         {/* Validations */}
