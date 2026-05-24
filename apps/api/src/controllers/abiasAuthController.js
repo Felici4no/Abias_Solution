@@ -17,6 +17,9 @@ export async function registrarUsuario(request, response) {
   if (senha.length < 6) {
     return sendJson(response, 400, { error: 'senha deve ter no mínimo 6 caracteres' })
   }
+  if (!/[a-zA-ZÀ-ú]/.test(senha) || !/[0-9]/.test(senha)) {
+    return sendJson(response, 400, { error: 'senha deve conter pelo menos uma letra e um número' })
+  }
 
   const existente = await buscarUsuarioPorEmail(email)
   if (existente) {

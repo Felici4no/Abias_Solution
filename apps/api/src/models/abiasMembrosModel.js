@@ -4,6 +4,7 @@ function rowToMembro(row) {
   return {
     id: row.id,
     nome: row.nome,
+    apelido: row.apelido || null,
     telefone: row.telefone,
     regiao: row.regiao || "",
     tempo: row.tempo_atuacao || "",
@@ -41,11 +42,14 @@ export async function registerAbiasMembro(payload) {
   );
   const usuarioId = userResult.rows[0]?.id || null;
 
+  const apelido = String(payload.apelido || "").trim() || nome.split(" ")[0];
+
   const result = await query(
-    `INSERT INTO abias_membros (nome, telefone, regiao, tempo_atuacao, ferramenta, raca, usuario_id, reputacao)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+    `INSERT INTO abias_membros (nome, apelido, telefone, regiao, tempo_atuacao, ferramenta, raca, usuario_id, reputacao)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
     [
       nome,
+      apelido,
       telefone,
       String(payload.regiao || "").trim() || null,
       String(payload.tempo || "").trim() || null,

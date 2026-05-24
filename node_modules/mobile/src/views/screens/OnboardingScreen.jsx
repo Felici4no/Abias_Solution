@@ -1,7 +1,9 @@
 export function OnboardingScreen({ ctrl }) {
   const {
     onboardingStep, setOnboardingStep,
-    inputNome, setInputNome,
+    inputNome,
+    inputApelido, setInputApelido,
+    loginUsuario,
     inputTelefone, setInputTelefone,
     inputRegiao, setInputRegiao,
     inputTempo, setInputTempo,
@@ -10,6 +12,17 @@ export function OnboardingScreen({ ctrl }) {
     inputAceite, setInputAceite,
     handleCadastro
   } = ctrl
+
+  const nomeRegistro = loginUsuario?.nome || inputNome
+
+  const formatPhone = (value) => {
+    const d = value.replace(/\D/g, '').slice(0, 11)
+    if (d.length === 0) return ''
+    if (d.length <= 2) return `(${d}`
+    if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`
+    if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`
+    return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`
+  }
 
   if (onboardingStep === 'splash') return (
     <div className="screen active" style={{ position: 'relative', overflow: 'hidden', height: '680px', display: 'flex', flexDirection: 'column' }}>
@@ -120,17 +133,55 @@ export function OnboardingScreen({ ctrl }) {
       </div>
 
       <form onSubmit={handleCadastro} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {/* Nome do cadastro — somente leitura */}
         <div className="mobile-form-group">
-          <label className="form-label">Nome Completo</label>
-          <input type="text" className="form-text-input" value={inputNome} onChange={(e) => setInputNome(e.target.value)} required />
+          <label className="form-label">Nome registrado</label>
+          <div style={{
+            padding: '12px 14px',
+            background: 'rgba(255,255,255,0.03)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            borderRadius: '8px',
+            fontSize: '0.88rem',
+            color: 'var(--text-secondary)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
+            <i className="fa-solid fa-lock" style={{ fontSize: '0.65rem', opacity: 0.5 }}></i>
+            {nomeRegistro}
+          </div>
+        </div>
+        <div className="mobile-form-group">
+          <label className="form-label">Como gostaria de ser chamado?</label>
+          <input
+            type="text"
+            className="form-text-input"
+            placeholder={nomeRegistro.split(' ')[0]}
+            value={inputApelido}
+            onChange={(e) => setInputApelido(e.target.value)}
+          />
         </div>
         <div className="mobile-form-group">
           <label className="form-label">Telefone / WhatsApp</label>
-          <input type="text" className="form-text-input" value={inputTelefone} onChange={(e) => setInputTelefone(e.target.value)} required />
+          <input
+            type="tel"
+            className="form-text-input"
+            placeholder="(11) 98765-4321"
+            value={inputTelefone}
+            onChange={(e) => setInputTelefone(formatPhone(e.target.value))}
+            required
+          />
         </div>
         <div className="mobile-form-group">
           <label className="form-label">Região principal de atuação</label>
-          <input type="text" className="form-text-input" value={inputRegiao} onChange={(e) => setInputRegiao(e.target.value)} required />
+          <input
+            type="text"
+            className="form-text-input"
+            placeholder="ex: Zona Leste, São Paulo"
+            value={inputRegiao}
+            onChange={(e) => setInputRegiao(e.target.value)}
+            required
+          />
         </div>
         <div className="mobile-form-group">
           <label className="form-label">Tempo como Motoboy</label>

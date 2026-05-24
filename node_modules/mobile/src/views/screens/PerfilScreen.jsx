@@ -37,6 +37,11 @@ export function PerfilScreen({ ctrl }) {
           </div>
           <div style={{ flex: 1 }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 900, color: '#ffffff', margin: 0, lineHeight: 1.1 }}>{membro.nome}</h3>
+            {membro.apelido && membro.apelido !== membro.nome.split(' ')[0] && (
+              <p style={{ fontSize: '0.62rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
+                Chamado de <strong style={{ color: 'var(--color-gold)' }}>{membro.apelido}</strong>
+              </p>
+            )}
             <p style={{ fontSize: '0.62rem', color: tierColor, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: '4px' }}>
               {tierLabel} • DESDE 2022
             </p>

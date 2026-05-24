@@ -204,17 +204,6 @@ export async function gerarParecer(membroId) {
   const ctx = await buscarContextoMembro(membroId);
   if (!ctx) return { ok: false, statusCode: 404, error: "Membro não encontrado" };
 
-  // Verificação: exigir dados operacionais iFood recentes para gerar decisão automática
-  // Se não houver registro de entregas/dias ativos nem histórico de ciclos, retornar erro controlado
-  const temDadosIfood = ctx.entregas_realizadas !== null && ctx.entregas_realizadas !== undefined;
-  if (!temDadosIfood) {
-    return {
-      ok: false,
-      statusCode: 422,
-      error: 'Dados operacionais insuficientes: não é possível gerar decisão automática para membros sem dados iFood vinculados.'
-    };
-  }
-
   const prompt = montarPrompt(ctx);
   const text = await callAI(prompt);
 

@@ -1063,6 +1063,15 @@ h2, h3, h4, h5 {
     border-color: var(--color-gold);
 }
 
+.form-text-input::placeholder {
+    color: rgba(255, 255, 255, 0.22);
+    font-style: italic;
+}
+
+.form-select option[value=""] {
+    color: rgba(255, 255, 255, 0.22);
+}
+
 .file-uploader-box {
     border: 1px dashed var(--border-color);
     border-radius: var(--border-radius-md);

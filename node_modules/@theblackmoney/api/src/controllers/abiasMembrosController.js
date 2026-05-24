@@ -1,7 +1,6 @@
 import { readJsonBody } from "../http/readJsonBody.js";
 import { findAbiasMembro, findAbiasMembroComDados, registerAbiasMembro } from "../models/abiasMembrosModel.js";
 import { getMembroLimites } from "../models/abiasGestaoModel.js";
-import { avaliarEAplicar } from "../models/abiasAiModel.js";
 import { sendJson } from "../views/jsonView.js";
 
 export async function createAbiasMembro(request, response) {
@@ -11,9 +10,6 @@ export async function createAbiasMembro(request, response) {
   if (!result.ok) {
     return sendJson(response, result.statusCode, { error: result.error, fields: result.fields });
   }
-
-  // Dispara avaliação IA em background — não bloqueia o retorno do cadastro
-  avaliarEAplicar(result.membro.id).catch(() => {});
 
   return sendJson(response, 201, { membro: result.membro });
 }

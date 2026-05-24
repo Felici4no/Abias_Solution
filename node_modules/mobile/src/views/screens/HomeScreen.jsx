@@ -19,7 +19,7 @@ export function HomeScreen({ ctrl }) {
   const dateStr = `${days[now.getDay()]}, ${now.getDate()} de ${months[now.getMonth()]}`
   const hour = now.getHours()
   const greeting = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite'
-  const firstName = membro?.nome?.split(' ')[0] || 'Membro'
+  const firstName = membro?.apelido || membro?.nome?.split(' ')[0] || 'Membro'
   const semScore = reputacao === 0
   const tierLabel = reputacao >= 800 ? 'ELITE' : reputacao >= 700 ? 'GOLD' : reputacao > 0 ? 'MEMBER' : 'NOVO'
   const isElite = reputacao >= 700

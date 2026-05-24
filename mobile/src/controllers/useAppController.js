@@ -33,8 +33,9 @@ export function useAppController() {
   const [inputNome, setInputNome] = useState(() => {
     try { return JSON.parse(localStorage.getItem('abias_usuario') || 'null')?.nome || '' } catch { return '' }
   })
-  const [inputTelefone, setInputTelefone] = useState('(11) 98765-4321')
-  const [inputRegiao, setInputRegiao] = useState('Zona Leste, São Paulo')
+  const [inputApelido, setInputApelido] = useState('')
+  const [inputTelefone, setInputTelefone] = useState('')
+  const [inputRegiao, setInputRegiao] = useState('')
   const [inputTempo, setInputTempo] = useState('')
   const [inputFerramenta, setInputFerramenta] = useState('Moto')
   const [inputRaca, setInputRaca] = useState('')
@@ -220,21 +221,15 @@ export function useAppController() {
     e.preventDefault()
     if (!inputAceite) { alert('Você precisa aceitar o uso de dados para entrar na comunidade.'); return }
     try {
+      const nomeRegistro = loginUsuario?.nome || inputNome
       const { membro: m } = await apiFetch('/abias/membros', {
         method: 'POST',
-        body: { nome: inputNome, telefone: inputTelefone, regiao: inputRegiao, tempo: inputTempo === '1' ? '1 ano' : inputTempo === '11' ? 'Mais de 10 anos' : `${inputTempo} anos`, ferramenta: inputFerramenta, raca: inputRaca }
+        body: { nome: nomeRegistro, apelido: inputApelido || nomeRegistro.split(' ')[0], telefone: inputTelefone, regiao: inputRegiao, tempo: inputTempo === '1' ? '1 ano' : inputTempo === '11' ? 'Mais de 10 anos' : `${inputTempo} anos`, ferramenta: inputFerramenta, raca: inputRaca }
       })
       setMembro(m)
       setMembroId(m.id)
       setReputacao(m.reputacao)
       localStorage.setItem('abias_membro_id', m.id)
-      // Avaliação IA: dispara em paralelo sem bloquear o fluxo
-      apiFetch(`/abias/membros/${m.id}/avaliar`, { method: 'POST' })
-        .then(({ membro: avMembro, parecer }) => {
-          if (avMembro) { setMembro(avMembro); setReputacao(avMembro.reputacao) }
-          if (parecer) setParecerAi(parecer)
-        })
-        .catch(() => {})
       // Vincular membro ao usuário autenticado
       if (loginUsuario?.id) {
         try {
@@ -324,10 +319,6 @@ export function useAppController() {
 
   const handlePedirAnalise = async () => {
     if (!membroId || analisandoIA) return
-    if (!membro?.dadosOperacionais) {
-      setAiError('Dados operacionais insuficientes: não é possível gerar decisão automática para membros sem dados iFood vinculados.')
-      return
-    }
     setAnalisandoIA(true)
     setAiError(null)
     try {
@@ -366,8 +357,8 @@ export function useAppController() {
     setEvidencia({ file: '', obs: '', status: 'pending', type: '' })
     setOficinaConfirmacao({ quoteConfirmed: false, serviceConfirmed: false, note: '' })
     setGestaoJustificativa('')
-    setInputNome('João Silva'); setInputTelefone('(11) 98765-4321')
-    setInputRegiao('Zona Leste, São Paulo'); setInputTempo('')
+    setInputNome('João Silva'); setInputApelido(''); setInputTelefone('')
+    setInputRegiao(''); setInputTempo('')
     setInputFerramenta('Moto'); setInputRaca(''); setInputAceite(true)
     setInputAmount(850); setInputFinalidade('Pneu + Revisão')
     setInputPrazo('30'); setInputOficina('Oficina JN')
@@ -430,6 +421,7 @@ export function useAppController() {
     showAreaOperacional, setShowAreaOperacional,
     onboardingStep, setOnboardingStep,
     inputNome, setInputNome,
+    inputApelido, setInputApelido,
     inputTelefone, setInputTelefone,
     inputRegiao, setInputRegiao,
     inputTempo, setInputTempo,

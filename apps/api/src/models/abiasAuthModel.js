@@ -33,14 +33,16 @@ export async function vincularMembro(usuarioId, membroId) {
   const usuario = result.rows[0] ?? null
   if (!usuario) return null
 
-  // Tenta vincular o membro ao usuario bancario usando o email como ponte
+  // Vincula membro ao usuário iFood/bancário pela ponte do telefone (normalizado)
+  // O email nos dois sistemas raramente coincide — telefone é o identificador compartilhado
   await query(
     `UPDATE abias_membros m
      SET usuario_id = u.id
      FROM usuarios u
      WHERE m.id = $1
-       AND u.email = $2`,
-    [membroId, usuario.email]
+       AND m.usuario_id IS NULL
+       AND REGEXP_REPLACE(m.telefone, '[^0-9]', '', 'g') = u.telefone`,
+    [membroId]
   )
 
   return usuario
