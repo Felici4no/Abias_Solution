@@ -1798,7 +1798,7 @@ h2, h3, h4, h5 {
     position: absolute;
     left: 50%;
     bottom: calc(14px + env(safe-area-inset-bottom));
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateZ(0);
     width: calc(100% - 24px);
     max-width: 360px;
     height: 70px;
@@ -1807,12 +1807,18 @@ h2, h3, h4, h5 {
     align-items: center;
     padding: 8px;
     border-radius: 34px;
-    background: rgba(244, 239, 230, 0.10);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    backdrop-filter: blur(18px) saturate(160%);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
-    box-shadow: 0 14px 44px rgba(0, 0, 0, 0.36);
+    background: rgba(244, 239, 230, 0.12);
+    border: 1px solid rgba(244, 239, 230, 0.18);
+    backdrop-filter: blur(12px) saturate(145%);
+    -webkit-backdrop-filter: blur(12px) saturate(145%);
+    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.34);
     z-index: 150;
+}
+
+@supports not ((backdrop-filter: blur(12px)) or (-webkit-backdrop-filter: blur(12px))) {
+    .mobile-tab-bar {
+        background: rgba(20, 20, 20, 0.94);
+    }
 }
 
 .tab-item {
@@ -1829,7 +1835,7 @@ h2, h3, h4, h5 {
     font-weight: 700;
     cursor: pointer;
     border-radius: 28px;
-    transition: all 180ms ease;
+    transition: background 160ms ease, color 160ms ease, transform 120ms ease;
 }
 
 .tab-item i,
@@ -1840,7 +1846,7 @@ h2, h3, h4, h5 {
 .tab-item.active {
     background: rgba(244, 239, 230, 0.18);
     color: #C99A3D;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.20);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 .tab-item:active {
@@ -1917,13 +1923,21 @@ h2, h3, h4, h5 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #0b0b0b;
+    background: rgba(11, 11, 11, 0.78);
+    border: 1px solid rgba(244, 239, 230, 0.14);
+    backdrop-filter: blur(14px) saturate(135%);
+    -webkit-backdrop-filter: blur(14px) saturate(135%);
     z-index: 200;
     padding: 24px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border: 1px solid var(--border-color);
+}
+
+@supports not ((backdrop-filter: blur(14px)) or (-webkit-backdrop-filter: blur(14px))) {
+    .area-operacional-overlay {
+        background: #0B0B0B;
+    }
 }
 
 .area-operacional-header {
