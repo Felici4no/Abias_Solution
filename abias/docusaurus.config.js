@@ -10,8 +10,8 @@ import {themes as prismThemes} from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Minha Documentação',
-  tagline: 'Dinosaurs are cool',
+  title: 'Abias — Documentação',
+  tagline: 'Crédito produtivo comunitário para entregadores negros e periféricos',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -27,8 +27,8 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'abias',
+  projectName: 'abias-docs',
 
   onBrokenLinks: 'throw',
 
@@ -50,8 +50,7 @@ const config = {
           routeBasePath: '/', // Define a documentação como a página inicial
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          // editUrl: 'https://github.com/seu-usuario/abias/edit/main/',
         },
         // Blog desativado completamente para não gerar erros
         blog: false,
@@ -76,56 +75,27 @@ const config = {
           alt: 'My Site Logo',
           src: 'img/logo.svg',
         },
-        items: [
-          // Links extras removidos daqui para deixar apenas o link do GitHub
-          {
-            href: 'https://github.com/facebook/docusaurus',
-            label: 'GitHub',
-            position: 'right',
-          },
-        ],
+        items: [],
       },
       footer: {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Documentação',
             items: [
-              {
-                label: 'Documentação',
-                to: '/', // Aponta direto para a raiz
-              },
+              { label: 'Introdução', to: '/' },
+              { label: 'Back-end', to: '/backend/visao-geral' },
+              { label: 'Front-end', to: '/frontend/visao-geral' },
             ],
           },
           {
-            title: 'Community',
+            title: 'Projeto',
             items: [
-              {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-              },
-              {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'X',
-                href: 'https://x.com/docusaurus',
-              },
-            ],
-          },
-          {
-            title: 'More',
-            items: [
-              // Item do Blog removido daqui
-              {
-                label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
-              },
+              { label: 'Viabilidade', to: '/viabilidade/' },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `© ${new Date().getFullYear()} Abias — Hackathon Afrocapital. Construído com Docusaurus.`,
       },
       prism: {
         theme: prismThemes.github,
