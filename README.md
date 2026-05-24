@@ -125,13 +125,26 @@ A documentação ficará disponível em `http://localhost:3000` (porta diferente
 
 ---
 
-## 🚀 Acesso e Download
+## 🚀 Acesso
 
-Acesse a documentação completa do projeto, feita com Docusaurus, através do link abaixo:
+### 🌐 Aplicação online (banco de dados real)
 
-- 🔗 [**Documentação do Projeto**](https://abias-sigma.vercel.app)
+| Recurso | Link |
+|---------|------|
+| **App mobile (PWA)** | [https://mobile-beige-alpha-59.vercel.app](https://mobile-beige-alpha-59.vercel.app) |
+| **API (back-end)** | [https://api-six-psi-19.vercel.app/health](https://api-six-psi-19.vercel.app/health) |
+| **Documentação** | [https://abias-sigma.vercel.app](https://abias-sigma.vercel.app) |
 
-Para testar o aplicativo em um dispositivo Android, realize o download do arquivo `.apk` pelo Google Drive:
+**Credenciais de demo:**
+
+| Perfil | E-mail | Senha |
+|--------|--------|-------|
+| Membro com crédito (reputação 720) | `joao@abias.app` | `joao123` |
+| Membro inadimplente (reputação 0) | `carlos@abias.app` | `carlos123` |
+
+### 📱 APK Android
+
+Para testar em um dispositivo Android, baixe o `.apk` pelo Google Drive:
 
 - 📱 [**Baixar APK (v1.0.0)**](https://drive.google.com/drive/folders/1K65Ex8_zP6IK49BFd9cUDenJw1rwTiKE?usp=drive_link)
 
