@@ -1,6 +1,6 @@
 # Abias - Crédito apra seu corre
 
-<p align="center"><img src="[(https://res.cloudinary.com/dhlzexsce/image/upload/v1779632466/abiaslogo_xwwc9v.png](https://res.cloudinary.com/dhlzexsce/image/upload/v1779632466/abiaslogo_xwwc9v.png)" alt="Abias - Logo" border="0"></a>
+<p align="center"<a href="https://res.cloudinary.com/dhlzexsce/image/upload/v1779632466/abiaslogo_xwwc9v.png">" alt="Abias - Logo" border="0"></a>
 </p>
 
 
