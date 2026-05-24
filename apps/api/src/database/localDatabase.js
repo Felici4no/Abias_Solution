@@ -15,7 +15,10 @@ const initialState = {
   localPartners: [],
   transactions: [],
   cashbacks: [],
-  invoices: []
+  invoices: [],
+  abiasMembros: [],
+  abiasCiclos: [],
+  abiasFundo: []
 };
 
 export function insertRecord(collectionName, record) {
@@ -40,6 +43,16 @@ export function findLastRecord(collectionName, predicate) {
 export function readCollection(collectionName) {
   const database = readDatabase();
   return database[collectionName] ?? [];
+}
+
+export function updateRecord(collectionName, predicate, updater) {
+  const database = readDatabase();
+  const index = database[collectionName].findIndex(predicate);
+  if (index === -1) return null;
+  const updated = { ...database[collectionName][index], ...updater(database[collectionName][index]) };
+  database[collectionName][index] = updated;
+  writeDatabase(database);
+  return updated;
 }
 
 export function ensureSeedRecords(collectionName, records) {

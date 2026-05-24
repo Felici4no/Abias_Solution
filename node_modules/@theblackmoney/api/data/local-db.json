@@ -232,5 +232,52 @@
       "appliedAt": "2026-05-24T02:32:30.904Z"
     }
   ],
-  "invoices": []
+  "invoices": [],
+  "abiasMembros": [
+    {
+      "id": "a7d97d11-49f8-40fc-987e-a40c9ef949a3",
+      "nome": "Teste Silva",
+      "telefone": "(11) 91111-2222",
+      "regiao": "Zona Leste",
+      "tempo": "2 anos",
+      "ferramenta": "Moto",
+      "raca": "Negro",
+      "reputacao": 720,
+      "criadoEm": "2026-05-24T06:58:06.153Z"
+    }
+  ],
+  "abiasCiclos": [
+    {
+      "id": "62d512ab-5a3c-4bd7-9f74-a73aeb6c4444",
+      "membroId": "a7d97d11-49f8-40fc-987e-a40c9ef949a3",
+      "valor": 850,
+      "finalidade": "Pneu + Revis�o",
+      "prazo": "30",
+      "oficina": "Oficina JN",
+      "urgencia": "Alta",
+      "descricao": "Preciso trocar o pneu",
+      "estado": "submitted",
+      "avais": {
+        "marcos": "pending",
+        "marcosComment": "",
+        "aline": "pending",
+        "alineComment": ""
+      },
+      "evidencia": {
+        "file": "",
+        "obs": "",
+        "status": "pending",
+        "type": ""
+      },
+      "oficinaConfirmacao": {
+        "quoteConfirmed": false,
+        "serviceConfirmed": false,
+        "note": ""
+      },
+      "justificativa": "",
+      "criadoEm": "2026-05-24T06:58:39.827Z",
+      "atualizadoEm": "2026-05-24T06:58:39.827Z"
+    }
+  ],
+  "abiasFundo": []
 }

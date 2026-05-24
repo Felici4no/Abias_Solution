@@ -6,16 +6,47 @@ import { recordHttpRequest } from "./observability/metricsModel.js";
 import { routes } from "./routes/index.js";
 import { sendJson } from "./views/jsonView.js";
 
+function matchRoute(candidate, method, pathname) {
+  if (candidate.method !== method) return null;
+  if (candidate.path === pathname) return {};
+
+  const candidateParts = candidate.path.split("/");
+  const pathParts = pathname.split("/");
+  if (candidateParts.length !== pathParts.length) return null;
+
+  const params = {};
+  for (let i = 0; i < candidateParts.length; i++) {
+    if (candidateParts[i].startsWith(":")) {
+      params[candidateParts[i].slice(1)] = pathParts[i];
+    } else if (candidateParts[i] !== pathParts[i]) {
+      return null;
+    }
+  }
+  return params;
+}
+
 export function createApp() {
   return createServer(async (request, response) => {
     const startedAt = performance.now();
     const requestId = request.headers["x-request-id"] ?? randomUUID();
     const requestUrl = new URL(request.url, "http://localhost");
     response.setHeader("X-Request-Id", requestId);
+    response.setHeader("Access-Control-Allow-Origin", "*");
+    response.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS");
+    response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Request-Id");
 
+    if (request.method === "OPTIONS") {
+      response.writeHead(204);
+      return response.end();
+    }
+
+    let matchedParams = null;
     const route = routes.find((candidate) => {
-      return candidate.method === request.method && candidate.path === requestUrl.pathname;
+      const params = matchRoute(candidate, request.method, requestUrl.pathname);
+      if (params !== null) { matchedParams = params; return true; }
+      return false;
     });
+    if (route && matchedParams) request.params = matchedParams;
 
     try {
       if (!route) {
