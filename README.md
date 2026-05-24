@@ -29,3 +29,9 @@ Por enquanto a API expoe apenas um health check:
 ```text
 GET /health
 ```
+
+E tambem expoe os contratos iniciais das entidades de dominio:
+
+```text
+GET /domain/entities
+```
