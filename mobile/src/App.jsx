@@ -444,7 +444,7 @@ function App() {
             </div>
 
             {/* Screen Content Scroll Area */}
-            <div className="screen-scroll-area" style={{ paddingBottom: '80px' }}>
+            <div className="screen-scroll-area">
               
               {/* OPERATIONAL DRAWER OVERLAY */}
               {showAreaOperacional && (
