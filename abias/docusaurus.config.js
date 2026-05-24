@@ -5,6 +5,9 @@
 // See: https://docusaurus.io/docs/api/docusaurus-config
 
 import {themes as prismThemes} from 'prism-react-renderer';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -48,6 +51,8 @@ const config = {
         docs: {
           sidebarPath: './sidebars.js',
           routeBasePath: '/', // Define a documentação como a página inicial
+          remarkPlugins: [remarkMath],   
+          rehypePlugins: [rehypeKatex], 
         },
         // Blog desativado completamente para não gerar erros
         blog: false,
@@ -83,45 +88,7 @@ const config = {
       },
       footer: {
         style: 'dark',
-        links: [
-          {
-            title: 'Docs',
-            items: [
-              {
-                label: 'Documentação',
-                to: '/', // Aponta direto para a raiz
-              },
-            ],
-          },
-          {
-            title: 'Community',
-            items: [
-              {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-              },
-              {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'X',
-                href: 'https://x.com/docusaurus',
-              },
-            ],
-          },
-          {
-            title: 'More',
-            items: [
-              // Item do Blog removido daqui
-              {
-                label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
-              },
-            ],
-          },
-        ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Abias, Inc. Built with Docusaurus.`,
       },
       prism: {
         theme: prismThemes.github,

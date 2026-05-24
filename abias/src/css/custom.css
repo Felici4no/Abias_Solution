@@ -2,6 +2,8 @@
  * Any CSS included here will be global. The original light theme overrides.
  */
 
+ @import url('https://jsdelivr.net');
+
 :root {
   /* Cor principal dos links e botões: Dourado (#D7A434) */
   --ifm-color-primary: #D7A434;
