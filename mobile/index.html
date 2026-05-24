@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Abias - Protótipo mobile-first de alta fidelidade para comunidade de crédito produtivo de motoboys.">
+    <title>Abias | Simulador de Protótipo Mobile-First</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="desktop-showcase-container">
+        <!-- Left Showcase Side Bar (Only visible on Desktop) -->
+        <div class="showcase-sidebar">
+            <div class="sidebar-header">
+                <span class="badge-hackathon">AFROCAPITAL HACK 2026</span>
+                <h1 class="sidebar-title">Abias</h1>
+                <p class="sidebar-subtitle">Comunidade de Crédito Produtivo</p>
+            </div>
+            
+            <div class="sidebar-context-card">
+                <p><strong>A Abias não é banco digital nem aplicativo de cartão de crédito.</strong></p>
+                <p>É um protótipo de alta fidelidade desenhado para motoboys negros e periféricos, focado em crédito produtivo para manter a ferramenta de trabalho funcionando — validado pela rede e oficinas locais.</p>
+            </div>
+
+            <div class="sidebar-instructions">
+                <h3>Controles da Demo</h3>
+                <p>Clique nos botões abaixo ou navegue tocando diretamente nas telas e botões do celular simulado ao lado.</p>
+                
+                <div class="sidebar-actions-grid">
+                    <button class="btn-sidebar active" id="btn-show-app" onclick="window.showScreen('onboarding')">
+                        <i class="fa-solid fa-mobile-screen-button"></i> Tela Inicial (Onboarding)
+                    </button>
+                    <button class="btn-sidebar" id="btn-show-home" onclick="window.showScreen('home')">
+                        <i class="fa-solid fa-house"></i> Home do Membro
+                    </button>
+                    <button class="btn-sidebar" id="btn-show-admin" onclick="window.showScreen('admin')">
+                        <i class="fa-solid fa-users-cog"></i> Painel Admin / Financiador
+                    </button>
+                    <button class="btn-sidebar btn-reset" onclick="window.resetDemo()">
+                        <i class="fa-solid fa-rotate-left"></i> Reiniciar Simulação
+                    </button>
+                </div>
+            </div>
+
+            <div class="sidebar-rules">
+                <h4>Microcopy em Destaque:</h4>
+                <ul>
+                    <li><i class="fa-solid fa-quote-left"></i> “Não é empréstimo livre. É crédito produtivo validado.”</li>
+                    <li><i class="fa-solid fa-quote-left"></i> “Quando a moto para, a renda para.”</li>
+                    <li><i class="fa-solid fa-quote-left"></i> “A IA apoia a análise. A decisão não é automática.”</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right Side: Phone Mockup Frame -->
+        <div class="phone-showcase-wrapper">
+            <div class="smartphone-frame">
+                <!-- Speaker and Camera notch -->
+                <div class="phone-notch"></div>
+                <!-- Left Buttons -->
+                <div class="phone-button volume-up"></div>
+                <div class="phone-button volume-down"></div>
+                <!-- Right Button -->
+                <div class="phone-button power-button"></div>
+                
+                <!-- Screen Area -->
+                <div class="phone-screen-container">
+                    
+                    <!-- Simulated Mobile Status Bar -->
+                    <div class="mobile-status-bar">
+                        <span class="status-time" id="mobile-clock">00:00</span>
+                        <div class="status-icons">
+                            <i class="fa-solid fa-signal"></i>
+                            <span class="network-type">5G</span>
+                            <i class="fa-solid fa-wifi"></i>
+                            <i class="fa-solid fa-battery-three-quarters"></i>
+                        </div>
+                    </div>
+
+                    <!-- Screen Content Wrapper -->
+                    <div class="screen-scroll-area">
+                        
+                        <!-- Screen 1: Onboarding -->
+                        <div class="screen active" id="screen-onboarding">
+                            <div class="onboarding-container">
+                                <div class="onboarding-logo">
+                                    <span class="abias-logo">Abias</span>
+                                </div>
+                                <div class="onboarding-content">
+                                    <h2 class="onboarding-title">O banco vê um CPF.<br>A Abias vê uma rota.</h2>
+                                    <p class="onboarding-subtitle">
+                                        Crédito produtivo validado para motoboys negros manterem a ferramenta de trabalho funcionando.
+                                    </p>
+                                    <div class="onboarding-warning-card">
+                                        <p><i class="fa-solid fa-circle-info"></i> Não é empréstimo livre. É crédito para manter sua rota viva.</p>
+                                    </div>
+                                    <div class="onboarding-actions">
+                                        <button class="btn-app btn-app-primary" onclick="window.showScreen('home')">Entrar na comunidade</button>
+                                        <button class="btn-app btn-app-secondary" onclick="window.showScreen('solicitar')">Simular crédito de rota</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Screen 2: Home -->
+                        <div class="screen" id="screen-home">
+                            <div class="app-header">
+                                <div class="member-profile">
+                                    <div class="member-avatar"><i class="fa-solid fa-motorcycle"></i></div>
+                                    <div>
+                                        <span class="greeting-sub">Bem-vindo, corre ativo</span>
+                                        <h3 class="member-name">Salve, João Silva</h3>
+                                    </div>
+                                </div>
+                                <span class="badge-status-membro"><i class="fa-solid fa-shield-halved"></i> Membro Validado</span>
+                            </div>
+
+                            <!-- Main Rota Active Status Card -->
+                            <div class="home-main-card">
+                                <div class="home-card-header">
+                                    <span class="card-tag">STATUS OPERACIONAL</span>
+                                    <span class="status-indicator-green"><i class="fa-solid fa-circle"></i> Sua rota está ativa</span>
+                                </div>
+                                <div class="home-card-body">
+                                    <div class="reputacao-summary">
+                                        <span class="lbl">Reputação de Rota</span>
+                                        <div class="score-display">
+                                            <span class="score-num font-mono">720</span>
+                                            <span class="score-max font-mono">/1000</span>
+                                        </div>
+                                        <span class="score-level-badge">Confiança Rota A2</span>
+                                    </div>
+                                </div>
+                                <div class="home-card-footer">
+                                    <div class="fundo-summary">
+                                        <i class="fa-solid fa-vault"></i>
+                                        <span>Fundo Abias: <strong>R$ 4.820</strong> em reserva coletiva</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Primary CTAs -->
+                            <div class="home-actions-group">
+                                <button class="btn-app btn-app-primary" onclick="window.showScreen('solicitar')">
+                                    <i class="fa-solid fa-wrench"></i> Solicitar crédito de rota
+                                </button>
+                                <button class="btn-app btn-app-secondary" onclick="window.showScreen('upload')">
+                                    <i class="fa-solid fa-upload"></i> Enviar evidência
+                                </button>
+                            </div>
+
+                            <!-- Stats Grid -->
+                            <div class="home-stats-section">
+                                <h4 class="section-title-mobile">Sua Frequência</h4>
+                                <div class="stats-mobile-grid">
+                                    <div class="stat-mobile-card">
+                                        <span class="val font-mono">02</span>
+                                        <span class="lbl">Ciclos concluídos</span>
+                                    </div>
+                                    <div class="stat-mobile-card text-success">
+                                        <span class="val font-mono">00</span>
+                                        <span class="lbl">Atrasos de rota</span>
+                                    </div>
+                                    <div class="stat-mobile-card">
+                                        <span class="val font-mono">01</span>
+                                        <span class="lbl">Aval recebido</span>
+                                    </div>
+                                    <div class="stat-mobile-card">
+                                        <span class="val font-mono">R$ 850</span>
+                                        <span class="lbl">Último fomento</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Notice Card -->
+                            <div class="info-notice-card">
+                                <p><i class="fa-solid fa-quote-left"></i> A comunidade ajuda a provar o que o banco não enxerga.</p>
+                            </div>
+                        </div>
+
+                        <!-- Screen 3: Solicitação de Crédito -->
+                        <div class="screen" id="screen-solicitar">
+                            <div class="app-header-simple">
+                                <button class="btn-back" onclick="window.showScreen('home')"><i class="fa-solid fa-chevron-left"></i></button>
+                                <h3>Solicitar Crédito de Rota</h3>
+                            </div>
+                            
+                            <form class="mobile-form" id="solicitacao-form" onsubmit="window.handleSolicitar(event)">
+                                <div class="form-banner-info">
+                                    <p><strong>Não é empréstimo livre.</strong> O recurso é exclusivo para despesas da sua ferramenta de trabalho.</p>
+                                </div>
+
+                                <div class="mobile-form-group">
+                                    <label class="form-label">Quanto você precisa?</label>
+                                    <div class="money-input-wrapper">
+                                        <span class="currency-symbol">R$</span>
+                                        <input type="number" id="form-amount" value="850" min="100" max="2000" required>
+                                    </div>
+                                    <span class="form-helper">Valor alvo sugerido para manutenção regular: R$ 850</span>
+                                </div>
+
+                                <div class="mobile-form-group">
+                                    <label class="form-label">Para qual finalidade?</label>
+                                    <div class="chips-selector">
+                                        <label class="chip-option">
+                                            <input type="radio" name="finalidade" value="Troca de pneu" checked>
+                                            <span>Troca de pneu</span>
+                                        </label>
+                                        <label class="chip-option">
+                                            <input type="radio" name="finalidade" value="Revisão da moto">
+                                            <span>Revisão da moto</span>
+                                        </label>
+                                        <label class="chip-option">
+                                            <input type="radio" name="finalidade" value="Celular de trabalho">
+                                            <span>Celular de trabalho</span>
+                                        </label>
+                                        <label class="chip-option">
+                                            <input type="radio" name="finalidade" value="Baú ou Mochila">
+                                            <span>Baú / Mochila</span>
+                                        </label>
+                                        <label class="chip-option">
+                                            <input type="radio" name="finalidade" value="Documentação">
+                                            <span>Documentação</span>
+                                        </label>
+                                        <label class="chip-option">
+                                            <input type="radio" name="finalidade" value="Seguro contra roubo">
+                                            <span>Seguro</span>
+                                        </label>
+                                        <label class="chip-option">
+                                            <input type="radio" name="finalidade" value="Equipamento de segurança">
+                                            <span>Segurança</span>
+                                        </label>
+                                        <label class="chip-option">
+                                            <input type="radio" name="finalidade" value="Emergência operacional">
+                                            <span>Emergência</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="mobile-form-group">
+                                    <label class="form-label">Em quanto tempo pode pagar?</label>
+                                    <select class="form-select" id="form-prazo" required>
+                                        <option value="7">7 dias (Ciclo rápido)</option>
+                                        <option value="15">15 dias (Ciclo quinzenal)</option>
+                                        <option value="30" selected>30 dias (Ciclo mensal)</option>
+                                        <option value="45">45 dias (Ciclo estendido)</option>
+                                    </select>
+                                </div>
+
+                                <div class="mobile-form-group">
+                                    <label class="form-label">Qual oficina pretende usar?</label>
+                                    <input type="text" class="form-text-input" id="form-oficina" value="Oficina JN" placeholder="Ex: Oficina JN ou Borracharia São Jorge" required>
+                                </div>
+
+                                <div class="mobile-form-group">
+                                    <label class="form-label">Você já possui orçamento / comprovante?</label>
+                                    <div class="file-uploader-box">
+                                        <i class="fa-solid fa-camera"></i>
+                                        <span>Tirar foto ou anexar orçamento</span>
+                                        <span class="helper-text">Formatos PDF, PNG ou JPG</span>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn-app btn-app-primary">Gerar plano de crédito</button>
+                            </form>
+                        </div>
+
+                        <!-- Screen 4: Plano Sugerido -->
+                        <div class="screen" id="screen-plano">
+                            <div class="app-header-simple">
+                                <button class="btn-back" onclick="window.showScreen('solicitar')"><i class="fa-solid fa-chevron-left"></i></button>
+                                <h3>Plano de Crédito Sugerido</h3>
+                            </div>
+
+                            <div class="plano-container">
+                                <div class="plano-notice-badge">
+                                    <span><i class="fa-solid fa-triangle-exclamation"></i> Plano sugerido. Sujeito à validação da rede.</span>
+                                </div>
+
+                                <!-- Slip de Crédito Produtivo -->
+                                <div class="premium-credit-card compact-slip">
+                                    <div class="card-brand-row">
+                                        <span class="card-brand">Abias</span>
+                                        <span class="card-contactless"><i class="fa-solid fa-receipt"></i> MOCK SLIP</span>
+                                    </div>
+                                    <div class="slip-details">
+                                        <div class="slip-row">
+                                            <span class="slip-label">FINALIDADE DE CRÉDITO</span>
+                                            <span class="slip-value" id="plano-finalidade">Troca de pneu</span>
+                                        </div>
+                                        <div class="slip-row">
+                                            <span class="slip-label">PRAZO TOTAL</span>
+                                            <span class="slip-value" id="plano-prazo">30 dias</span>
+                                        </div>
+                                        <div class="slip-row">
+                                            <span class="slip-label">OFICINA PARCEIRA</span>
+                                            <span class="slip-value" id="plano-oficina">Oficina JN</span>
+                                        </div>
+                                        <div class="slip-row">
+                                            <span class="slip-label">EVIDÊNCIAS COBRADAS</span>
+                                            <span class="slip-value">Nota + Foto do Serviço</span>
+                                        </div>
+                                    </div>
+                                    <div class="slip-footer">
+                                        <div class="slip-badge">CRÉDITO PRODUTIVO</div>
+                                        <span class="slip-amount" id="plano-valor">R$ 850,00</span>
+                                    </div>
+                                </div>
+
+                                <!-- Parcelas -->
+                                <div class="plano-payment-card glass">
+                                    <h4>Estrutura do Ciclo Comunitário</h4>
+                                    <div class="payment-row">
+                                        <span class="lbl font-bold">Retorno estimado:</span>
+                                        <span class="val font-mono font-bold" id="plano-parcelas">4x de R$ 230,00</span>
+                                    </div>
+                                    <span class="tax-info-footer">Sem taxas abusivas. Juros voltados a blindar a rede.</span>
+                                </div>
+
+                                <!-- Validações Exigidas -->
+                                <div class="validacoes-list-card glass">
+                                    <h4>Evidências Necessárias no Ciclo</h4>
+                                    <ul class="bullet-list-mobile">
+                                        <li><i class="fa-solid fa-receipt text-success"></i> Orçamento cadastrado pela oficina parceira</li>
+                                        <li><i class="fa-solid fa-image text-warning"></i> Foto da manutenção concluída na moto</li>
+                                        <li><i class="fa-solid fa-check-double text-warning"></i> Aval emitido por 2 membros da comunidade</li>
+                                    </ul>
+                                </div>
+
+                                <!-- Impacto Estimado -->
+                                <div class="impacto-estimado-card">
+                                    <h4 class="impacto-title"><i class="fa-solid fa-sparkles"></i> Impacto estimado no asfalto</h4>
+                                    <div class="impact-grid">
+                                        <div class="impact-item">
+                                            <i class="fa-solid fa-calendar-check"></i>
+                                            <span>Até 3 dias parados evitados</span>
+                                        </div>
+                                        <div class="impact-item">
+                                            <i class="fa-solid fa-money-bill-trend-up"></i>
+                                            <span>Renda diária preservada</span>
+                                        </div>
+                                        <div class="impact-item">
+                                            <i class="fa-solid fa-shop"></i>
+                                            <span>Oficina local ativada no bairro</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="plano-actions">
+                                    <button class="btn-app btn-app-primary" onclick="window.confirmarPlano()">Confirmar solicitação</button>
+                                    <button class="btn-app btn-app-secondary" onclick="window.showScreen('solicitar')">Editar plano</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Screen 5: Aval Comunitário -->
+                        <div class="screen" id="screen-aval">
+                            <div class="app-header-simple">
+                                <button class="btn-back" onclick="window.showScreen('home')"><i class="fa-solid fa-chevron-left"></i></button>
+                                <h3>Validação de Rede</h3>
+                            </div>
+
+                            <div class="aval-container">
+                                <div class="aval-status-banner glass">
+                                    <span class="section-tag tag-yellow">ESTADO DA SOLICITAÇÃO</span>
+                                    <h2>Quem valida sua rota?</h2>
+                                    <p>Seu crédito de rota entra em vigor assim que a rede de confiança validar seu perfil e a oficina credenciar o orçamento.</p>
+                                </div>
+
+                                <!-- Lista de Validores -->
+                                <div class="aval-peers-list">
+                                    <!-- Peer 1 -->
+                                    <div class="peer-item-card glass">
+                                        <div class="peer-avatar"><i class="fa-solid fa-motorcycle"></i></div>
+                                        <div class="peer-info">
+                                            <h5>Marcos Santos</h5>
+                                            <span class="peer-sub">Motoboy Leste 4 anos</span>
+                                        </div>
+                                        <span class="status-badge badge-success"><i class="fa-solid fa-circle-check"></i> Validou</span>
+                                    </div>
+
+                                    <!-- Peer 2 -->
+                                    <div class="peer-item-card glass" id="peer-aline-card">
+                                        <div class="peer-avatar"><i class="fa-solid fa-motorcycle"></i></div>
+                                        <div class="peer-info">
+                                            <h5>Aline Souza</h5>
+                                            <span class="peer-sub">Membro da Rede - ZL</span>
+                                        </div>
+                                        <span class="status-badge badge-pending" id="status-aline"><i class="fa-solid fa-spinner fa-spin"></i> Pendente</span>
+                                    </div>
+
+                                    <!-- Oficina JN -->
+                                    <div class="peer-item-card glass">
+                                        <div class="peer-avatar"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                                        <div class="peer-info">
+                                            <h5>Oficina JN</h5>
+                                            <span class="peer-sub">Oficina parceira credenciada</span>
+                                        </div>
+                                        <span class="status-badge badge-success"><i class="fa-solid fa-circle-check"></i> Confirmado</span>
+                                    </div>
+                                </div>
+
+                                <!-- Explicação do aval -->
+                                <div class="info-notice-card plain-border">
+                                    <p><strong>Por que isso importa?</strong> O aval comunitário não substitui a análise de dados. Ele comprova que você está ativo na rota e que a sua necessidade produtiva é real.</p>
+                                </div>
+
+                                <div class="aval-actions">
+                                    <button class="btn-app btn-app-primary" id="btn-convidar-validador" onclick="window.simularAprovacaoComunidade()">Convidar validador (Simular)</button>
+                                    <button class="btn-app btn-app-secondary" onclick="window.showScreen('upload')">Avançar para evidência</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Screen 6: Upload de Evidência -->
+                        <div class="screen" id="screen-upload">
+                            <div class="app-header-simple">
+                                <button class="btn-back" onclick="window.showScreen('home')"><i class="fa-solid fa-chevron-left"></i></button>
+                                <h3>Comprovar Uso de Crédito</h3>
+                            </div>
+
+                            <div class="upload-container">
+                                <div class="form-banner-info border-terra">
+                                    <p><strong>Quando a moto para, a renda para.</strong> Mantenha seu ciclo saudável provando que o recurso foi aplicado na finalidade acordada.</p>
+                                </div>
+
+                                <div class="milestone-card glass">
+                                    <span class="lbl-milestone">CICLO CORRENTE</span>
+                                    <h4>Manutenção da Moto (Pneu + Relação)</h4>
+                                    <div class="milestone-status-row">
+                                        <span class="lbl">Estado da Análise:</span>
+                                        <span class="val-status text-warning" id="evidencia-status-label">Pendente de Envio</span>
+                                    </div>
+                                </div>
+
+                                <!-- Upload options simulator -->
+                                <div class="upload-methods">
+                                    <div class="upload-box-action" onclick="window.simularSelecaoFoto()">
+                                        <div class="box-icon"><i class="fa-solid fa-camera"></i></div>
+                                        <span>Tirar foto da moto / peças</span>
+                                    </div>
+                                    <div class="upload-box-action" onclick="window.simularUploadRecibo()">
+                                        <div class="box-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                                        <span>Enviar recibo da oficina</span>
+                                    </div>
+                                    <div class="upload-box-action">
+                                        <div class="box-icon"><i class="fa-solid fa-qrcode"></i></div>
+                                        <span>Ler QR da oficina parceira</span>
+                                    </div>
+                                </div>
+
+                                <!-- Hidden input simulated file label -->
+                                <div class="simulated-file-badge" id="file-upload-display" style="display: none;">
+                                    <i class="fa-solid fa-paperclip"></i> <span id="file-name-text">recibo_oficina_jn.jpg</span> <button class="btn-remove-file" onclick="window.removerArquivoSimulado()">&times;</button>
+                                </div>
+
+                                <div class="mobile-form-group" style="margin-top: 24px;">
+                                    <label class="form-label">O que foi feito? (Observação)</label>
+                                    <textarea class="form-textarea" id="upload-obs" placeholder="Ex: Trocado pneu traseiro careca e ajustado o kit relação na Oficina JN."></textarea>
+                                </div>
+
+                                <button class="btn-app btn-app-primary" id="btn-send-evidencia" onclick="window.enviarEvidenciaSimulada()">Enviar evidência</button>
+                            </div>
+                        </div>
+
+                        <!-- Screen 7: Reputação de Rota -->
+                        <div class="screen" id="screen-reputacao">
+                            <div class="app-header-simple">
+                                <h3>Reputação de Rota</h3>
+                            </div>
+
+                            <div class="reputacao-container">
+                                <div class="reputacao-score-box glass">
+                                    <span class="lbl-tag">SUA NOTA EXPLICÁVEL</span>
+                                    <div class="reputacao-number-row">
+                                        <span class="val font-mono">720</span>
+                                        <span class="max font-mono">/1000</span>
+                                    </div>
+                                    <h4 class="reputacao-level">Rota Confiável</h4>
+                                    <p class="reputacao-desc">
+                                        Sua reputação cresce quando você destina o crédito corretamente, valida evidências em até 24h, conclui os ciclos e apoia outros parceiros na rede.
+                                    </p>
+                                </div>
+
+                                <!-- Factores bars -->
+                                <div class="reputacao-factors-list">
+                                    <h4>Fatores da Reputação</h4>
+                                    
+                                    <!-- factor 1 -->
+                                    <div class="factor-progress-item">
+                                        <div class="factor-lbl">
+                                            <span>Ciclos pagos em dia</span>
+                                            <span class="percent font-mono">85%</span>
+                                        </div>
+                                        <div class="progress-track">
+                                            <div class="progress-bar" style="width: 85%; background-color: var(--color-accent-pink);"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- factor 2 -->
+                                    <div class="factor-progress-item">
+                                        <div class="factor-lbl">
+                                            <span>Evidências validadas</span>
+                                            <span class="percent font-mono">90%</span>
+                                        </div>
+                                        <div class="progress-track">
+                                            <div class="progress-bar" style="width: 90%; background-color: var(--color-accent-pink);"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- factor 3 -->
+                                    <div class="factor-progress-item">
+                                        <div class="factor-lbl">
+                                            <span>Aval comunitário emitido</span>
+                                            <span class="percent font-mono">70%</span>
+                                        </div>
+                                        <div class="progress-track">
+                                            <div class="progress-bar" style="width: 70%; background-color: var(--color-accent-gold);"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- factor 4 -->
+                                    <div class="factor-progress-item">
+                                        <div class="factor-lbl">
+                                            <span>Participação no Fundo Coletivo</span>
+                                            <span class="percent font-mono">55%</span>
+                                        </div>
+                                        <div class="progress-track">
+                                            <div class="progress-bar" style="width: 55%; background-color: var(--color-accent-gold);"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- How to improve -->
+                                <div class="how-to-improve-card glass">
+                                    <h4>Como subir sua reputação?</h4>
+                                    <ul class="improve-checklist">
+                                        <li><i class="fa-solid fa-square-plus"></i> Finalizar ciclo de crédito corrente</li>
+                                        <li><i class="fa-solid fa-square-plus"></i> Enviar a foto da manutenção em menos de 24h</li>
+                                        <li><i class="fa-solid fa-square-plus"></i> Emitir aval pendente para um colega da rota</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Screen 8: Fundo Abias -->
+                        <div class="screen" id="screen-fundo">
+                            <div class="app-header-simple">
+                                <h3>Fundo Abias</h3>
+                            </div>
+
+                            <div class="fundo-mobile-container">
+                                <div class="fundo-headline-card glass">
+                                    <span class="section-tag tag-yellow">PROTEÇÃO DE REDE</span>
+                                    <h2>Crédito individual.<br>Proteção coletiva.</h2>
+                                    <p>Parte do valor de cada ciclo concluído fortalece a reserva coletiva de emergência da nossa rota.</p>
+                                </div>
+
+                                <div class="fundo-reserve-card glass">
+                                    <span class="lbl">Reserva Coletiva do Piloto</span>
+                                    <div class="amount-val font-mono" id="mobile-fundo-val">R$ 4.820,00</div>
+                                    <div class="fundo-bar-wrapper">
+                                        <div class="fundo-bar-fill-mobile" style="width: 58%;"></div>
+                                    </div>
+                                    <span class="fundo-subtext-meta">Meta de blindagem do piloto: R$ 8.000,00</span>
+                                </div>
+
+                                <!-- Inflows / Outflows -->
+                                <div class="fundo-inout-grid">
+                                    <div class="inout-section">
+                                        <h5><i class="fa-solid fa-arrow-down-long text-success"></i> Entradas do Fundo</h5>
+                                        <ul>
+                                            <li>Margem dos ciclos (10%)</li>
+                                            <li>Parceiros mecânicos</li>
+                                            <li>Apoiadores do Hack</li>
+                                        </ul>
+                                    </div>
+                                    <div class="inout-section">
+                                        <h5><i class="fa-solid fa-arrow-up-long text-danger"></i> Destinação Coletiva</h5>
+                                        <ul>
+                                            <li>Manutenção emergencial</li>
+                                            <li>Redução de juros futuros</li>
+                                            <li>Auxílio quebra/acidente</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="info-notice-card plain-border">
+                                    <p><i class="fa-solid fa-quote-left"></i> O crédito entra na rede e volta como proteção coletiva.</p>
+                                </div>
+
+                                <button class="btn-app btn-app-secondary" onclick="alert('Regras do Fundo: 1. Cobertura de reboque em até R$ 200 por evento. 2. Juros comunitários são recalculados mensalmente baseado na saúde do fundo.')">Ver regulamento completo</button>
+                            </div>
+                        </div>
+
+                        <!-- Screen 9: Rede / Economia Local -->
+                        <div class="screen" id="screen-rede">
+                            <div class="app-header-simple">
+                                <h3>Rede & Economia Local</h3>
+                            </div>
+
+                            <div class="rede-container">
+                                <div class="rede-headline-box">
+                                    <h2>A rota movimenta o território</h2>
+                                    <p>Nosso crédito produtivo fortalece os negócios do bairro. Veja os indicadores da economia circular:</p>
+                                </div>
+
+                                <!-- Stats list -->
+                                <div class="rede-stats-grid">
+                                    <div class="stat-card-inline glass">
+                                        <span class="lbl">Oficinas Parceiras</span>
+                                        <span class="val font-mono">03</span>
+                                    </div>
+                                    <div class="stat-card-inline glass">
+                                        <span class="lbl">Ciclos de Manutenção</span>
+                                        <span class="val font-mono">10</span>
+                                    </div>
+                                    <div class="stat-card-inline glass">
+                                        <span class="lbl">Dias Parados Evitados</span>
+                                        <span class="val font-mono">05</span>
+                                    </div>
+                                    <div class="stat-card-inline glass">
+                                        <span class="lbl">Circulação Estimada</span>
+                                        <span class="val font-mono">R$ 8.500</span>
+                                    </div>
+                                </div>
+
+                                <!-- Flow Diagram inside app -->
+                                <div class="rede-flow-card glass">
+                                    <h5>Fluxo da Rede:</h5>
+                                    <div class="inline-flow-steps">
+                                        <div class="flow-dot-step">Fomento</div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                        <div class="flow-dot-step">Oficina</div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                        <div class="flow-dot-step">Rota</div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                        <div class="flow-dot-step">Fundo</div>
+                                    </div>
+                                </div>
+
+                                <!-- Partners List -->
+                                <div class="rede-partners-list">
+                                    <h4>Negócios Locais Parceiros</h4>
+                                    
+                                    <div class="partner-item glass">
+                                        <div class="p-icon"><i class="fa-solid fa-wrench"></i></div>
+                                        <div class="p-info">
+                                            <h5>Oficina JN</h5>
+                                            <span>Mecânica de motos - Zona Leste</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="partner-item glass">
+                                        <div class="p-icon"><i class="fa-solid fa-circle-radiation"></i></div>
+                                        <div class="p-info">
+                                            <h5>Borracharia São Jorge</h5>
+                                            <span>Reparos rápidos e pneus</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="partner-item glass">
+                                        <div class="p-icon"><i class="fa-solid fa-box-archive"></i></div>
+                                        <div class="p-info">
+                                            <h5>Moto Peças Leste</h5>
+                                            <span>Componentes e acessórios</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Screen 10: Admin -->
+                        <div class="screen" id="screen-admin">
+                            <div class="app-header-admin">
+                                <h3>Mesa de Gestão — Abias</h3>
+                                <span class="badge-admin">Mesa Operacional</span>
+                            </div>
+
+                            <div class="admin-container">
+                                <!-- Admin metrics -->
+                                <div class="admin-metrics-grid">
+                                    <div class="metric-admin-card glass">
+                                        <span class="lbl">Ciclos Ativos</span>
+                                        <span class="val font-mono">10</span>
+                                    </div>
+                                    <div class="metric-admin-card glass">
+                                        <span class="lbl">Volume Solicitado</span>
+                                        <span class="val font-mono">R$ 8.500</span>
+                                    </div>
+                                    <div class="metric-admin-card glass">
+                                        <span class="lbl">Evidências Pendentes</span>
+                                        <span class="val font-mono">01</span>
+                                    </div>
+                                    <div class="metric-admin-card glass">
+                                        <span class="lbl">Fundo Simulador</span>
+                                        <span class="val font-mono">R$ 4.820</span>
+                                    </div>
+                                </div>
+
+                                <!-- Pending Validation Queue -->
+                                <div class="admin-queue-card glass">
+                                    <h4>Fila de Ciclos Pendentes</h4>
+                                    
+                                    <div class="queue-item" id="admin-pending-item">
+                                        <div class="q-header">
+                                            <span class="q-name">João Silva (Leste)</span>
+                                            <span class="q-amount font-mono">R$ 850,00</span>
+                                        </div>
+                                        <div class="q-details">
+                                            <span>Finalidade: Troca de pneu + Revisão</span>
+                                            <span>Oficina: Oficina JN</span>
+                                        </div>
+                                        <div class="q-checklists">
+                                            <span class="chk-status checked"><i class="fa-solid fa-check"></i> Rota Comprovada</span>
+                                            <span class="chk-status checked"><i class="fa-solid fa-check"></i> Aval: Marcos</span>
+                                            <span class="chk-status warning" id="admin-chk-aline"><i class="fa-solid fa-spinner fa-spin"></i> Aval: Aline</span>
+                                        </div>
+                                        
+                                        <!-- Actions -->
+                                        <div class="admin-actions-row">
+                                            <button class="btn-admin btn-admin-approve" id="btn-admin-approve" onclick="window.adminAprovarCiclo()" disabled>Aprovar Fomento</button>
+                                            <button class="btn-admin btn-admin-reject" onclick="window.adminSolicitarRevisao()">Pedir Revisão</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Alerts / Audit -->
+                                <div class="admin-alerts-card glass">
+                                    <h4>Alertas de Risco Operacional</h4>
+                                    <div class="alert-log-item danger">
+                                        <i class="fa-solid fa-circle-exclamation"></i>
+                                        <span>Evidência ilegível: Foto do recibo enviada por Carlos M. desfocada.</span>
+                                    </div>
+                                    <div class="alert-log-item warning">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        <span>Aval circular: Marcos e João validaram um ao outro na mesma rota.</span>
+                                    </div>
+                                </div>
+
+                                <div class="info-notice-card">
+                                    <p><i class="fa-solid fa-circle-info"></i> <strong>Decisão Humana:</strong> A IA apoia a análise. A decisão não é automática.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div> <!-- End Screen Scroll Area -->
+
+                    <!-- Simulated Bottom Navigation Tab Bar (Hidden on onboarding/admin) -->
+                    <div class="mobile-tab-bar" id="app-tab-bar" style="display: none;">
+                        <button class="tab-item active" id="tab-home" onclick="window.showScreen('home')">
+                            <i class="fa-solid fa-house"></i>
+                            <span>Início</span>
+                        </button>
+                        <button class="tab-item" id="tab-solicitar" onclick="window.showScreen('solicitar')">
+                            <i class="fa-solid fa-route"></i>
+                            <span>Rota</span>
+                        </button>
+                        <button class="tab-item" id="tab-reputacao" onclick="window.showScreen('reputacao')">
+                            <i class="fa-solid fa-chart-simple"></i>
+                            <span>Reputação</span>
+                        </button>
+                        <button class="tab-item" id="tab-fundo" onclick="window.showScreen('fundo')">
+                            <i class="fa-solid fa-vault"></i>
+                            <span>Fundo</span>
+                        </button>
+                        <button class="tab-item" id="tab-rede" onclick="window.showScreen('rede')">
+                            <i class="fa-solid fa-network-wired"></i>
+                            <span>Rede</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom JS -->
+    <script src="app.js"></script>
+</body>
+</html>
