@@ -70,6 +70,12 @@ export function connectDeliveryPlatformAccount(payload) {
   };
 }
 
+export function findConnectedAccountsByCourierId(courierId) {
+  return connectedAccounts.filter((account) => {
+    return account.courierId === courierId && account.connectionStatus === "connected";
+  });
+}
+
 export function validateConnectionPayload(payload) {
   if (!payload || typeof payload !== "object" || payload._invalidJson) {
     return {

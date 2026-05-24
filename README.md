@@ -71,3 +71,19 @@ Payload esperado:
 ```
 
 Providers aceitos nesta etapa: `ifood` e `99`.
+
+Calculo inicial do score operacional:
+
+```text
+POST /operational-scores/calculate
+```
+
+Payload esperado:
+
+```json
+{
+  "courierId": "uuid-do-entregador"
+}
+```
+
+Antes de calcular o score, o entregador precisa ter pelo menos uma conta conectada pelo fluxo mockado.

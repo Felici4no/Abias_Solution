@@ -2,6 +2,7 @@ import { createCourier } from "../controllers/courierController.js";
 import { createDeliveryPlatformConnection } from "../controllers/deliveryPlatformController.js";
 import { listDomainEntities } from "../controllers/domainController.js";
 import { getHealth } from "../controllers/healthController.js";
+import { createOperationalScore } from "../controllers/operationalScoreController.js";
 
 export const routes = [
   {
@@ -23,5 +24,10 @@ export const routes = [
     method: "POST",
     path: "/delivery-platform-connections/mock",
     handler: createDeliveryPlatformConnection
+  },
+  {
+    method: "POST",
+    path: "/operational-scores/calculate",
+    handler: createOperationalScore
   }
 ];

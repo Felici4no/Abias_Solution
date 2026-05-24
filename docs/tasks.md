@@ -6,7 +6,7 @@
 - [x] Task 2: Definir entidades centrais do dominio: entregador, conta conectada, score operacional, produto financeiro, transacao, parceiro local e cashback.
 - [x] Task 3: Implementar cadastro inicial de entregadores e validacao de dados.
 - [x] Task 4: Criar fluxo mockado de conexao com plataformas de entrega para simular dados do iFood/99.
-- [ ] Task 5: Construir motor inicial de score operacional com regras transparentes e versionadas.
+- [x] Task 5: Construir motor inicial de score operacional com regras transparentes e versionadas.
 - [ ] Task 6: Criar modulo de limite dinamico para cartao de credito.
 - [ ] Task 7: Criar modulo de pre-aprovacao de emprestimos com parametros de risco.
 - [ ] Task 8: Implementar cashback comunitario aplicado como desconto na proxima fatura.
@@ -63,3 +63,24 @@ A quarta task implementou o fluxo mockado de conexao com plataformas de entrega:
 - Retorno de `connectedAccount` e `operationalSnapshot` com dados simulados de atividade.
 
 O snapshot operacional inclui entregas nos ultimos 30 dias, dias ativos, ganhos medios semanais, avaliacao media, tempo de plataforma e taxa de cancelamento. Esses dados serao usados como entrada para o motor de score da Task 5.
+
+## Task 5 Entregue
+
+A quinta task implementou o motor inicial de score operacional:
+
+- `POST /operational-scores/calculate`: calcula o score de um entregador cadastrado.
+- Exige pelo menos uma conta de entrega conectada pelo fluxo mockado.
+- Usa a versao `operational-score-v1` para versionar a regra.
+- Retorna score de 0 a 1000, faixa de risco e breakdown dos criterios.
+- Mantem os resultados em memoria ate a chegada da persistencia definitiva.
+
+Os pesos iniciais sao transparentes:
+
+- Recorrencia de atividade: 250 pontos.
+- Volume de entregas: 200 pontos.
+- Previsibilidade de ganhos: 200 pontos.
+- Reputacao: 150 pontos.
+- Tempo de plataforma: 100 pontos.
+- Comportamento de cancelamento: 100 pontos.
+
+Esse motor ainda e baseado em regras explicaveis. Ele prepara o terreno para evoluir depois para modelos estatisticos ou IA com auditoria de risco.
