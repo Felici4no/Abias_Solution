@@ -397,6 +397,9 @@ function App() {
     }
   }
 
+  const tabIds = ['inicio', 'credito', 'evidencia', 'reputacao', 'fundo']
+  const activeIndex = tabIds.indexOf(activeTab)
+
   return (
     <div className="desktop-showcase-container">
       {/* Centered phone wrapper with clean outer header */}
@@ -1505,6 +1508,10 @@ function App() {
             {/* Simulated Bottom Navigation Tab Bar (Hidden on onboarding/admin) */}
             {profileMode === 'membro' && membro && (
               <div className="mobile-tab-bar" id="app-tab-bar">
+                <div 
+                  className="tab-selection-indicator" 
+                  style={{ transform: `translateX(${activeIndex * 100}%) translateZ(0)` }}
+                />
                 <button 
                   className={`tab-item ${activeTab === 'inicio' ? 'active' : ''}`} 
                   onClick={() => setActiveTab('inicio')}>
