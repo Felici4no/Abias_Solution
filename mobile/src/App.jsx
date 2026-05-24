@@ -237,12 +237,12 @@ function App() {
   }
 
   // 7. Evidência - Envio
-  const handleSimularRecibo = () => {
+  const handleAnexarRecibo = () => {
     setUploadFileSelected('recibo_oficina_jn.jpg')
     setUploadFileType('recibo')
   }
 
-  const handleSimularFoto = () => {
+  const handleAnexarFoto = () => {
     setUploadFileSelected('foto_pneu_instalado.jpg')
     setUploadFileType('foto')
   }
@@ -324,7 +324,7 @@ function App() {
 
     setProfileMode('membro')
     setActiveTab('inicio')
-    alert('O ambiente piloto do MVP foi reiniciado!')
+    alert('Os dados locais foram limpos!')
   }
 
   // Helper para tradução amigável do estado
@@ -407,8 +407,7 @@ function App() {
       {/* Centered phone wrapper with clean outer header */}
       <div className="phone-showcase-wrapper">
         <div className="external-desktop-header">
-          <h1>Abias</h1>
-          <p>MVP Operacional — Rede Piloto</p>
+          <h1>Abias — MVP Operacional</h1>
         </div>
 
         <div className="smartphone-frame">
@@ -457,7 +456,7 @@ function App() {
                   <div>
                     <div className="area-operacional-header">
                       <h3>Área operacional</h3>
-                      <p>Área operacional do MVP local. Use apenas para alternar perfis e validar o ciclo.</p>
+                      <p>Área operacional local. Use para alternar contexto e validar o ciclo.</p>
                     </div>
                     
                     <div className="area-operacional-content">
@@ -476,7 +475,7 @@ function App() {
                             border: '1px solid var(--border-color)' 
                           }}
                           onClick={() => { setProfileMode('membro'); setShowAreaOperacional(false); }}>
-                          Acessar Modo Membro {profileMode === 'membro' && '✓'}
+                          Modo Membro {profileMode === 'membro' && '✓'}
                         </button>
                         <button 
                           className="btn-app btn-app-primary"
@@ -486,7 +485,7 @@ function App() {
                             border: '1px solid var(--border-color)'
                           }}
                           onClick={() => { setProfileMode('oficina'); setShowAreaOperacional(false); }}>
-                          Acessar Modo Oficina {profileMode === 'oficina' && '✓'}
+                          Modo Oficina {profileMode === 'oficina' && '✓'}
                         </button>
                         <button 
                           className="btn-app btn-app-primary"
@@ -495,19 +494,19 @@ function App() {
                             border: '1px solid var(--border-color)'
                           }}
                           onClick={() => { setProfileMode('gestao'); setShowAreaOperacional(false); }}>
-                          Acessar Modo Gestão {profileMode === 'gestao' && '✓'}
+                          Modo Gestão {profileMode === 'gestao' && '✓'}
+                        </button>
+                        <button 
+                          className="btn-app btn-app-secondary" 
+                          style={{ color: 'var(--danger)', borderColor: 'rgba(239, 68, 68, 0.2)', marginTop: '8px' }}
+                          onClick={handleResetDemo}>
+                          Limpar dados locais
                         </button>
                       </div>
                     </div>
                   </div>
 
                   <div className="area-operacional-footer">
-                    <button 
-                      className="btn-app btn-app-secondary" 
-                      style={{ color: 'var(--danger)', borderColor: 'rgba(239, 68, 68, 0.2)' }}
-                      onClick={handleResetDemo}>
-                      Limpar dados locais
-                    </button>
                     <button className="btn-app btn-app-secondary" onClick={() => setShowAreaOperacional(false)}>
                       Voltar ao aplicativo
                     </button>
@@ -772,14 +771,14 @@ function App() {
                               <div className="upload-methods" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', marginBottom: '12px' }}>
                                 <div 
                                   className="upload-box-action" 
-                                  onClick={handleSimularFoto} 
+                                  onClick={handleAnexarFoto} 
                                   style={{ padding: '12px 8px', border: uploadFileType === 'foto' ? '1px solid var(--color-gold)' : '1px solid var(--border-color)', background: 'rgba(0,0,0,0.2)' }}>
                                   <div className="box-icon" style={{ fontSize: '1rem' }}><i className="fa-solid fa-camera"></i></div>
                                   <span style={{ fontSize: '0.65rem' }}>Foto do Pneu Instalado</span>
                                 </div>
                                 <div 
                                   className="upload-box-action" 
-                                  onClick={handleSimularRecibo} 
+                                  onClick={handleAnexarRecibo} 
                                   style={{ padding: '12px 8px', border: uploadFileType === 'recibo' ? '1px solid var(--color-gold)' : '1px solid var(--border-color)', background: 'rgba(0,0,0,0.2)' }}>
                                   <div className="box-icon" style={{ fontSize: '1rem' }}><i className="fa-solid fa-file-invoice-dollar"></i></div>
                                   <span style={{ fontSize: '0.65rem' }}>Recibo da Oficina</span>
@@ -847,7 +846,7 @@ function App() {
                                     <div className="activity-item-card" style={{ display: 'flex', gap: '10px', padding: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-color)' }}>
                                       <div className="activity-icon-badge" style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: 'var(--success)' }}><i className="fa-solid fa-signature"></i></div>
                                       <div>
-                                        <h5 style={{ fontSize: '0.75rem', fontWeight: 800 }}>Aval de Marcos Santos Emitido</h5>
+                                        <h5 style={{ fontSize: '0.75rem', fontWeight: 800 }}>Aval de Marcos Santos registrado</h5>
                                         <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Validação territorial efetuada na Zona Leste.</p>
                                       </div>
                                     </div>
@@ -1183,7 +1182,7 @@ function App() {
                                         className="btn-app btn-app-secondary" 
                                         onClick={handleMarcosAval}
                                         style={{ fontSize: '0.75rem', padding: '10px' }}>
-                                        <i className="fa-solid fa-signature"></i> Confirmar Aval de Marcos
+                                        <i className="fa-solid fa-signature"></i> Registrar aval de Marcos
                                       </button>
                                     ) : (
                                       <p style={{ fontSize: '0.75rem', fontStyle: 'italic', color: 'var(--text-secondary)' }}>
@@ -1211,7 +1210,7 @@ function App() {
                                         className="btn-app btn-app-secondary" 
                                         onClick={handleAlineAval}
                                         style={{ fontSize: '0.75rem', padding: '10px' }}>
-                                        <i className="fa-solid fa-signature"></i> Confirmar Aval de Aline
+                                        <i className="fa-solid fa-signature"></i> Registrar aval de Aline
                                       </button>
                                     ) : (
                                       <p style={{ fontSize: '0.75rem', fontStyle: 'italic', color: 'var(--text-secondary)' }}>
@@ -1239,34 +1238,89 @@ function App() {
                                   </p>
                                 </div>
 
-                                <div className="premium-credit-card compact-slip" style={{ position: 'relative', overflow: 'hidden' }}>
-                                  <div className="card-brand-row">
-                                    <span className="card-brand">Abias</span>
-                                    <span className="card-contactless"><i className="fa-solid fa-receipt"></i> COMPROVANTE OPERACIONAL</span>
+                                {cicloEstado === 'completed' ? (
+                                  <div className="premium-credit-card compact-slip" style={{ 
+                                    position: 'relative', 
+                                    overflow: 'hidden',
+                                    border: '1px solid var(--color-green)',
+                                    background: 'linear-gradient(180deg, #0e1c16 0%, #0b0b0b 100%)'
+                                  }}>
+                                    <div className="card-brand-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                      <span className="card-brand" style={{ color: 'var(--color-gold)', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 800 }}>
+                                        <i className="fa-solid fa-circle-check" style={{ color: 'var(--success)' }}></i> Ciclo de rota validado
+                                      </span>
+                                      <span className="card-contactless" style={{ fontSize: '0.6rem', color: 'var(--text-secondary)' }}><i className="fa-solid fa-shield-halved"></i> ABIAS PRODUTIVO</span>
+                                    </div>
+                                    <div className="slip-details" style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                      <div className="slip-row" style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '4px' }}>
+                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>VALOR</span>
+                                        <span className="slip-value" style={{ fontSize: '0.8rem', fontWeight: 700 }}>R$ {currentAmount.toFixed(2)}</span>
+                                      </div>
+                                      <div className="slip-row" style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '4px' }}>
+                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>FINALIDADE</span>
+                                        <span className="slip-value" style={{ fontSize: '0.8rem', fontWeight: 700 }}>{currentFinalidade}</span>
+                                      </div>
+                                      <div className="slip-row" style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '4px' }}>
+                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>OFICINA</span>
+                                        <span className="slip-value" style={{ fontSize: '0.8rem', fontWeight: 700 }}>{currentOficina}</span>
+                                      </div>
+                                      <div className="slip-row" style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '4px' }}>
+                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>VALIDADORES</span>
+                                        <span className="slip-value" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Marcos e Aline</span>
+                                      </div>
+                                      <div className="slip-row" style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '4px' }}>
+                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>EVIDÊNCIA</span>
+                                        <span className="slip-value" style={{ fontSize: '0.8rem', fontWeight: 700 }}>recibo + foto</span>
+                                      </div>
+                                      <div className="slip-row" style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '4px' }}>
+                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>REPUTAÇÃO</span>
+                                        <span className="slip-value" style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--success)' }}>720 → {reputacao}</span>
+                                      </div>
+                                      <div className="slip-row" style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '4px' }}>
+                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>FUNDO ABIAS</span>
+                                        <span className="slip-value" style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-gold)' }}>+R$ {(currentAmount * 0.08).toFixed(0)}</span>
+                                      </div>
+                                      <div className="slip-row" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>STATUS</span>
+                                        <span className="slip-value" style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--success)' }}>ciclo concluído</span>
+                                      </div>
+                                    </div>
+                                    <div className="slip-footer" style={{ borderTop: '1px dashed var(--border-color)', paddingTop: '10px', marginTop: '10px', display: 'block', height: 'auto' }}>
+                                      <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', fontStyle: 'italic', lineHeight: '1.4', textAlign: 'center', margin: 0 }}>
+                                        “Este ciclo fortaleceu a rota de {membro.nome.split(' ')[0]} e adicionou contribuição ao Fundo Abias.”
+                                      </p>
+                                    </div>
                                   </div>
-                                  <div className="slip-details">
-                                    <div className="slip-row">
-                                      <span className="slip-label">MOTOCICLISTA</span>
-                                      <span className="slip-value">{membro.nome}</span>
+                                ) : (
+                                  <div className="premium-credit-card compact-slip" style={{ position: 'relative', overflow: 'hidden' }}>
+                                    <div className="card-brand-row">
+                                      <span className="card-brand">Abias</span>
+                                      <span className="card-contactless"><i className="fa-solid fa-receipt"></i> COMPROVANTE OPERACIONAL</span>
                                     </div>
-                                    <div className="slip-row">
-                                      <span className="slip-label">FINALIDADE PRODUTIVA</span>
-                                      <span className="slip-value">{currentFinalidade}</span>
+                                    <div className="slip-details">
+                                      <div className="slip-row">
+                                        <span className="slip-label">MOTOCICLISTA</span>
+                                        <span className="slip-value">{membro.nome}</span>
+                                      </div>
+                                      <div className="slip-row">
+                                        <span className="slip-label">FINALIDADE PRODUTIVA</span>
+                                        <span className="slip-value">{currentFinalidade}</span>
+                                      </div>
+                                      <div className="slip-row">
+                                        <span className="slip-label">OFICINA VINCULADA</span>
+                                        <span className="slip-value">{currentOficina}</span>
+                                      </div>
+                                      <div className="slip-row">
+                                        <span className="slip-label">RETORNO ACORDADO</span>
+                                        <span className="slip-value">4x de R$ {new Intl.NumberFormat('pt-BR').format(parcelasValor)}</span>
+                                      </div>
                                     </div>
-                                    <div className="slip-row">
-                                      <span className="slip-label">OFICINA VINCULADA</span>
-                                      <span className="slip-value">{currentOficina}</span>
-                                    </div>
-                                    <div className="slip-row">
-                                      <span className="slip-label">RETORNO ACORDADO</span>
-                                      <span className="slip-value">4x de R$ {new Intl.NumberFormat('pt-BR').format(parcelasValor)}</span>
+                                    <div className="slip-footer">
+                                      <div className="slip-badge">FOMENTO ATIVO</div>
+                                      <span className="slip-amount">R$ {currentAmount.toFixed(2)}</span>
                                     </div>
                                   </div>
-                                  <div className="slip-footer">
-                                    <div className="slip-badge">FOMENTO ATIVO</div>
-                                    <span className="slip-amount">R$ {currentAmount.toFixed(2)}</span>
-                                  </div>
-                                </div>
+                                )}
 
                                 {cicloEstado === 'completed' && (
                                   <button className="btn-app btn-app-primary" onClick={handleNovoCiclo}>
@@ -1585,8 +1639,8 @@ function App() {
 
                           <div className="q-checklists">
                             <span className="chk-status checked"><i className="fa-solid fa-check"></i> Rota Validada Comunidade</span>
-                            <span className="chk-status checked"><i className="fa-solid fa-check"></i> Aval de Marcos Santos</span>
-                            <span className="chk-status checked"><i className="fa-solid fa-check"></i> Aval de Aline Souza</span>
+                            <span className="chk-status checked"><i className="fa-solid fa-check"></i> Aval de Marcos Santos registrado</span>
+                            <span className="chk-status checked"><i className="fa-solid fa-check"></i> Aval de Aline Souza registrado</span>
                             <span className={`chk-status ${oficinaConfirmacao.quoteConfirmed ? 'checked' : 'warning'}`}>
                               <i className={`fa-solid ${oficinaConfirmacao.quoteConfirmed ? 'fa-check' : 'fa-spinner fa-spin'}`}></i> Orçamento Oficina JN
                             </span>
