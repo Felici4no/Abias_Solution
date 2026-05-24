@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ABDIAS BLACK LANDING PAGE - PREMIUM STYLE
+   ABIAS LANDING PAGE - PREMIUM STYLE
    ========================================================================== */
 
 :root {
@@ -476,20 +476,20 @@ h1, h2, h3, h4, h5 {
     color: var(--text-muted);
 }
 
-.abdias-success {
+.abias-success {
     background: rgba(16, 185, 129, 0.08);
     border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
-.abdias-success .label {
+.abias-success .label {
     color: var(--color-accent-gold);
 }
 
-.abdias-success .value {
+.abias-success .value {
     color: var(--success);
 }
 
-.abdias-success .detail {
+.abias-success .detail {
     color: var(--text-secondary);
 }
 
@@ -893,7 +893,7 @@ h1, h2, h3, h4, h5 {
     gap: 4px;
 }
 
-/* Seção Fundo Abdias */
+/* Seção Fundo Abias */
 .fundo-section {
     padding: 100px 0;
     background: var(--bg-primary);
