@@ -7,112 +7,157 @@ title: Controller (useAppController)
 
 **Arquivo:** `mobile/src/controllers/useAppController.js`
 
-Hook React central da aplicação. Concentra **todo o estado** e **todos os handlers** de ação. As telas recebem o resultado desse hook via prop `ctrl` e não gerenciam estado próprio.
+O `useAppController` é o coração do front-end. É um hook React que concentra **todo o estado da aplicação** e **todos os handlers de ação**. Nenhuma tela gerencia estado próprio — cada uma recebe o resultado desse hook via prop `ctrl` e age como uma view pura.
 
-## Estados principais
+Essa centralização foi uma escolha de arquitetura: com um único hook gerenciando tudo, é fácil entender o estado global da aplicação em qualquer momento, rastrear de onde vêm os dados que uma tela exibe, e adicionar novos handlers sem criar dependências espalhadas pelo código.
 
-### Autenticação e perfil
+O hook tem aproximadamente 400 linhas e pode ser dividido em cinco grandes blocos: autenticação, cadastro, produtos financeiros, ciclo de crédito, e IA.
+
+---
+
+## Autenticação e perfil
+
+Três estados controlam quem está usando o app e como ele deve se comportar:
 
 | Estado | Tipo | Descrição |
 |--------|------|-----------|
 | `loginRole` | `string \| null` | Perfil autenticado: `'membro'`, `'oficina'` ou `'gestao'` |
-| `loginUsuario` | `object \| null` | Dados do usuário do banco (`id`, `nome`, `email`, `role`, `membro_id`) |
-| `profileMode` | `string` | Modo de visualização atual (coincide com `loginRole`) |
+| `loginUsuario` | `object \| null` | Dados do usuário do banco (id, nome, email, role, membro_id) |
+| `profileMode` | `string` | Modo de visualização atual — coincide com `loginRole` |
 
-### Membro
+Na montagem, o hook lê o `localStorage` para restaurar a sessão anterior. Se `abias_membro_id` estiver presente, três chamadas são feitas em sequência para hidratar o estado:
+
+1. `GET /abias/membros/:id` — dados completos do membro com dados iFood
+2. `GET /abias/ciclos/ativo?membroId=:id` — ciclo ativo (se houver)
+3. `GET /abias/fundo` — saldo atual do fundo comunitário
+
+Se qualquer uma dessas chamadas falhar (por exemplo, se o membro foi removido do banco), o `localStorage` é limpo e o app retorna para a tela de login — prevenindo estados inconsistentes onde o app tenta operar com um id que não existe mais.
+
+---
+
+## Estados do membro
 
 | Estado | Tipo | Descrição |
 |--------|------|-----------|
-| `membroId` | `string \| null` | UUID do membro ativo (persistido em `localStorage`) |
-| `membro` | `object \| null` | Dados completos do membro (incluindo dados iFood) |
-| `reputacao` | `number` | Score de reputação (0–1000) |
-| `parecerAi` | `object \| null` | Parecer da IA após avaliação |
-| `analisandoIA` | `boolean` | Flag de carregamento da análise IA |
-| `aiError` | `string \| null` | Mensagem de erro da análise IA |
+| `membroId` | `string \| null` | UUID do membro ativo, persistido em `localStorage` |
+| `membro` | `object \| null` | Dados completos do membro, incluindo dados iFood |
+| `reputacao` | `number` | Score de reputação atual (0–1000) |
+| `fundo` | `number` | Saldo atual do fundo comunitário em reais |
 
-### Ciclo de crédito
+---
+
+## Produtos financeiros (valores derivados)
+
+O hook calcula automaticamente os produtos financeiros disponíveis para o membro com base na sua reputação atual. Esses cálculos são puramente derivados — sempre que `reputacao` muda, os produtos são recalculados.
+
+### Cartão Abias
+
+| Valor | Descrição |
+|-------|-----------|
+| `limiteCreditoCartao` | Limite do cartão por faixa de reputação (R$ 0 a R$ 1.500) |
+| `taxaRotativoCartao` | Taxa mensal do rotativo (7,9% a 15,9%) |
+| `cashbackSaldo` | Saldo de cashback acumulado (R$) |
+
+### Empréstimo Produtivo
+
+| Valor | Descrição |
+|-------|-----------|
+| `limiteEmprestimo` | Limite do empréstimo por faixa de reputação (R$ 0 a R$ 3.000) |
+| `taxaMensalJuros` | Taxa mensal do empréstimo (2,5% a 7,0%) |
+
+### Cálculos do empréstimo ativo
+
+Quando o membro está preenchendo uma solicitação, o hook recalcula em tempo real os detalhes financeiros do empréstimo conforme o valor e o prazo são alterados:
+
+| Valor | Descrição |
+|-------|-----------|
+| `valorOriginacao` | 2% do valor — taxa de originação cobrada pelo serviço |
+| `valorJuros` | Juros mensais proporcionais ao prazo selecionado |
+| `totalMembro` | Total que o membro vai pagar (valor + originação + juros) |
+| `parcelasValor` | Valor de cada parcela |
+| `numParcelas` | 1, 2, 4 ou 6 parcelas conforme o prazo |
+| `valorLiberadoOficina` | Valor que a oficina recebe (97% do valor — desconto de 3% de interchange) |
+
+Esses valores aparecem ao vivo no formulário da `CreditoScreen`, permitindo que o membro veja exatamente o custo do empréstimo antes de confirmar a solicitação.
+
+---
+
+## Estados do ciclo de crédito
+
+O ciclo é o objeto mais complexo do estado. Ele não é apenas um ID — é um conjunto de estados que representa toda a jornada do empréstimo.
 
 | Estado | Tipo | Descrição |
 |--------|------|-----------|
 | `cicloId` | `string \| null` | UUID do ciclo ativo |
-| `cicloEstado` | `string` | Estado atual do ciclo (ex: `'draft'`, `'approved'`) |
-| `solicitacao` | `object \| null` | Dados da solicitação (valor, finalidade, oficina, prazo…) |
-| `avaliacoes` | `object` | Avais de marcos e aline (`pending` / `approved`) |
+| `cicloEstado` | `string` | Estado atual: `draft`, `community_validation`, `partner_quote`, `under_review`, `approved`, `evidence_pending`, `evidence_review`, `validated`, `completed`, `rejected`, `needs_revision` |
+| `solicitacao` | `object \| null` | Dados da solicitação: valor, finalidade, prazo, oficina, urgência, descrição |
+| `avaliacoes` | `object` | Avais de Marcos e Aline (`pending` ou `approved`, com comentários) |
 | `evidencia` | `object` | Evidência de execução (arquivo, observação, status, tipo) |
 | `oficinaConfirmacao` | `object` | Confirmações da oficina (`quoteConfirmed`, `serviceConfirmed`) |
-| `gestaoJustificativa` | `string` | Justificativa preenchida pela gestão |
-| `fundo` | `number` | Saldo atual do fundo comunitário em R$ |
+| `gestaoJustificativa` | `string` | Justificativa digitada pela gestão para revisão ou recusa |
 
-### Navegação
+A sincronização desse estado com a resposta da API é feita pela função `syncCicloToState` do `cicloHelper.js`, que transforma o objeto retornado pela API nas múltiplas partes do estado React.
+
+---
+
+## Dados operacionais iFood (valores derivados)
+
+Quando os dados do membro são carregados, o hook extrai e calcula as métricas operacionais que aparecem na `ReputacaoScreen` e no painel `AreaOperacional`:
+
+| Valor | Descrição |
+|-------|-----------|
+| `dadosOp` | Objeto com entregas realizadas, dias ativos, ganhos brutos, ganho médio semanal, avaliação média e taxa de cancelamento |
+| `rankingOp` | Score iFood, classificação textual e percentil no ranking |
+| `consistenciaRota` | Porcentagem de dias ativos nos últimos 90 dias |
+| `entregasPorDia` | Média de entregas por dia ativo |
+| `topPct` | Posição percentil exibida como "Top X% da rede" |
+| `sparkYs` | Array de 10 pontos derivado da reputação para renderizar o gráfico sparkline |
+
+---
+
+## Estados da IA
+
+| Estado | Tipo | Descrição |
+|--------|------|-----------|
+| `parecerAi` | `object \| null` | Resultado completo da análise (score, recomendação, fatores, equidade) |
+| `analisandoIA` | `boolean` | Flag de carregamento enquanto a IA processa |
+| `aiError` | `string \| null` | Mensagem de erro se a análise falhar |
+| `foiAvaliado` | `boolean` | Se o membro já tem um parecer gravado |
+| `foiNegado` | `boolean` | Se a recomendação da IA foi `NEGAR` |
+| `motivoNegacao` | `string \| null` | Justificativa da negação, se houver |
+
+---
+
+## Handlers — tabela completa
+
+Todos os handlers seguem o mesmo padrão: fazem uma chamada à API, atualizam o estado com o resultado e tratam erros. Nenhuma tela conhece as URLs da API — elas apenas chamam o handler pelo nome.
+
+| Handler | Rota chamada | Efeito |
+|---------|-------------|--------|
+| `handleLogin(role, usuario)` | — | Atualiza estado de auth e persiste no localStorage |
+| `handleLogout()` | — | Limpa estado de auth e localStorage |
+| `handleCadastro(e)` | `POST /abias/membros` | Cadastra novo membro e avança para o app |
+| `handleSolicitacaoSubmit(e)` | `POST /abias/ciclos` | Abre novo ciclo de crédito |
+| `handleConfirmarPlano()` | `PATCH /abias/ciclos/:id/estado` | Avança para `community_validation` |
+| `handleMarcosAval()` | `POST /abias/ciclos/:id/avais` | Registra aval do Marcos |
+| `handleAlineAval()` | `POST /abias/ciclos/:id/avais` | Registra aval da Aline |
+| `handleOficinaConfirmarOrcamento()` | `POST /abias/ciclos/:id/confirmacoes` | Oficina confirma orçamento → `under_review` |
+| `handleGestaoAprovar()` | `PATCH /abias/ciclos/:id/estado` | Gestão aprova → `evidence_pending` |
+| `handleGestaoPedirRevisao()` | `PATCH /abias/ciclos/:id/estado` | Gestão pede revisão → `needs_revision` |
+| `handleGestaoRecusar()` | `PATCH /abias/ciclos/:id/estado` | Gestão recusa → `rejected` |
+| `handleEnviarEvidencia()` | `POST /abias/ciclos/:id/evidencias` | Membro envia evidência → `evidence_review` |
+| `handleOficinaConfirmarServico()` | `POST /abias/ciclos/:id/confirmacoes` | Oficina confirma serviço → `validated` |
+| `handleGestaoConcluirCiclo()` | `PATCH /abias/ciclos/:id/estado` | Gestão conclui → `completed` |
+| `handlePedirAnalise()` | `POST /abias/membros/:id/avaliar` | Aciona análise da IA e grava resultado |
+| `handleNovoCiclo()` | — | Reseta estado do ciclo para uma nova solicitação |
+| `handleResetDemo()` | — | Limpa localStorage e reinicia o app para demonstração |
+
+---
+
+## Navegação
 
 | Estado | Tipo | Descrição |
 |--------|------|-----------|
 | `activeTab` | `string` | Aba ativa: `inicio`, `reputacao`, `credito`, `rede`, `perfil` |
 | `onboardingStep` | `string` | Passo do onboarding: `splash` ou `cadastro` |
-| `showAreaOperacional` | `boolean` | Exibe/oculta o painel de dados operacionais |
-
-## Valores derivados (calculados no hook)
-
-### Produtos financeiros
-
-| Valor | Descrição |
-|-------|-----------|
-| `limiteCreditoCartao` | Limite do cartão Abias por faixa de reputação (R$ 0–1500) |
-| `taxaRotativoCartao` | Taxa mensal do rotativo do cartão (7,9%–15,9%) |
-| `limiteEmprestimo` | Limite do empréstimo produtivo por faixa (R$ 0–3000) |
-| `taxaMensalJuros` | Taxa mensal do empréstimo (2,5%–7,0%) |
-| `cashbackSaldo` | Saldo de cashback acumulado (R$) |
-
-### Cálculo do empréstimo ativo
-
-| Valor | Descrição |
-|-------|-----------|
-| `valorOriginacao` | 2% do valor (taxa de originação) |
-| `valorJuros` | Juros proporcionais ao prazo |
-| `totalMembro` | Valor total a pagar pelo membro |
-| `parcelasValor` | Valor de cada parcela (R$) |
-| `numParcelas` | Número de parcelas (1, 2, 4 ou 6 conforme prazo) |
-| `valorLiberadoOficina` | Valor que a oficina recebe (descontado 3% interchange) |
-
-### Dados operacionais iFood
-
-| Valor | Descrição |
-|-------|-----------|
-| `dadosOp` | Dados brutos: entregas, dias ativos, ganhos, cancelamentos |
-| `rankingOp` | Score iFood, classificação e percentil |
-| `consistenciaRota` | % de dias ativos nos últimos 90 dias |
-| `entregasPorDia` | Média de entregas por dia ativo |
-| `topPct` | Percentil no ranking (ex: Top 15%) |
-| `sparkYs` | Array de 10 pontos para o sparkline de reputação |
-
-## Handlers principais
-
-| Handler | Rota chamada | Descrição |
-|---------|-------------|-----------|
-| `handleLogin(role, usuario)` | — | Atualiza estado de auth e localStorage |
-| `handleLogout()` | — | Limpa estado de auth e localStorage |
-| `handleCadastro(e)` | `POST /abias/membros` | Cadastra novo membro |
-| `handleSolicitacaoSubmit(e)` | `POST /abias/ciclos` | Abre novo ciclo de crédito |
-| `handleConfirmarPlano()` | `PATCH /abias/ciclos/:id/estado` | Avança para `community_validation` |
-| `handleMarcosAval()` | `POST /abias/ciclos/:id/avais` | Registra aval do Marcos |
-| `handleAlineAval()` | `POST /abias/ciclos/:id/avais` | Registra aval da Aline |
-| `handleOficinaConfirmarOrcamento()` | `POST /abias/ciclos/:id/confirmacoes` | Confirma orçamento |
-| `handleGestaoAprovar()` | `PATCH /abias/ciclos/:id/estado` | Aprova o ciclo |
-| `handleGestaoPedirRevisao()` | `PATCH /abias/ciclos/:id/estado` | Solicita revisão com justificativa |
-| `handleGestaoRecusar()` | `PATCH /abias/ciclos/:id/estado` | Recusa o ciclo com justificativa |
-| `handleEnviarEvidencia()` | `POST /abias/ciclos/:id/evidencias` | Envia evidência de execução |
-| `handleOficinaConfirmarServico()` | `POST /abias/ciclos/:id/confirmacoes` | Confirma execução do serviço |
-| `handleGestaoConcluirCiclo()` | `PATCH /abias/ciclos/:id/estado` | Conclui o ciclo |
-| `handlePedirAnalise()` | `POST /abias/membros/:id/avaliar` | Solicita avaliação da IA |
-| `handleNovoCiclo()` | — | Reseta estado do ciclo para nova solicitação |
-| `handleResetDemo()` | — | Limpa localStorage e reinicia o app para demo |
-
-## Inicialização
-
-Na montagem do hook, se `membroId` estiver no `localStorage`, são feitas três chamadas sequenciais:
-
-1. `GET /abias/membros/:id` — carrega dados do membro
-2. `GET /abias/ciclos/ativo?membroId=:id` — carrega ciclo ativo
-3. `GET /abias/fundo` — carrega saldo do fundo
-
-Se qualquer chamada falhar (ex: membro deletado), o `localStorage` é limpo e o app volta para o estado inicial.
+| `showAreaOperacional` | `boolean` | Controla a visibilidade do painel lateral de dados operacionais |
