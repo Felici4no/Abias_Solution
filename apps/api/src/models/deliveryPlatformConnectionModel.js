@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { findCourierById } from "./courierRegistrationModel.js";
+import { filterRecords, insertRecord } from "../database/localDatabase.js";
 
-const connectedAccounts = [];
 const supportedProviders = ["ifood", "99"];
 
 export function connectDeliveryPlatformAccount(payload) {
@@ -30,9 +30,9 @@ export function connectDeliveryPlatformAccount(payload) {
   }
 
   const provider = normalizeProvider(payload.provider);
-  const alreadyConnected = connectedAccounts.some((account) => {
+  const alreadyConnected = filterRecords("connectedAccounts", (account) => {
     return account.courierId === courier.id && account.provider === provider;
-  });
+  }).length > 0;
 
   if (alreadyConnected) {
     return {
@@ -58,7 +58,7 @@ export function connectDeliveryPlatformAccount(payload) {
   };
   const operationalSnapshot = buildOperationalSnapshot(courier, connectedAccount);
 
-  connectedAccounts.push({
+  insertRecord("connectedAccounts", {
     ...connectedAccount,
     operationalSnapshot
   });
@@ -71,7 +71,7 @@ export function connectDeliveryPlatformAccount(payload) {
 }
 
 export function findConnectedAccountsByCourierId(courierId) {
-  return connectedAccounts.filter((account) => {
+  return filterRecords("connectedAccounts", (account) => {
     return account.courierId === courierId && account.connectionStatus === "connected";
   });
 }

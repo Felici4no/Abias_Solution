@@ -1,4 +1,5 @@
 import { createServer } from "node:http";
+import { authorizeRequest } from "./auth/authModel.js";
 import { routes } from "./routes/index.js";
 import { sendJson } from "./views/jsonView.js";
 
@@ -13,6 +14,13 @@ export function createApp() {
       return sendJson(response, 404, {
         error: "Route not found",
         path: requestUrl.pathname
+      });
+    }
+
+    if (!route.public && !authorizeRequest(request)) {
+      return sendJson(response, 401, {
+        error: "Unauthorized",
+        message: "Use a valid Bearer token to access this route"
       });
     }
 

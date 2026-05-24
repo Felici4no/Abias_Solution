@@ -9,9 +9,9 @@
 - [x] Task 5: Construir motor inicial de score operacional com regras transparentes e versionadas.
 - [x] Task 6: Criar modulo de limite dinamico para cartao de credito.
 - [x] Task 7: Criar modulo de pre-aprovacao de emprestimos com parametros de risco.
-- [ ] Task 8: Implementar cashback comunitario aplicado como desconto na proxima fatura.
-- [ ] Task 9: Adicionar persistencia com banco de dados e migrations.
-- [ ] Task 10: Adicionar autenticacao, autorizacao e protecao de rotas.
+- [x] Task 8: Implementar cashback comunitario aplicado como desconto na proxima fatura.
+- [x] Task 9: Adicionar persistencia com banco de dados e migrations.
+- [x] Task 10: Adicionar autenticacao, autorizacao e protecao de rotas.
 - [ ] Task 11: Criar testes automatizados para regras de score, credito e cashback.
 - [ ] Task 12: Preparar observabilidade basica, logs estruturados e documentacao de API.
 
@@ -108,3 +108,38 @@ A setima task implementou a pre-aprovacao de emprestimos pessoais:
 - Rejeita automaticamente scores abaixo do minimo definido pela politica.
 
 O modulo retorna `approvedAmount`, `termMonths`, `monthlyInterestRate`, `estimatedInstallment`, `status` e breakdown com criterios de risco e capacidade de pagamento.
+
+## Task 8 Entregue
+
+A oitava task implementou o cashback comunitario:
+
+- `GET /local-partners`: lista parceiros locais seedados para o ambiente inicial.
+- `POST /cashbacks/apply`: registra uma transacao em parceiro local e aplica cashback como desconto de fatura.
+- Calcula cashback com base na taxa do parceiro.
+- Retorna `transaction`, `cashback` e `invoiceDiscount` acumulado da fatura.
+- Usa a politica versionada `community-cashback-v1`.
+
+O cashback nao vira saldo separado: ele entra diretamente como desconto aplicado na fatura informada ou na proxima fatura aberta.
+
+## Task 9 Entregue
+
+A nona task adicionou uma camada inicial de persistencia:
+
+- Banco local em JSON em `apps/api/data/local-db.json`.
+- Repositorio simples para inserir, buscar e filtrar registros.
+- Persistencia aplicada aos cadastros, contas conectadas, scores, decisoes de credito, emprestimos, parceiros, transacoes e cashback.
+- Arquivo local de dados ignorado pelo Git.
+- Migration SQL inicial em `apps/api/src/database/migrations/001_initial_schema.sql`.
+
+Essa abordagem mantem o projeto funcional agora e deixa o caminho pronto para trocar pelo banco definitivo quando ele for escolhido.
+
+## Task 10 Entregue
+
+A decima task adicionou autenticacao e protecao de rotas:
+
+- Rotas publicas: `GET /health` e `GET /domain/entities`.
+- Rotas de negocio protegidas por `Authorization: Bearer <token>`.
+- Em desenvolvimento, o token padrao e `dev-token`.
+- Em ambientes reais, a API deve receber `API_AUTH_TOKEN` via variavel de ambiente.
+
+Essa protecao e simples de proposito, adequada para o estagio inicial do back-end. Autenticacao por usuario final pode ser substituida por JWT ou provedor externo quando o banco e o produto forem definidos.

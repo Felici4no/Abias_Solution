@@ -1,6 +1,5 @@
 import { randomUUID } from "node:crypto";
-
-const couriers = [];
+import { findRecord, insertRecord } from "../database/localDatabase.js";
 
 export function registerCourier(payload) {
   const validation = validateCourierPayload(payload);
@@ -15,7 +14,7 @@ export function registerCourier(payload) {
   }
 
   const normalizedDocument = onlyDigits(payload.document);
-  const alreadyRegistered = couriers.some((courier) => {
+  const alreadyRegistered = findRecord("couriers", (courier) => {
     return courier.document === normalizedDocument;
   });
 
@@ -44,7 +43,7 @@ export function registerCourier(payload) {
     updatedAt: now
   };
 
-  couriers.push(courier);
+  insertRecord("couriers", courier);
 
   return {
     ok: true,
@@ -53,7 +52,7 @@ export function registerCourier(payload) {
 }
 
 export function findCourierById(courierId) {
-  return couriers.find((courier) => {
+  return findRecord("couriers", (courier) => {
     return courier.id === courierId;
   });
 }

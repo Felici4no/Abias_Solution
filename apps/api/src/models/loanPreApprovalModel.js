@@ -1,12 +1,11 @@
 import { randomUUID } from "node:crypto";
 import { findCourierById } from "./courierRegistrationModel.js";
 import { findLatestOperationalScoreByCourierId } from "./operationalScoreEngineModel.js";
+import { insertRecord } from "../database/localDatabase.js";
 
 const LOAN_POLICY_VERSION = "personal-loan-pre-approval-v1";
 const MIN_LOAN_AMOUNT = 300;
 const MAX_LOAN_AMOUNT = 12000;
-const loanPreApprovals = [];
-
 export function calculateLoanPreApproval(payload) {
   const validation = validateLoanPreApprovalPayload(payload);
 
@@ -64,7 +63,7 @@ export function calculateLoanPreApproval(payload) {
     calculatedAt: new Date().toISOString()
   };
 
-  loanPreApprovals.push(loanPreApproval);
+  insertRecord("loanPreApprovals", loanPreApproval);
 
   return {
     ok: true,

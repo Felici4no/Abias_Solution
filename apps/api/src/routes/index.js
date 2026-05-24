@@ -1,8 +1,10 @@
+import { createCashback } from "../controllers/cashbackController.js";
 import { createCreditCardLimit } from "../controllers/creditCardLimitController.js";
 import { createCourier } from "../controllers/courierController.js";
 import { createDeliveryPlatformConnection } from "../controllers/deliveryPlatformController.js";
 import { listDomainEntities } from "../controllers/domainController.js";
 import { getHealth } from "../controllers/healthController.js";
+import { listPartners } from "../controllers/localPartnerController.js";
 import { createLoanPreApproval } from "../controllers/loanPreApprovalController.js";
 import { createOperationalScore } from "../controllers/operationalScoreController.js";
 
@@ -10,12 +12,14 @@ export const routes = [
   {
     method: "GET",
     path: "/health",
-    handler: getHealth
+    handler: getHealth,
+    public: true
   },
   {
     method: "GET",
     path: "/domain/entities",
-    handler: listDomainEntities
+    handler: listDomainEntities,
+    public: true
   },
   {
     method: "POST",
@@ -41,5 +45,15 @@ export const routes = [
     method: "POST",
     path: "/loan-pre-approvals/calculate",
     handler: createLoanPreApproval
+  },
+  {
+    method: "GET",
+    path: "/local-partners",
+    handler: listPartners
+  },
+  {
+    method: "POST",
+    path: "/cashbacks/apply",
+    handler: createCashback
   }
 ];

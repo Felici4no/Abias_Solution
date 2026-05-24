@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { findCourierById } from "./courierRegistrationModel.js";
 import { findConnectedAccountsByCourierId } from "./deliveryPlatformConnectionModel.js";
+import { findLastRecord, insertRecord } from "../database/localDatabase.js";
 
 const SCORE_ENGINE_VERSION = "operational-score-v1";
 const MAX_SCORE = 1000;
@@ -12,8 +13,6 @@ const scoreWeights = {
   platformTenure: 100,
   cancellationBehavior: 100
 };
-
-const operationalScores = [];
 
 export function calculateOperationalScore(payload) {
   const validation = validateScorePayload(payload);
@@ -70,7 +69,7 @@ export function calculateOperationalScore(payload) {
     calculatedAt: new Date().toISOString()
   };
 
-  operationalScores.push(operationalScore);
+  insertRecord("operationalScores", operationalScore);
 
   return {
     ok: true,
@@ -79,7 +78,7 @@ export function calculateOperationalScore(payload) {
 }
 
 export function findLatestOperationalScoreByCourierId(courierId) {
-  return operationalScores.findLast((operationalScore) => {
+  return findLastRecord("operationalScores", (operationalScore) => {
     return operationalScore.courierId === courierId;
   });
 }

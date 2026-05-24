@@ -1,12 +1,11 @@
 import { randomUUID } from "node:crypto";
 import { findCourierById } from "./courierRegistrationModel.js";
 import { findLatestOperationalScoreByCourierId } from "./operationalScoreEngineModel.js";
+import { insertRecord } from "../database/localDatabase.js";
 
 const CREDIT_CARD_POLICY_VERSION = "credit-card-limit-v1";
 const MIN_LIMIT = 100;
 const MAX_LIMIT = 5000;
-const creditCardLimits = [];
-
 export function calculateCreditCardLimit(payload) {
   const validation = validateCreditCardLimitPayload(payload);
 
@@ -61,7 +60,7 @@ export function calculateCreditCardLimit(payload) {
     calculatedAt: new Date().toISOString()
   };
 
-  creditCardLimits.push(creditCardLimit);
+  insertRecord("creditCardLimits", creditCardLimit);
 
   return {
     ok: true,

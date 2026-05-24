@@ -24,6 +24,14 @@ docs/
 npm run dev -w apps/api
 ```
 
+## Autenticacao local
+
+As rotas de negocio exigem Bearer token. Em desenvolvimento, sem `API_AUTH_TOKEN`, use:
+
+```text
+Authorization: Bearer dev-token
+```
+
 Por enquanto a API expoe apenas um health check:
 
 ```text
@@ -109,3 +117,34 @@ Payload esperado para ambos:
 ```
 
 Antes desses calculos, o entregador precisa ter um score operacional calculado.
+
+Parceiros locais para cashback:
+
+```text
+GET /local-partners
+```
+
+Aplicacao de cashback comunitario na proxima fatura:
+
+```text
+POST /cashbacks/apply
+```
+
+Payload esperado:
+
+```json
+{
+  "courierId": "uuid-do-entregador",
+  "localPartnerId": "partner-mercado-quilombo",
+  "amount": 120.5,
+  "invoiceId": "invoice-2026-05"
+}
+```
+
+## Persistencia
+
+Nesta etapa a API usa um banco local em JSON em `apps/api/data/local-db.json`, ignorado pelo Git. As migrations SQL iniciais ficam em:
+
+```text
+apps/api/src/database/migrations
+```
