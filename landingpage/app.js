@@ -1,5 +1,5 @@
 /* ==========================================================================
-   THE BLACK MONEY - INTERACTIVE SCRIPT
+   ABIAS LANDING PAGE - DYNAMIC JAVASCRIPT
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -40,102 +40,57 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Financial Calculator Simulator
-    const calcAmount = document.getElementById('calc-amount');
-    const calcTime = document.getElementById('calc-time');
+    // 3. Score progress bar animation using IntersectionObserver
+    const progressFill = document.querySelector('.progress-bar-fill');
     
-    const amountLabel = document.getElementById('amount-label');
-    const timeLabel = document.getElementById('time-label');
-    
-    const resultTotal = document.getElementById('result-total');
-    const resultInvested = document.getElementById('result-invested');
-    const resultProfit = document.getElementById('result-profit');
+    if (progressFill && 'IntersectionObserver' in window) {
+        // Set initial width to 0
+        progressFill.style.width = '0%';
+        
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Animate to 72%
+                    progressFill.style.width = '72%';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
 
-    const ANNUAL_RATE = 0.224; // 22.4% annual returns
-
-    function formatCurrency(value) {
-        return new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL'
-        }).format(value);
+        observer.observe(document.querySelector('.progress-widget'));
+    } else if (progressFill) {
+        // Fallback for older browsers
+        progressFill.style.width = '72%';
     }
 
-    function calculateGrowth() {
-        if (!calcAmount || !calcTime) return;
-
-        const principal = parseFloat(calcAmount.value);
-        const years = parseInt(calcTime.value);
-
-        // Update UI Labels
-        amountLabel.textContent = formatCurrency(principal).split(',')[0]; // Simple format without cents
-        timeLabel.textContent = `${years} ${years === 1 ? 'Ano' : 'Anos'}`;
-
-        // Compound Interest formula: A = P * (1 + r)^t
-        const total = principal * Math.pow(1 + ANNUAL_RATE, years);
-        const profit = total - principal;
-
-        // Animate count-up for values
-        animateValue(resultTotal, parseFloat(resultTotal.textContent.replace(/[^\d]/g, '')) / 100 || 0, total, 600, true);
-        animateValue(resultInvested, parseFloat(resultInvested.textContent.replace(/[^\d]/g, '')) / 100 || 0, principal, 300, true);
-        animateValue(resultProfit, parseFloat(resultProfit.textContent.replace(/[^\d]/g, '')) / 100 || 0, profit, 600, true);
-    }
-
-    function animateValue(element, start, end, duration, isCurrency = false) {
-        if (!element) return;
-        let startTimestamp = null;
-        const step = (timestamp) => {
-            if (!startTimestamp) startTimestamp = timestamp;
-            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            const currentValue = progress * (end - start) + start;
-            
-            if (isCurrency) {
-                element.textContent = formatCurrency(currentValue);
-            } else {
-                element.textContent = Math.floor(currentValue);
-            }
-
-            if (progress < 1) {
-                window.requestAnimationFrame(step);
-            }
-        };
-        window.requestAnimationFrame(step);
-    }
-
-    if (calcAmount && calcTime) {
-        calcAmount.addEventListener('input', calculateGrowth);
-        calcTime.addEventListener('input', calculateGrowth);
-        // Initial execution
-        calculateGrowth();
-    }
-
-    // 4. Form Lead Submission
-    const leadForm = document.getElementById('lead-form');
-    if (leadForm) {
-        leadForm.addEventListener('submit', (e) => {
+    // 4. CTA Form Submission
+    const ctaForm = document.getElementById('cta-email-form');
+    if (ctaForm) {
+        ctaForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            const submitBtn = document.getElementById('form-submit-btn');
+            const submitBtn = document.getElementById('cta-submit-btn');
+            const emailInput = document.getElementById('cta-email-input');
             const originalText = submitBtn.textContent;
             
-            // Visual submission state
+            // Visual loading state
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processando...';
+            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> ENVIANDO...';
 
             setTimeout(() => {
-                // Success feedback
-                leadForm.innerHTML = `
-                    <div style="text-align: center; padding: 40px 20px; color: var(--text-primary);">
-                        <i class="fa-solid fa-circle-check" style="font-size: 4rem; color: var(--success); margin-bottom: 20px;"></i>
-                        <h3 style="font-size: 1.8rem; margin-bottom: 12px; font-family: var(--font-heading);">Solicitação Recebida!</h3>
-                        <p style="color: var(--text-secondary); margin-bottom: 24px;">Um consultor especializado entrará em contato nas próximas 2 horas úteis.</p>
-                        <span style="font-size: 0.85rem; color: var(--color-accent-1); font-weight: 600; text-transform: uppercase;">Protocolo VIP: #${Math.floor(100000 + Math.random() * 900000)}</span>
+                // Success feedback replacing the form
+                ctaForm.innerHTML = `
+                    <div style="text-align: center; padding: 20px 0; animation: fadeIn 0.5s ease-out;">
+                        <i class="fa-solid fa-circle-check" style="font-size: 3rem; color: var(--success); margin-bottom: 16px;"></i>
+                        <h3 style="font-size: 1.5rem; margin-bottom: 8px; font-family: var(--font-heading); color: #ffffff;">Pré-cadastro Realizado!</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem;">Enviamos um convite exclusivo de acesso para: <strong style="color: #ffffff;">${emailInput.value}</strong></p>
                     </div>
                 `;
-            }, 1800);
+            }, 1500);
         });
     }
 
-    // 5. Active section navigation highlight
+    // 5. Active section navigation highlight on scroll
     const sections = document.querySelectorAll('section[id]');
     
     window.addEventListener('scroll', () => {
@@ -143,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         sections.forEach(current => {
             const sectionHeight = current.offsetHeight;
-            const sectionTop = current.offsetTop - 120;
+            const sectionTop = current.offsetTop - 150;
             const sectionId = current.getAttribute('id');
             const navLink = document.querySelector(`.nav-menu a[href*=${sectionId}]`);
             

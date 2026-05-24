@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="The Black Money - A plataforma financeira definitiva para maximizar seus investimentos com tecnologia de ponta, segurança e inteligência artificial.">
-    <title>The Black Money | Inteligência Financeira Premium</title>
+    <meta name="description" content="Abias - Seu corre vale crédito. Dignidade e autonomia financeira para quem move a cidade. Transformamos seu histórico operacional em limite real.">
+    <title>Abias | O banco de quem faz o corre acontecer</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
@@ -23,18 +23,16 @@
     <header class="main-header" id="header">
         <div class="container header-container">
             <a href="#" class="logo" id="nav-logo">
-                <span class="logo-icon"><i class="fa-solid fa-wallet"></i></span>
-                <span class="logo-text">The<span class="text-gradient">Black</span>Money</span>
+                <span class="logo-text">Abias</span>
             </a>
             <nav class="nav-menu" id="nav-menu">
                 <a href="#hero" class="nav-link active">Início</a>
-                <a href="#features" class="nav-link">Recursos</a>
-                <a href="#calculator" class="nav-link">Simulador</a>
-                <a href="#about" class="nav-link">Sobre</a>
-                <a href="#contact" class="btn btn-secondary nav-btn" id="nav-cta-mobile">Falar com Consultor</a>
+                <a href="#card-section" class="nav-link">Produto</a>
+                <a href="#score-section" class="nav-link">Como funciona</a>
+                <a href="#testimonials" class="nav-link">Depoimentos</a>
             </nav>
             <div class="header-actions">
-                <a href="#contact" class="btn btn-primary" id="nav-cta">Começar Agora</a>
+                <a href="#cta-section" class="btn btn-secondary nav-btn-cta" id="nav-cta-btn"><i class="fa-solid fa-user"></i> Entrar</a>
                 <button class="mobile-toggle" id="mobile-toggle" aria-label="Abrir menu de navegação">
                     <i class="fa-solid fa-bars"></i>
                 </button>
@@ -44,244 +42,235 @@
 
     <main>
         <!-- Hero Section -->
-        <section class="hero-section" id="hero">
+        <section class="hero-section" id="hero" style="background-image: linear-gradient(180deg, rgba(8, 8, 10, 0.4) 0%, rgba(8, 8, 10, 0.95) 100%), url('https://images.unsplash.com/photo-1617347454431-f49d7ff5c3b1?auto=format&fit=crop&w=1600&q=80');">
             <div class="container hero-container">
                 <div class="hero-content">
-                    <span class="badge" id="hero-badge"><i class="fa-solid fa-sparkles"></i> Nova Era da Gestão de Riqueza</span>
                     <h1 class="hero-title" id="hero-heading">
-                        Multiplique seu capital com <span class="text-gradient">Inteligência Suprema</span>
+                        Seu <span class="text-italic-accent">corre</span><br>vale crédito.
                     </h1>
                     <p class="hero-description" id="hero-subheading">
-                        Conectamos tecnologia exclusiva de inteligência de mercado a estratégias avançadas de liquidez, proporcionando crescimento consistente e blindagem patrimonial.
+                        Dignidade e autonomia financeira para quem move a cidade. Transformamos seu histórico operacional em limite real.
                     </p>
                     <div class="hero-actions">
-                        <a href="#calculator" class="btn btn-primary btn-lg" id="hero-btn-primary">Simular Rendimentos</a>
-                        <a href="#features" class="btn btn-outline btn-lg" id="hero-btn-secondary">Saber Mais <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                    <div class="hero-stats" id="hero-stats-panel">
-                        <div class="stat-item">
-                            <span class="stat-value">R$ 2.4B+</span>
-                            <span class="stat-label">Sob custódia</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value">22.4%</span>
-                            <span class="stat-label">Rendimento médio a.a.</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value">15k+</span>
-                            <span class="stat-label">Membros VIP</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="hero-visual">
-                    <div class="visual-card glass" id="hero-dashboard-preview">
-                        <div class="card-header">
-                            <div class="user-info">
-                                <div class="user-avatar"><i class="fa-solid fa-user-tie"></i></div>
-                                <div>
-                                    <h3 class="user-name">Patrimônio Líquido</h3>
-                                    <p class="user-status">Status: Platinum</p>
-                                </div>
-                            </div>
-                            <span class="card-badge">VIP</span>
-                        </div>
-                        <div class="card-balance">
-                            <span class="balance-label">Saldo Disponível</span>
-                            <span class="balance-amount" id="dashboard-balance">R$ 1.240.500,00</span>
-                        </div>
-                        <div class="card-graph">
-                            <!-- Visual placeholder for dynamic growth line -->
-                            <div class="graph-bar-container">
-                                <div class="graph-bar" style="height: 40%"></div>
-                                <div class="graph-bar" style="height: 55%"></div>
-                                <div class="graph-bar" style="height: 48%"></div>
-                                <div class="graph-bar" style="height: 70%"></div>
-                                <div class="graph-bar" style="height: 85%"></div>
-                                <div class="graph-bar active" style="height: 100%">
-                                    <span class="bar-tooltip">+22.4%</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="footer-stat">
-                                <i class="fa-solid fa-arrow-trend-up text-success"></i>
-                                <span>Lucro Mensal: <strong>+ R$ 24.310,00</strong></span>
-                            </div>
-                        </div>
+                        <a href="#cta-section" class="btn btn-primary btn-lg" id="hero-btn-primary">ABRA SUA CONTA AGORA</a>
+                        <a href="#score-section" class="btn-text" id="hero-btn-secondary">ENTENDA O SCORE <i class="fa-solid fa-arrow-right-long"></i></a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Features Section -->
-        <section class="features-section" id="features">
-            <div class="container">
-                <div class="section-header text-center">
-                    <span class="badge">Nossos Diferenciais</span>
-                    <h2 class="section-title">Soluções sob medida para o seu sucesso</h2>
-                    <p class="section-subtitle">Ferramentas avançadas e atendimento de elite para potencializar seus ganhos.</p>
-                </div>
-                <div class="features-grid">
-                    <div class="feature-card glass" id="feature-card-1">
-                        <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
-                        <h3 class="feature-title">Segurança Absoluta</h3>
-                        <p class="feature-text">Sistemas criptografados de nível bancário e conformidade rigorosa com órgãos reguladores internacionais.</p>
-                    </div>
-                    <div class="feature-card glass" id="feature-card-2">
-                        <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
-                        <h3 class="feature-title">Análise de IA</h3>
-                        <p class="feature-text">Algoritmos proprietários que analisam milhões de dados por segundo para identificar oportunidades exclusivas.</p>
-                    </div>
-                    <div class="feature-card glass" id="feature-card-3">
-                        <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
-                        <h3 class="feature-title">Liquidez Rápida</h3>
-                        <p class="feature-text">Acesse seus rendimentos de forma descomplicada, com resgates rápidos e liquidação otimizada.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Calculator Section -->
-        <section class="calculator-section" id="calculator">
-            <div class="container">
-                <div class="calculator-container glass">
-                    <div class="calculator-info">
-                        <span class="badge">Simulador Digital</span>
-                        <h2 class="section-title text-left">Visualize a evolução da sua riqueza</h2>
-                        <p class="section-subtitle text-left">Ajuste os parâmetros abaixo e veja uma estimativa de crescimento do seu patrimônio com a nossa assessoria de rendimentos.</p>
-                        <div class="calc-inputs">
-                            <div class="input-group">
-                                <label for="calc-amount">Valor do Aporte Inicial (R$)</label>
-                                <div class="range-container">
-                                    <input type="range" id="calc-amount" min="10000" max="1000000" step="10000" value="100000">
-                                    <span class="range-value" id="amount-label">R$ 100.000</span>
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <label for="calc-time">Tempo de Investimento (Anos)</label>
-                                <div class="range-container">
-                                    <input type="range" id="calc-time" min="1" max="10" step="1" value="5">
-                                    <span class="range-value" id="time-label">5 Anos</span>
-                                </div>
+        <!-- Credit Card Section -->
+        <section class="card-section" id="card-section">
+            <div class="container card-grid-container">
+                <div class="card-visual-wrapper">
+                    <!-- Premium Gradient Credit Card -->
+                    <div class="premium-credit-card" id="abias-credit-card">
+                        <div class="card-brand-row">
+                            <span class="card-brand">Abias</span>
+                            <span class="card-contactless"><i class="fa-solid fa-wifi"></i></span>
+                        </div>
+                        <div class="card-chip-row">
+                            <div class="card-chip"></div>
+                        </div>
+                        <div class="card-number-row">
+                            <span class="card-number">•••• •••• •••• 2026</span>
+                        </div>
+                        <div class="card-footer-row">
+                            <span class="card-holder">O CARTÃO DO CORRE</span>
+                            <div class="card-flag-icon">
+                                <div class="flag-circle flag-red"></div>
+                                <div class="flag-circle flag-yellow"></div>
                             </div>
                         </div>
                     </div>
-                    <div class="calculator-result">
-                        <h3 class="result-title">Estimativa do Patrimônio Futuro</h3>
-                        <div class="result-value" id="result-total">R$ 274.800,00</div>
-                        <div class="result-details">
-                            <div class="detail-item">
-                                <span class="detail-label">Valor Investido</span>
-                                <span class="detail-val" id="result-invested">R$ 100.000,00</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Rendimento Estimado (22.4% a.a.)</span>
-                                <span class="detail-val text-gradient" id="result-profit">R$ 174.800,00</span>
-                            </div>
-                        </div>
-                        <a href="#contact" class="btn btn-primary btn-block text-center" id="calc-cta-btn">Garantir esta Taxa</a>
-                    </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- About Section -->
-        <section class="about-section" id="about">
-            <div class="container about-container">
-                <div class="about-visual">
-                    <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=600&q=80" alt="Consultoria financeira premium" class="about-img" id="about-display-img">
-                </div>
-                <div class="about-content">
-                    <span class="badge">Nossa Essência</span>
-                    <h2 class="section-title text-left">Redefinindo o futuro do wealth management</h2>
-                    <p class="section-text">
-                        Acreditamos que a gestão patrimonial de excelência combina sofisticação analítica, discrição incomparável e decisões guiadas por tecnologia. Fundada por especialistas com passagens pelas maiores instituições financeiras globais, a <strong>The Black Money</strong> nasceu para democratizar o acesso a estruturas de investimento sofisticadas.
+                <div class="card-content-wrapper">
+                    <span class="section-tag tag-yellow">O CARTÃO DO CORRE</span>
+                    <h2 class="section-heading">Materialidade financeira. Reconhecimento tangível.</h2>
+                    <p class="section-description">
+                        Sem anuidade, sem taxas ocultas. Um cartão desenhado para suportar a inflação da rua, convertendo entregas em limite de crédito justo e transparente.
                     </p>
-                    <ul class="about-list">
-                        <li><i class="fa-solid fa-circle-check"></i> Relatórios de performance semanais transparentes.</li>
-                        <li><i class="fa-solid fa-circle-check"></i> Gerente de contas dedicado 24/7.</li>
-                        <li><i class="fa-solid fa-circle-check"></i> Alocação de ativos personalizada e internacional.</li>
+                    <ul class="features-list">
+                        <li class="feature-item">
+                            <span class="feature-icon-bullet"><i class="fa-solid fa-circle-check"></i></span>
+                            <div class="feature-item-text">
+                                <strong>Sem Burocracia:</strong> Abra sua conta em menos de 5 minutos direto no celular.
+                            </div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-icon-bullet"><i class="fa-solid fa-circle-check"></i></span>
+                            <div class="feature-item-text">
+                                <strong>Cashback no Posto:</strong> Receba dinheiro de volta ao abastecer ou fazer manutenção.
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
         </section>
 
-        <!-- Contact Section -->
-        <section class="contact-section" id="contact">
+        <!-- Score Section (Score Operacional) -->
+        <section class="score-section" id="score-section">
             <div class="container">
-                <div class="contact-grid glass">
-                    <div class="contact-info-panel">
-                        <h2>Fale com nossa mesa de Wealth</h2>
-                        <p>Preencha os campos e um de nossos especialistas em gestão de grandes fortunas entrará em contato para agendar uma reunião exclusiva e sigilosa.</p>
-                        <div class="contact-details-list">
-                            <div class="detail-contact-item">
-                                <i class="fa-solid fa-envelope"></i>
-                                <span>contato@theblackmoney.com</span>
+                <div class="section-header text-center">
+                    <span class="section-tag tag-yellow">INTELIGÊNCIA ABIAS</span>
+                    <h2 class="section-heading">Score Operacional</h2>
+                    <p class="section-subtitle">
+                        Transformamos seus dados de entregas, rotas e avaliações de aplicativos no seu maior ativo financeiro.
+                    </p>
+                </div>
+                <div class="score-cards-grid">
+                    <!-- Card 1: Consistência de Rota -->
+                    <div class="score-card glass">
+                        <div class="score-card-header">
+                            <h3 class="score-card-title">Consistência de Rota</h3>
+                        </div>
+                        <p class="score-card-text">
+                            Mostre que sua regularidade vale mais do que qualquer histórico de crédito tradicional.
+                        </p>
+                        <!-- Widget visual: Mini gráfico de rota -->
+                        <div class="widget-container route-widget">
+                            <div class="route-map">
+                                <div class="route-line"></div>
+                                <div class="route-dot start-dot"></div>
+                                <div class="route-dot end-dot"></div>
+                                <div class="route-courier"><i class="fa-solid fa-motorcycle"></i></div>
                             </div>
-                            <div class="detail-contact-item">
-                                <i class="fa-solid fa-phone"></i>
-                                <span>0800 555 9000</span>
-                            </div>
-                            <div class="detail-contact-item">
-                                <i class="fa-solid fa-location-dot"></i>
-                                <span>Av. Brigadeiro Faria Lima, 4500 - São Paulo, SP</span>
+                            <div class="route-stats">
+                                <span>12 Rota/dia</span>
+                                <span>99.8% Concluídas</span>
                             </div>
                         </div>
                     </div>
-                    <form class="contact-form" id="lead-form">
-                        <div class="form-group">
-                            <label for="form-name">Nome Completo</label>
-                            <input type="text" id="form-name" placeholder="Ex: Alexandre Silva" required>
+
+                    <!-- Card 2: Dignidade de Dados -->
+                    <div class="score-card glass">
+                        <div class="score-card-header">
+                            <h3 class="score-card-title">Dignidade de Dados</h3>
                         </div>
-                        <div class="form-group">
-                            <label for="form-email">E-mail Corporativo</label>
-                            <input type="email" id="form-email" placeholder="Ex: alexandre@empresa.com" required>
+                        <p class="score-card-text">
+                            Seus dados são seus. Use-os para comprovar sua renda e obter as melhores taxas.
+                        </p>
+                        <!-- Widget visual: Lock/Security animation -->
+                        <div class="widget-container lock-widget">
+                            <div class="lock-icon-wrapper">
+                                <i class="fa-solid fa-shield-halved lock-shield"></i>
+                                <i class="fa-solid fa-lock lock-core"></i>
+                            </div>
+                            <span class="security-status">Criptografia Ponta a Ponta</span>
                         </div>
-                        <div class="form-group">
-                            <label for="form-phone">Telefone / WhatsApp</label>
-                            <input type="tel" id="form-phone" placeholder="Ex: (11) 99999-9999" required>
+                    </div>
+
+                    <!-- Card 3: Análise Instantânea -->
+                    <div class="score-card glass">
+                        <div class="score-card-header">
+                            <h3 class="score-card-title">Análise Instantânea</h3>
                         </div>
-                        <div class="form-group">
-                            <label for="form-invest">Capital Planejado para Investimento</label>
-                            <select id="form-invest" required>
-                                <option value="" disabled selected>Selecione um intervalo</option>
-                                <option value="10k-50k">R$ 10.000 a R$ 50.000</option>
-                                <option value="50k-200k">R$ 50.000 a R$ 200.000</option>
-                                <option value="200k-1m">R$ 200.000 a R$ 1.000.000</option>
-                                <option value="1m+">Acima de R$ 1.000.000</option>
-                            </select>
+                        <p class="score-card-text">
+                            Sem burocracia e sem papelada. Aprovação rápida baseada no seu corre do dia a dia.
+                        </p>
+                        <!-- Widget visual: Lightning pulse -->
+                        <div class="widget-container lightning-widget">
+                            <div class="pulse-ring ring-1"></div>
+                            <div class="pulse-ring ring-2"></div>
+                            <div class="lightning-icon"><i class="fa-solid fa-bolt"></i></div>
+                            <span class="speed-badge">Aprovação em 30s</span>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block" id="form-submit-btn">Solicitar Reunião Privada</button>
-                    </form>
+                    </div>
+
+                    <!-- Card 4: Dashboard do Corre -->
+                    <div class="score-card glass">
+                        <div class="score-card-header">
+                            <h3 class="score-card-title">Dashboard do Corre</h3>
+                        </div>
+                        <p class="score-card-text">
+                            Acompanhe seu score subir e desbloqueie novos limites a cada entrega.
+                        </p>
+                        <!-- Widget visual: Progress bar with Score -->
+                        <div class="widget-container progress-widget">
+                            <div class="score-info-row">
+                                <span class="score-level">Nível A2</span>
+                                <span class="score-number">720/1000</span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" style="width: 72%;"></div>
+                            </div>
+                            <span class="progress-status"><i class="fa-solid fa-circle-up"></i> +45 pontos este mês</span>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials-section" id="testimonials">
+            <div class="container">
+                <div class="testimonials-header-row">
+                    <div>
+                        <span class="section-tag tag-yellow">DEPOIMENTOS</span>
+                        <h2 class="section-heading">Construído com quem entende do asfalto.</h2>
+                    </div>
+                    <a href="#cta-section" class="btn-text font-bold">Ver todos os relatos <i class="fa-solid fa-arrow-right-long"></i></a>
+                </div>
+                <div class="testimonials-grid">
+                    <!-- Testimonial 1 -->
+                    <div class="testimonial-card glass">
+                        <div class="testimonial-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?auto=format&fit=crop&w=800&q=80" alt="Entregador Carlos M. no asfalto" class="testimonial-img">
+                        </div>
+                        <div class="testimonial-content">
+                            <blockquote class="testimonial-quote">
+                                "O Abias me deu o limite que eu precisava para trocar os pneus da moto. Eles entendem o corre."
+                            </blockquote>
+                            <cite class="testimonial-author">Carlos M. &mdash; Entregador em SP</cite>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 2 -->
+                    <div class="testimonial-card glass">
+                        <div class="testimonial-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80" alt="Entregadora Aline S. segurando pacote" class="testimonial-img">
+                        </div>
+                        <div class="testimonial-content">
+                            <blockquote class="testimonial-quote">
+                                "Com o cartão do Abias eu consigo fazer a feira e abastecer a moto sem sufoco no fim do mês."
+                            </blockquote>
+                            <cite class="testimonial-author">Aline S. &mdash; Entregadora em RJ</cite>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section (Final CTA) -->
+        <section class="cta-section" id="cta-section">
+            <div class="container text-center cta-container">
+                <div class="cta-icon-wrapper">
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+                <h2 class="section-heading">Pronto para o próximo nível?</h2>
+                <p class="cta-subheading">
+                    Abra sua conta grátis em menos de 5 minutos. Sem taxas escondidas, desenvolvido para quem faz o corre girar.
+                </p>
+                <form class="cta-form" id="cta-email-form">
+                    <div class="cta-input-group">
+                        <input type="email" id="cta-email-input" placeholder="Seu e-mail principal" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block btn-lg" id="cta-submit-btn">ABRA SUA CONTA AGORA</button>
+                </form>
+                <p class="cta-legal">
+                    Ao clicar, você concorda com nossos <a href="#">Termos de Uso</a> e <a href="#">Política de Privacidade</a>.
+                </p>
             </div>
         </section>
     </main>
 
     <!-- Footer -->
     <footer class="main-footer">
-        <div class="container footer-container">
-            <div class="footer-brand">
-                <a href="#" class="logo">
-                    <span class="logo-icon"><i class="fa-solid fa-wallet"></i></span>
-                    <span class="logo-text">The<span class="text-gradient">Black</span>Money</span>
-                </a>
-                <p>O futuro dos seus investimentos com máxima rentabilidade e segurança de ponta.</p>
-            </div>
-            <div class="footer-links">
-                <h4>Links Úteis</h4>
-                <a href="#hero">Início</a>
-                <a href="#features">Recursos</a>
-                <a href="#calculator">Simulador</a>
-                <a href="#about">Sobre</a>
-            </div>
-            <div class="footer-legal">
-                <h4>Legal</h4>
-                <p>The Black Money Assessoria de Investimentos Ltda. CNPJ: 00.000.000/0001-00. Todo investimento envolve riscos. O desempenho passado não garante resultados futuros.</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 The Black Money. Todos os direitos reservados.</p>
+        <div class="container text-center">
+            <a href="#" class="footer-logo">Abias</a>
+            <p class="footer-legal-text">
+                © 2026 Abias S.A. Todos os direitos reservados. Abias Instituição de Pagamento S.A.
+            </p>
         </div>
     </footer>
 
