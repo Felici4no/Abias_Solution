@@ -565,7 +565,7 @@ function App() {
                                 <div style={{ fontSize: '1.2rem', color: 'var(--color-gold)' }}><i className="fa-solid fa-route"></i></div>
                                 <div>
                                   <h4 style={{ fontSize: '0.85rem', fontWeight: 800, marginBottom: '2px' }}>Crédito produtivo</h4>
-                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>Fomento para pneu, manutenção, celular, documentação e segurança. Não é empréstimo livre.</p>
+                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>Crédito produtivo para pneu, manutenção, celular, documentação e segurança. Não é empréstimo livre.</p>
                                 </div>
                               </div>
                               
@@ -721,7 +721,7 @@ function App() {
                               <span className="card-tag">STATUS OPERACIONAL</span>
                               {['evidence_pending', 'evidence_review', 'validated'].includes(cicloEstado) ? (
                                 <span className="status-indicator-green" style={{ color: 'var(--color-gold)' }}>
-                                  <i className="fa-solid fa-circle"></i> Fomento em Manutenção Ativo
+                                  <i className="fa-solid fa-circle"></i> Crédito Produtivo Ativo
                                 </span>
                               ) : (
                                 <span className="status-indicator-green">
@@ -765,7 +765,7 @@ function App() {
                                 <i className="fa-solid fa-triangle-exclamation"></i> Enviar Evidências de Trabalho
                               </h4>
                               <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '14px', lineHeight: '1.4' }}>
-                                Forneça a comprovação técnica da manutenção do veículo (troca do pneu ou revisão realizada) para validar seu fomento.
+                                Forneça a comprovação técnica da manutenção do veículo (troca do pneu ou revisão realizada) para validar seu crédito produtivo.
                               </p>
                               
                               <div className="upload-methods" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', marginBottom: '12px' }}>
@@ -838,7 +838,7 @@ function App() {
                                       <div className="activity-icon-badge" style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: 'var(--color-gold)' }}><i className="fa-solid fa-file-invoice"></i></div>
                                       <div>
                                         <h5 style={{ fontSize: '0.75rem', fontWeight: 800 }}>Crédito de Jornada Solicitado</h5>
-                                        <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Fomento de R$ {currentAmount} para {currentFinalidade} registrado.</p>
+                                        <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Crédito produtivo de R$ {currentAmount} para {currentFinalidade} registrado.</p>
                                       </div>
                                     </div>
                                   )}
@@ -1068,7 +1068,7 @@ function App() {
                                 </div>
 
                                 <button type="submit" className="btn-app btn-app-primary">
-                                  Gerar plano de fomento
+                                  Gerar plano de crédito produtivo
                                 </button>
                               </form>
                             </>
@@ -1142,7 +1142,7 @@ function App() {
                                     Confirmar solicitação
                                   </button>
                                   <button className="btn-app btn-app-secondary" onClick={() => setCicloEstado('draft')}>
-                                    Editar fomento
+                                    Editar solicitação
                                   </button>
                                 </div>
                               </div>
@@ -1227,7 +1227,7 @@ function App() {
                           {['partner_quote', 'under_review', 'approved', 'evidence_pending', 'evidence_review', 'validated', 'completed', 'needs_revision', 'rejected'].includes(cicloEstado) && (
                             <>
                               <div className="app-header-simple">
-                                <h3>Status do Fomento</h3>
+                                <h3>Status do Crédito Produtivo</h3>
                               </div>
                               <div className="plano-container">
                                 <div className="milestone-card glass">
@@ -1316,7 +1316,7 @@ function App() {
                                       </div>
                                     </div>
                                     <div className="slip-footer">
-                                      <div className="slip-badge">FOMENTO ATIVO</div>
+                                      <div className="slip-badge">CRÉDITO PRODUTIVO</div>
                                       <span className="slip-amount">R$ {currentAmount.toFixed(2)}</span>
                                     </div>
                                   </div>
@@ -1372,7 +1372,7 @@ function App() {
                                   border: (cicloEstado === 'submitted' || cicloEstado === 'community_validation') ? '1px solid var(--color-gold)' : '1px solid transparent'
                                 }}>
                                   <span style={{ fontWeight: 700, color: 'var(--color-gold)' }}>1. Crédito na Rede</span>
-                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Fomento produtivo para a moto.</span>
+                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Crédito produtivo para a moto.</span>
                                 </div>
 
                                 <div style={{ 
@@ -1529,13 +1529,13 @@ function App() {
 
                   {!solicitacao || ['draft', 'submitted', 'community_validation'].includes(cicloEstado) ? (
                     <div className="info-notice-card" style={{ margin: 0 }}>
-                      <p>Nenhuma solicitação de fomento vinculada à Oficina JN no momento.</p>
+                      <p>Nenhuma solicitação de crédito produtivo vinculada à Oficina JN no momento.</p>
                     </div>
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                       <div className="milestone-card glass">
                         <span className="lbl-milestone">OFICINA JN</span>
-                        <h4 style={{ marginBottom: '8px' }}>Solicitação de fomento de {membro?.nome || 'João Silva'}</h4>
+                        <h4 style={{ marginBottom: '8px' }}>Solicitação de crédito produtivo de {membro?.nome || 'João Silva'}</h4>
                         <div className="q-details" style={{ marginBottom: '10px' }}>
                           <span>Finalidade: <strong>{currentFinalidade}</strong></span>
                           <span>Valor Solicitado: <strong>R$ {currentAmount.toFixed(2)}</strong></span>
@@ -1665,7 +1665,7 @@ function App() {
                               />
                               <div className="admin-actions-row">
                                 <button className="btn-admin btn-admin-approve" onClick={handleGestaoAprovar}>
-                                  Aprovar Fomento
+                                  Aprovar Crédito Produtivo
                                 </button>
                                 <button className="btn-admin btn-admin-reject" onClick={handleGestaoPedirRevisao} style={{ flex: 'unset' }}>
                                   Pedir Revisão
