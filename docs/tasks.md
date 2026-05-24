@@ -7,8 +7,8 @@
 - [x] Task 3: Implementar cadastro inicial de entregadores e validacao de dados.
 - [x] Task 4: Criar fluxo mockado de conexao com plataformas de entrega para simular dados do iFood/99.
 - [x] Task 5: Construir motor inicial de score operacional com regras transparentes e versionadas.
-- [ ] Task 6: Criar modulo de limite dinamico para cartao de credito.
-- [ ] Task 7: Criar modulo de pre-aprovacao de emprestimos com parametros de risco.
+- [x] Task 6: Criar modulo de limite dinamico para cartao de credito.
+- [x] Task 7: Criar modulo de pre-aprovacao de emprestimos com parametros de risco.
 - [ ] Task 8: Implementar cashback comunitario aplicado como desconto na proxima fatura.
 - [ ] Task 9: Adicionar persistencia com banco de dados e migrations.
 - [ ] Task 10: Adicionar autenticacao, autorizacao e protecao de rotas.
@@ -84,3 +84,27 @@ Os pesos iniciais sao transparentes:
 - Comportamento de cancelamento: 100 pontos.
 
 Esse motor ainda e baseado em regras explicaveis. Ele prepara o terreno para evoluir depois para modelos estatisticos ou IA com auditoria de risco.
+
+## Task 6 Entregue
+
+A sexta task implementou o modulo de limite dinamico para cartao de credito:
+
+- `POST /credit-card-limits/calculate`: calcula o limite inicial do cartao.
+- Exige score operacional previamente calculado.
+- Usa a politica versionada `credit-card-limit-v1`.
+- Calcula limite com base em score, faixa de risco e renda mensal estimada.
+- Aplica guardrails de limite minimo e maximo para controlar exposicao.
+
+O modulo retorna `limitAmount`, `status`, `policyVersion`, score usado e breakdown explicavel da decisao.
+
+## Task 7 Entregue
+
+A setima task implementou a pre-aprovacao de emprestimos pessoais:
+
+- `POST /loan-pre-approvals/calculate`: calcula pre-aprovacao de emprestimo.
+- Exige score operacional previamente calculado.
+- Usa a politica versionada `personal-loan-pre-approval-v1`.
+- Define valor aprovado, prazo, taxa mensal e parcela estimada.
+- Rejeita automaticamente scores abaixo do minimo definido pela politica.
+
+O modulo retorna `approvedAmount`, `termMonths`, `monthlyInterestRate`, `estimatedInstallment`, `status` e breakdown com criterios de risco e capacidade de pagamento.

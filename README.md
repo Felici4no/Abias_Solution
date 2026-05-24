@@ -87,3 +87,25 @@ Payload esperado:
 ```
 
 Antes de calcular o score, o entregador precisa ter pelo menos uma conta conectada pelo fluxo mockado.
+
+Calculo de limite dinamico para cartao:
+
+```text
+POST /credit-card-limits/calculate
+```
+
+Pre-aprovacao de emprestimo pessoal:
+
+```text
+POST /loan-pre-approvals/calculate
+```
+
+Payload esperado para ambos:
+
+```json
+{
+  "courierId": "uuid-do-entregador"
+}
+```
+
+Antes desses calculos, o entregador precisa ter um score operacional calculado.

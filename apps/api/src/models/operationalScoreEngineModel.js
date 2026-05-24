@@ -78,6 +78,12 @@ export function calculateOperationalScore(payload) {
   };
 }
 
+export function findLatestOperationalScoreByCourierId(courierId) {
+  return operationalScores.findLast((operationalScore) => {
+    return operationalScore.courierId === courierId;
+  });
+}
+
 export function validateScorePayload(payload) {
   if (!payload || typeof payload !== "object" || payload._invalidJson) {
     return {
