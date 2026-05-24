@@ -1,30 +1,62 @@
 /**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+ * Any CSS included here will be global. The original light theme overrides.
  */
 
-/* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  /* Cor principal dos links e botões: Dourado (#D7A434) */
+  --ifm-color-primary: #D7A434;
+  --ifm-color-primary-dark: #c2942e;
+  --ifm-color-primary-darker: #b78c2c;
+  --ifm-color-primary-darkest: #977324;
+  --ifm-color-primary-light: #e0b04c;
+  --ifm-color-primary-lighter: #e4b659;
+  --ifm-color-primary-lightest: #efcc81;
+  
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
+/* Cor primária para o Modo Escuro: Rosa Claro (#FFB0C8) para dar mais contraste */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-color-primary: #FFB0C8;
+  --ifm-color-primary-dark: #e69eb4;
+  --ifm-color-primary-darker: #da96aa;
+  --ifm-color-primary-darkest: #b37c8c;
+  --ifm-color-primary-light: #ffc2d3;
+  --ifm-color-primary-lighter: #ffcbd9;
+  --ifm-color-primary-lightest: #ffe6ed;
+}
+
+/* --- CUSTOMIZAÇÃO DO GRADIENTE --- */
+
+/* Aplica o gradiente na Barra Superior (Navbar) em ambos os modos (claro/escuro) */
+.navbar {
+  background: linear-gradient(135deg, #D7A434 0%, #FFB0C8 100%) !important;
+}
+
+/* Garante que os textos e links da navbar fiquem brancos ou escuros para leitura */
+.navbar__item, .navbar__title, .navbar__toggle {
+  color: #1c1e21 !important; /* Cor escura para destacar bem no fundo colorido */
+  font-weight: bold;
+}
+
+/* Cor do link do menu lateral quando estiver selecionado (Tema Claro) */
+html[data-theme='light'] .theme-doc-sidebar-item-link-active {
+  background-color: rgba(215, 164, 52, 0.15) !important; /* Fundo suave dourado */
+  color: #D7A434 !important;
+}
+
+/* Cor do link do menu lateral quando estiver selecionado (Tema Escuro) */
+html[data-theme='dark'] .theme-doc-sidebar-item-link-active {
+  background-color: rgba(255, 176, 200, 0.15) !important; /* Fundo suave rosa */
+  color: #FFB0C8 !important;
+}
+
+/* src/css/custom.css */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin: 32px 0;
+  width: 100%;
 }
