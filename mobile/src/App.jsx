@@ -45,10 +45,11 @@ function App() {
     return localStorage.getItem('abias_gestao_justificativa') || ''
   })
 
-  // --- UI-only Navigation States ---
+  // --- UI Navigation States ---
   const [profileMode, setProfileMode] = useState('membro') // 'membro' | 'oficina' | 'gestao'
   const [activeTab, setActiveTab] = useState('inicio') // 'inicio' | 'credito' | 'evidencia' | 'reputacao' | 'fundo'
   const [clockTime, setClockTime] = useState('00:00')
+  const [showAreaOperacional, setShowAreaOperacional] = useState(false)
 
   // --- Temporary inputs for forms ---
   const [inputNome, setInputNome] = useState('João Silva')
@@ -177,14 +178,14 @@ function App() {
     setCicloEstado('community_validation')
   }
 
-  // 4. Simulação de avais comunitários
-  const handleSimularAvalMarcos = () => {
+  // 4. Avais comunitários
+  const handleMarcosAval = () => {
     const updated = { ...avaliacoes, marcos: 'approved', marcosComment: 'João é parceiro de confiança, conheço a rota dele na Zona Leste.' }
     setAvaliacoes(updated)
     checkAvais(updated)
   }
 
-  const handleSimularAvalAline = () => {
+  const handleAlineAval = () => {
     const updated = { ...avaliacoes, aline: 'approved', alineComment: 'Grande profissional de entrega. Corre garantido no asfalto.' }
     setAvaliacoes(updated)
     checkAvais(updated)
@@ -208,7 +209,6 @@ function App() {
   const handleGestaoAprovar = () => {
     setFundo(prev => prev + 34) // Contribuição simbólica no aprovado
     setCicloEstado('approved')
-    // Auto transition to evidence_pending for the member
     setTimeout(() => {
       setCicloEstado('evidence_pending')
     }, 100)
@@ -235,7 +235,7 @@ function App() {
     setAdminJustifyInput('')
   }
 
-  // 7. Evidência - Simulação de seleção e envio
+  // 7. Evidência - Envio
   const handleSimularRecibo = () => {
     setUploadFileSelected('recibo_oficina_jn.jpg')
     setUploadFileType('recibo')
@@ -248,7 +248,7 @@ function App() {
 
   const handleEnviarEvidencia = () => {
     if (!uploadFileSelected) {
-      alert('Selecione ou simule um arquivo para envio.')
+      alert('Selecione ou tire uma foto do serviço para envio.')
       return
     }
     const novaEvidencia = {
@@ -275,7 +275,7 @@ function App() {
     setCicloEstado('completed')
   }
 
-  // 10. Novo ciclo (Reset parcial para novo fluxo mantendo score e fundo)
+  // 10. Novo ciclo (Reset parcial para novo fluxo)
   const handleNovoCiclo = () => {
     setSolicitacao(null)
     setAvaliacoes({ marcos: 'pending', marcosComment: '', aline: 'pending', alineComment: '' })
@@ -328,14 +328,14 @@ function App() {
   // Helper para tradução amigável do estado
   const getEstadoLabel = (state) => {
     const dict = {
-      draft: { label: 'Rascunho', step: 'Preencher solicitação de crédito' },
+      draft: { label: 'Inativo', step: 'Solicitar crédito de rota para iniciar' },
       submitted: { label: 'Plano Sugerido', step: 'Confirmar os termos do plano comunitário' },
-      community_validation: { label: 'Validação da Rede', step: 'Obter avais de Marcos e Aline' },
+      community_validation: { label: 'Validação da Rede', step: 'Acompanhar validação da rede (Marcos e Aline)' },
       partner_quote: { label: 'Aguardando Orçamento', step: 'Oficina JN confirmando valores' },
       under_review: { label: 'Em Análise', step: 'Aguardando validação da Gestão Abias' },
       approved: { label: 'Aprovado', step: 'Recurso liberado para a manutenção' },
       evidence_pending: { label: 'Comprovação Pendente', step: 'Enviar comprovantes na aba Evidências' },
-      evidence_review: { label: 'Evidência em Validação', step: 'Oficina JN analisando serviço realizado' },
+      evidence_review: { label: 'Evidência em Análise', step: 'Oficina JN validando serviço realizado' },
       validated: { label: 'Serviço Validado', step: 'Aguardando finalização pela Gestão Abias' },
       completed: { label: 'Ciclo Concluído', step: 'Parabéns! Sua reputação subiu' },
       needs_revision: { label: 'Revisão Solicitada', step: 'Editar dados conforme indicado pela gestão' },
@@ -346,45 +346,66 @@ function App() {
 
   const currentStatus = getEstadoLabel(cicloEstado)
 
-  return (
-    <div className="desktop-showcase-container">
-      {/* Left Showcase Side Bar (Only visible on Desktop) */}
-      <div className="showcase-sidebar">
-        <div className="sidebar-header">
-          <span className="badge-hackathon">AMBIENTE PILOTO</span>
-          <h1 className="sidebar-title">Abias</h1>
-          <p className="sidebar-subtitle">MVP Funcional Local</p>
-        </div>
-
-        <div className="sidebar-context-card">
-          <p><strong>Não é empréstimo livre. É crédito produtivo validado.</strong></p>
-          <p>Este painel opera com persistência local em <code>localStorage</code>. Toda alteração de estado em modo Oficina ou Gestão reflete dinamicamente na tela do membro.</p>
-        </div>
-
-        <div className="sidebar-instructions">
-          <h3>Testando o MVP</h3>
-          <p>Simule a jornada de <strong>João Silva</strong> (R$ 850 para pneu + revisão) navegando pelas abas e alternando perfis no topo do smartphone ao lado.</p>
-
-          <div className="sidebar-actions-grid">
-            <button className="btn-sidebar btn-reset" onClick={handleResetDemo}>
-              <i className="fa-solid fa-rotate-left"></i> Reiniciar MVP (Reset Local)
+  // Dynamic Home Screen CTA render
+  const renderHomeCTA = () => {
+    switch (cicloEstado) {
+      case 'draft':
+        return (
+          <button className="btn-app btn-app-primary" onClick={() => setActiveTab('credito')}>
+            <i className="fa-solid fa-route"></i> Solicitar crédito de rota
+          </button>
+        )
+      case 'community_validation':
+        return (
+          <button className="btn-app btn-app-primary" onClick={() => setActiveTab('credito')}>
+            <i className="fa-solid fa-users-double"></i> Acompanhar validação da rede
+          </button>
+        )
+      case 'evidence_pending':
+        return (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
+            <button className="btn-app btn-app-primary" onClick={() => setActiveTab('evidencia')}>
+              <i className="fa-solid fa-upload"></i> Enviar evidência
+            </button>
+            <button className="btn-app btn-app-secondary" onClick={() => setActiveTab('credito')}>
+              Acompanhar ciclo
             </button>
           </div>
-        </div>
+        )
+      case 'submitted':
+      case 'partner_quote':
+      case 'under_review':
+      case 'evidence_review':
+      case 'validated':
+        return (
+          <button className="btn-app btn-app-primary" onClick={() => setActiveTab('credito')}>
+            <i className="fa-solid fa-route"></i> Acompanhar ciclo
+          </button>
+        )
+      case 'completed':
+        return (
+          <button className="btn-app btn-app-primary" onClick={handleNovoCiclo}>
+            <i className="fa-solid fa-rotate-left"></i> Iniciar novo ciclo
+          </button>
+        )
+      default:
+        return (
+          <button className="btn-app btn-app-primary" onClick={() => setActiveTab('credito')}>
+            Ver status
+          </button>
+        )
+    }
+  }
 
-        <div className="sidebar-rules">
-          <h4>Parâmetros da Simulação:</h4>
-          <ul>
-            <li><i className="fa-solid fa-check"></i> Motoboy: João Silva (Leste)</li>
-            <li><i className="fa-solid fa-check"></i> Oficina: Oficina JN</li>
-            <li><i className="fa-solid fa-check"></i> Validadores: Marcos e Aline</li>
-            <li><i className="fa-solid fa-quote-left"></i> “Quando a moto para, a renda para.”</li>
-          </ul>
-        </div>
-      </div>
-
-      {/* Right Side: Phone Mockup Frame */}
+  return (
+    <div className="desktop-showcase-container">
+      {/* Centered phone wrapper with clean outer header */}
       <div className="phone-showcase-wrapper">
+        <div className="external-desktop-header">
+          <h1>Abias</h1>
+          <p>MVP Operacional — Rede Piloto</p>
+        </div>
+
         <div className="smartphone-frame">
           <div className="phone-notch"></div>
           <div className="phone-button volume-up"></div>
@@ -392,7 +413,7 @@ function App() {
           <div className="phone-button power-button"></div>
 
           <div className="phone-screen-container">
-            {/* Top Status Bar */}
+            {/* Simulated Mobile Status Bar */}
             <div className="mobile-status-bar">
               <span className="status-time">{clockTime}</span>
               <div className="status-icons">
@@ -403,85 +424,111 @@ function App() {
               </div>
             </div>
 
-            {/* Profile Swapper Buttons in App Header */}
-            <div className="app-profile-switcher-header" style={{
+            {/* Header Area with Discrete Settings Gear for Operating Drawer */}
+            <div className="app-header-main-top" style={{
               display: 'flex',
-              background: '#141416',
+              background: '#0B0B0B',
               borderBottom: '1px solid var(--border-color)',
-              padding: '6px 12px',
-              justifyContent: 'space-around',
-              gap: '6px'
+              padding: '12px 20px',
+              justifyContent: 'space-between',
+              alignItems: 'center'
             }}>
+              <span className="abias-logo" style={{ fontSize: '1.2rem', fontWeight: 800 }}>Abias</span>
               <button 
-                onClick={() => setProfileMode('membro')}
-                style={{
-                  flex: 1,
-                  padding: '6px 4px',
-                  background: profileMode === 'membro' ? 'var(--color-green)' : 'rgba(255,255,255,0.03)',
-                  border: 'none',
-                  borderRadius: '4px',
-                  color: '#ffffff',
-                  fontSize: '0.7rem',
-                  fontWeight: 700,
-                  cursor: 'pointer'
-                }}>
-                <i className="fa-solid fa-user-ninja" style={{ marginRight: '4px' }}></i> Membro
-              </button>
-              <button 
-                onClick={() => setProfileMode('oficina')}
-                style={{
-                  flex: 1,
-                  padding: '6px 4px',
-                  background: profileMode === 'oficina' ? 'var(--color-gold)' : 'rgba(255,255,255,0.03)',
-                  border: 'none',
-                  borderRadius: '4px',
-                  color: profileMode === 'oficina' ? '#000000' : '#ffffff',
-                  fontSize: '0.7rem',
-                  fontWeight: 700,
-                  cursor: 'pointer'
-                }}>
-                <i className="fa-solid fa-wrench" style={{ marginRight: '4px' }}></i> Oficina
-              </button>
-              <button 
-                onClick={() => setProfileMode('gestao')}
-                style={{
-                  flex: 1,
-                  padding: '6px 4px',
-                  background: profileMode === 'gestao' ? 'var(--color-terra)' : 'rgba(255,255,255,0.03)',
-                  border: 'none',
-                  borderRadius: '4px',
-                  color: '#ffffff',
-                  fontSize: '0.7rem',
-                  fontWeight: 700,
-                  cursor: 'pointer'
-                }}>
-                <i className="fa-solid fa-users-cog" style={{ marginRight: '4px' }}></i> Gestão
+                className="btn-settings-toggle" 
+                onClick={() => setShowAreaOperacional(true)}
+                title="Área operacional"
+                aria-label="Abrir Área operacional">
+                <i className="fa-solid fa-sliders"></i>
               </button>
             </div>
 
-            {/* Main Screen Content */}
+            {/* Screen Content Scroll Area */}
             <div className="screen-scroll-area" style={{ paddingBottom: '80px' }}>
               
+              {/* OPERATIONAL DRAWER OVERLAY */}
+              {showAreaOperacional && (
+                <div className="area-operacional-overlay">
+                  <div>
+                    <div className="area-operacional-header">
+                      <h3>Área operacional</h3>
+                      <p>Área operacional do MVP local. Use apenas para alternar perfis e validar o ciclo.</p>
+                    </div>
+                    
+                    <div className="area-operacional-content">
+                      <div className="area-operacional-info-card">
+                        <p><strong>Membro:</strong> {membro ? membro.nome : 'Não cadastrado'}</p>
+                        <p><strong>Estado do Ciclo:</strong> <span className="font-mono">{getEstadoLabel(cicloEstado).label}</span></p>
+                        <p><strong>Reputação de Rota:</strong> <span className="font-mono">{reputacao}/1000</span></p>
+                        <p><strong>Fundo Abias:</strong> <span className="font-mono">R$ {fundo.toFixed(2)}</span></p>
+                      </div>
+
+                      <div className="area-operacional-actions">
+                        <button 
+                          className="btn-app btn-app-primary"
+                          style={{ 
+                            background: profileMode === 'membro' ? 'var(--color-green)' : 'rgba(255,255,255,0.03)',
+                            border: '1px solid var(--border-color)' 
+                          }}
+                          onClick={() => { setProfileMode('membro'); setShowAreaOperacional(false); }}>
+                          Acessar Modo Membro {profileMode === 'membro' && '✓'}
+                        </button>
+                        <button 
+                          className="btn-app btn-app-primary"
+                          style={{ 
+                            background: profileMode === 'oficina' ? 'var(--color-gold)' : 'rgba(255,255,255,0.03)', 
+                            color: profileMode === 'oficina' ? '#0b0b0b' : '#ffffff',
+                            border: '1px solid var(--border-color)'
+                          }}
+                          onClick={() => { setProfileMode('oficina'); setShowAreaOperacional(false); }}>
+                          Acessar Modo Oficina {profileMode === 'oficina' && '✓'}
+                        </button>
+                        <button 
+                          className="btn-app btn-app-primary"
+                          style={{ 
+                            background: profileMode === 'gestao' ? 'var(--color-terra)' : 'rgba(255,255,255,0.03)',
+                            border: '1px solid var(--border-color)'
+                          }}
+                          onClick={() => { setProfileMode('gestao'); setShowAreaOperacional(false); }}>
+                          Acessar Modo Gestão {profileMode === 'gestao' && '✓'}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="area-operacional-footer">
+                    <button 
+                      className="btn-app btn-app-secondary" 
+                      style={{ color: 'var(--danger)', borderColor: 'rgba(239, 68, 68, 0.2)' }}
+                      onClick={handleResetDemo}>
+                      Limpar dados locais
+                    </button>
+                    <button className="btn-app btn-app-secondary" onClick={() => setShowAreaOperacional(false)}>
+                      Voltar ao aplicativo
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* PROFILE MODE: MEMBRO */}
               {profileMode === 'membro' && (
                 <>
-                  {/* If not registered yet, force registration screen */}
+                  {/* If not registered, force registration onboarding */}
                   {!membro ? (
                     <div className="screen active" style={{ padding: '20px' }}>
-                      <div className="onboarding-logo" style={{ marginBottom: '20px' }}>
-                        <span className="abias-logo">Abias</span>
-                      </div>
-                      <h2 style={{ fontSize: '1.6rem', marginBottom: '10px' }}>Cadastro de Membro</h2>
+                      <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '8px', lineHeight: '1.2' }}>
+                        O banco vê um CPF.<br />A Abias vê uma rota.
+                      </h2>
                       <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>
                         Cadastre-se na comunidade para validar sua rota e acessar fomento produtivo.
                       </p>
-                      
+
                       <form onSubmit={handleCadastro} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                         <div className="mobile-form-group">
                           <label className="form-label">Nome Completo</label>
                           <input 
                             type="text" 
-                            className="form-text-input" 
+                            className="form-text-input"
                             value={inputNome} 
                             onChange={(e) => setInputNome(e.target.value)} 
                             required 
@@ -492,7 +539,7 @@ function App() {
                           <label className="form-label">Telefone / WhatsApp</label>
                           <input 
                             type="text" 
-                            className="form-text-input" 
+                            className="form-text-input"
                             value={inputTelefone} 
                             onChange={(e) => setInputTelefone(e.target.value)} 
                             required 
@@ -500,10 +547,10 @@ function App() {
                         </div>
 
                         <div className="mobile-form-group">
-                          <label className="form-label">Região / Cidade</label>
+                          <label className="form-label">Região principal de atuação</label>
                           <input 
                             type="text" 
-                            className="form-text-input" 
+                            className="form-text-input"
                             value={inputRegiao} 
                             onChange={(e) => setInputRegiao(e.target.value)} 
                             required 
@@ -514,7 +561,7 @@ function App() {
                           <label className="form-label">Tempo como Motoboy</label>
                           <input 
                             type="text" 
-                            className="form-text-input" 
+                            className="form-text-input"
                             value={inputTempo} 
                             onChange={(e) => setInputTempo(e.target.value)} 
                             required 
@@ -545,20 +592,21 @@ function App() {
                           </select>
                         </div>
 
-                        <div className="mobile-form-group" style={{ flexDirection: 'row', alignItems: 'center', gap: '10px', marginTop: '10px' }}>
+                        <div className="mobile-form-group" style={{ flexDirection: 'row', alignItems: 'flex-start', gap: '10px', marginTop: '10px' }}>
                           <input 
                             type="checkbox" 
-                            id="aceite-dados" 
+                            id="aceite-dados-mvp" 
                             checked={inputAceite} 
+                            style={{ marginTop: '2px' }}
                             onChange={(e) => setInputAceite(e.target.checked)} 
                           />
-                          <label htmlFor="aceite-dados" style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                            Aceito os termos da comunidade e concordo com o compartilhamento de rota Abias.
+                          <label htmlFor="aceite-dados-mvp" style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>
+                            Concordo com os termos de consentimento e aceito o compartilhamento de rota comunitária da Abias.
                           </label>
                         </div>
 
                         <button type="submit" className="btn-app btn-app-primary" style={{ marginTop: '10px' }}>
-                          Concluir Cadastro
+                          Registrar membro
                         </button>
                       </form>
                     </div>
@@ -567,22 +615,22 @@ function App() {
                       {/* TAB 1: INÍCIO */}
                       {activeTab === 'inicio' && (
                         <div className="screen active" id="screen-home">
-                          <div className="app-header">
+                          <div className="app-header" style={{ borderBottom: 'none', paddingBottom: '0' }}>
                             <div className="member-profile">
                               <div className="member-avatar"><i className="fa-solid fa-motorcycle"></i></div>
                               <div>
-                                <span className="greeting-sub">Corre Ativo</span>
+                                <span className="greeting-sub">CORRE ATIVO</span>
                                 <h3 className="member-name">Salve, {membro.nome}</h3>
                               </div>
                             </div>
-                            <span className="badge-status-membro"><i className="fa-solid fa-shield-halved"></i> Membro Validado</span>
+                            <span className="badge-status-membro"><i className="fa-solid fa-shield-halved"></i> Rota Comprovada</span>
                           </div>
 
-                          {/* Operational Status Card */}
-                          <div className="home-main-card">
+                          {/* Cycle Active Status Card */}
+                          <div className="home-main-card" style={{ marginTop: '16px' }}>
                             <div className="home-card-header">
-                              <span className="card-tag">STATUS DO CICLO</span>
-                              {cicloEstado === 'evidence_pending' || cicloEstado === 'evidence_review' || cicloEstado === 'validated' ? (
+                              <span className="card-tag">STATUS OPERACIONAL</span>
+                              {['evidence_pending', 'evidence_review', 'validated'].includes(cicloEstado) ? (
                                 <span className="status-indicator-green" style={{ color: 'var(--color-gold)' }}>
                                   <i className="fa-solid fa-circle"></i> Fomento em Manutenção Ativo
                                 </span>
@@ -612,12 +660,17 @@ function App() {
                             </div>
                           </div>
 
-                          {/* Quick Stats Grid */}
-                          <div className="home-stats-section" style={{ marginTop: '0', marginBottom: '20px' }}>
-                            <h4 className="section-title-mobile">Métricas Operacionais do Piloto</h4>
-                            <div className="stats-mobile-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
+                          {/* Dynamic CTA button conforme estado */}
+                          <div className="home-actions-group">
+                            {renderHomeCTA()}
+                          </div>
+
+                          {/* Quick Metrics display */}
+                          <div className="home-stats-section" style={{ marginTop: '24px', marginBottom: '20px' }}>
+                            <h4 className="section-title-mobile">Indicadores do Fomento</h4>
+                            <div className="stats-mobile-grid">
                               <div className="stat-mobile-card">
-                                <span className="val font-mono">{cicloEstado !== 'draft' ? '1' : '0'}</span>
+                                <span className="val font-mono">{cicloEstado !== 'draft' && cicloEstado !== 'completed' ? '1' : '0'}</span>
                                 <span className="lbl">Solicitação ativa</span>
                               </div>
                               <div className="stat-mobile-card">
@@ -626,7 +679,7 @@ function App() {
                                     (avaliacoes.marcos === 'approved' ? 0 : 1) + (avaliacoes.aline === 'approved' ? 0 : 1)
                                   ) : cicloEstado === 'draft' || cicloEstado === 'submitted' ? '2' : '0'}
                                 </span>
-                                <span className="lbl">Avais comunitários pendentes</span>
+                                <span className="lbl">Avais comunitários</span>
                               </div>
                               <div className="stat-mobile-card">
                                 <span className="val font-mono">{cicloEstado !== 'draft' ? '1' : '0'}</span>
@@ -636,23 +689,13 @@ function App() {
                                 <span className="val font-mono">R$ {currentAmount}</span>
                                 <span className="lbl">Valor solicitado</span>
                               </div>
-                              <div className="stat-mobile-card">
-                                <span className="val font-mono">{cicloEstado !== 'draft' ? '4' : '0'}</span>
-                                <span className="lbl">Parcelas sugeridas</span>
-                              </div>
-                              <div className="stat-mobile-card">
-                                <span className="val font-mono">
-                                  {cicloEstado === 'completed' || cicloEstado === 'validated' ? '2/2' : '0/2'}
-                                </span>
-                                <span className="lbl">Evidências validadas</span>
-                              </div>
                             </div>
                           </div>
 
-                          {/* Timeline display */}
+                          {/* Cycle Timeline */}
                           {cicloEstado !== 'draft' && (
                             <div className="info-notice-card plain-border" style={{ margin: '0 20px 20px' }}>
-                              <h4 style={{ fontSize: '0.8rem', color: 'var(--color-gold)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Acompanhamento do Ciclo</h4>
+                              <h4 style={{ fontSize: '0.8rem', color: 'var(--color-gold)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Acompanhar ciclo</h4>
                               <p style={{ fontSize: '0.8rem', color: '#ffffff', fontWeight: 'bold' }}>Passo Atual: {currentStatus.label}</p>
                               <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '2px' }}>Próximo passo: {currentStatus.step}</p>
                             </div>
@@ -761,12 +804,12 @@ function App() {
                                 </div>
 
                                 <div className="mobile-form-group">
-                                  <label className="form-label">Descrição curta da necessidade</label>
+                                  <label className="form-label">Descrição da necessidade</label>
                                   <textarea 
                                     className="form-textarea" 
                                     value={inputDescricao} 
                                     onChange={(e) => setInputDescricao(e.target.value)} 
-                                    placeholder="Descreva por que o serviço é necessário agora."
+                                    placeholder="Explique porque o serviço é necessário para continuar as entregas."
                                     required
                                   />
                                 </div>
@@ -793,7 +836,7 @@ function App() {
                                 <div className="premium-credit-card compact-slip">
                                   <div className="card-brand-row">
                                     <span className="card-brand">Abias</span>
-                                    <span className="card-contactless"><i className="fa-solid fa-receipt"></i> MOCK SLIP</span>
+                                    <span className="card-contactless"><i className="fa-solid fa-receipt"></i> COMPROVANTE OPERACIONAL</span>
                                   </div>
                                   <div className="slip-details">
                                     <div className="slip-row">
@@ -884,8 +927,8 @@ function App() {
                                     {avaliacoes.marcos === 'pending' ? (
                                       <button 
                                         className="btn-app btn-app-secondary" 
-                                        onClick={handleSimularMarcos}>
-                                        <i className="fa-solid fa-signature"></i> Simular Aval de Marcos
+                                        onClick={handleMarcosAval}>
+                                        <i className="fa-solid fa-signature"></i> Confirmar Aval de Marcos
                                       </button>
                                     ) : (
                                       <p style={{ fontSize: '0.75rem', fontStyle: 'italic', color: 'var(--text-secondary)' }}>
@@ -911,8 +954,8 @@ function App() {
                                     {avaliacoes.aline === 'pending' ? (
                                       <button 
                                         className="btn-app btn-app-secondary" 
-                                        onClick={handleSimularAline}>
-                                        <i className="fa-solid fa-signature"></i> Simular Aval de Aline
+                                        onClick={handleAlineAval}>
+                                        <i className="fa-solid fa-signature"></i> Confirmar Aval de Aline
                                       </button>
                                     ) : (
                                       <p style={{ fontSize: '0.75rem', fontStyle: 'italic', color: 'var(--text-secondary)' }}>
@@ -948,7 +991,7 @@ function App() {
                                 <div className="premium-credit-card compact-slip">
                                   <div className="card-brand-row">
                                     <span className="card-brand">Abias</span>
-                                    <span className="card-contactless"><i className="fa-solid fa-receipt"></i> DEFINITIVE SLIP</span>
+                                    <span className="card-contactless"><i className="fa-solid fa-receipt"></i> COMPROVANTE OPERACIONAL</span>
                                   </div>
                                   <div className="slip-details">
                                     <div className="slip-row">
@@ -999,7 +1042,7 @@ function App() {
                                       <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', marginTop: '2px' }}>"{gestaoJustificativa}"</p>
                                     </div>
                                     <button className="btn-app btn-app-primary" onClick={handleNovoCiclo}>
-                                      Solicitar Nova Rota
+                                      Solicitar Novo Fomento
                                     </button>
                                   </div>
                                 )}
@@ -1028,7 +1071,7 @@ function App() {
                                   <h4>Manutenção da Moto ({currentFinalidade})</h4>
                                   <div className="milestone-status-row">
                                     <span className="lbl">Estado da Evidência:</span>
-                                    <span className="val-status text-warning">Pendente de Upload</span>
+                                    <span className="val-status text-warning">Pendente de Envio</span>
                                   </div>
                                 </div>
 
@@ -1039,7 +1082,7 @@ function App() {
                                   </div>
                                   <div className="upload-box-action" onClick={handleSimularRecibo} style={{ border: uploadFileType === 'recibo' ? '1px solid var(--color-gold)' : '' }}>
                                     <div className="box-icon"><i className="fa-solid fa-file-invoice-dollar"></i></div>
-                                    <span>Enviar recibo da oficina</span>
+                                    <span>Anexar recibo da oficina</span>
                                   </div>
                                 </div>
 
@@ -1112,7 +1155,7 @@ function App() {
                                 {reputacao <= 720 ? 'Rota Confiável' : reputacao <= 745 ? 'Rota Consolidada' : 'Alta Confiança de Rota'}
                               </h4>
                               <p className="reputacao-desc">
-                                Sua reputação cresce com o cumprimento de ciclos em dia, validação rápida de evidências em até 24h e suporte comunitário a outros entregadores da rede.
+                                Sua reputação de rota cresce com o cumprimento de ciclos em dia, envio rápido de evidências e apoio mútuo a outros entregadores da rede Abias.
                               </p>
                             </div>
 
@@ -1161,13 +1204,10 @@ function App() {
                             </div>
 
                             <div className="how-to-improve-card glass">
-                              <h4>Como subir seu score?</h4>
-                              <ul className="improve-checklist">
-                                <li><i className="fa-solid fa-plus-square"></i> Confirmar avais comunitários (+10 pts)</li>
-                                <li><i className="fa-solid fa-plus-square"></i> Confirmar orçamento na oficina (+15 pts)</li>
-                                <li><i className="fa-solid fa-plus-square"></i> Enviar evidência do serviço realizado (+20 pts)</li>
-                                <li><i className="fa-solid fa-plus-square"></i> Finalizar ciclo com sucesso (+25 pts)</li>
-                              </ul>
+                              <h4>Fatores de Crescimento</h4>
+                              <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
+                                Cada etapa do ciclo ativo que você conclui melhora seu histórico e nota. "Sua rota também é reputação."
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -1184,7 +1224,7 @@ function App() {
                             <div className="fundo-headline-card glass">
                               <span className="section-tag tag-yellow">FUNDO ABIAS — AMBIENTE PILOTO</span>
                               <h2>Crédito individual. Proteção coletiva.</h2>
-                              <p>A taxa de sustentabilidade de 8% compartilhada na manutenção da moto retorna integralmente para blindar a rede de motoboys contra imprevistos.</p>
+                              <p>A margem dos ciclos operacionais não é juro bancário para lucro de terceiros. Ela retorna para a base como reserva coletiva da rota.</p>
                             </div>
 
                             <div className="fundo-reserve-card glass">
@@ -1193,7 +1233,7 @@ function App() {
                               <div className="fundo-bar-wrapper">
                                 <div className="fundo-bar-fill-mobile" style={{ width: `${Math.min(100, (fundo / 8000) * 100)}%` }}></div>
                               </div>
-                              <span className="fundo-subtext-meta">Meta de cobertura piloto: R$ 8.000,00</span>
+                              <span className="fundo-subtext-meta">Meta de blindagem do piloto: R$ 8.000,00</span>
                             </div>
 
                             {/* Circular Economy loop visual */}
@@ -1211,7 +1251,7 @@ function App() {
                                   border: (cicloEstado === 'submitted' || cicloEstado === 'community_validation') ? '1px solid var(--color-gold)' : '1px solid transparent'
                                 }}>
                                   <span style={{ fontWeight: 700, color: 'var(--color-gold)' }}>1. Crédito na Rede</span>
-                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Fomento produtivo pequeno liberado.</span>
+                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Fomento exclusivo para a ferramenta.</span>
                                 </div>
 
                                 <div style={{ 
@@ -1224,7 +1264,7 @@ function App() {
                                   border: (cicloEstado === 'partner_quote' || cicloEstado === 'evidence_review' || cicloEstado === 'validated') ? '1px solid var(--color-green)' : '1px solid transparent'
                                 }}>
                                   <span style={{ fontWeight: 700, color: 'var(--success)' }}>2. Oficina Recebe</span>
-                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Recurso entra direto nas oficinas do bairro.</span>
+                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Recurso circula em mecânicas locais.</span>
                                 </div>
 
                                 <div style={{ 
@@ -1237,7 +1277,7 @@ function App() {
                                   border: (cicloEstado === 'evidence_pending') ? '1px solid var(--color-terra)' : '1px solid transparent'
                                 }}>
                                   <span style={{ fontWeight: 700, color: 'var(--color-terra)' }}>3. Moto na Rota</span>
-                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>João volta às ruas reduzindo dias parados.</span>
+                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>João mantém entregas sem dias parados.</span>
                                 </div>
 
                                 <div style={{ 
@@ -1250,7 +1290,7 @@ function App() {
                                   border: (cicloEstado === 'completed') ? '1px solid var(--color-gold)' : '1px solid transparent'
                                 }}>
                                   <span style={{ fontWeight: 700, color: 'var(--color-gold)' }}>4. Fundo Cresce</span>
-                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Taxa quitada retroalimenta o fundo de blindagem.</span>
+                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Retorno de taxa retroalimenta a rede piloto.</span>
                                 </div>
                               </div>
 
@@ -1258,10 +1298,6 @@ function App() {
                                 "O crédito entra na rede e volta como proteção coletiva."
                               </p>
                             </div>
-
-                            <button className="btn-app btn-app-secondary" onClick={() => alert('Parâmetros do Fundo Piloto: Cobertura parcial para guincho, pneus sobressalentes e manutenção emergencial na rede de oficinas certificadas.')}>
-                              Visualizar Parâmetros do Fundo
-                            </button>
                           </div>
                         </div>
                       )}
@@ -1273,24 +1309,24 @@ function App() {
               {/* PROFILE MODE: OFICINA */}
               {profileMode === 'oficina' && (
                 <div className="screen active" id="screen-oficina-mode" style={{ padding: '20px' }}>
-                  <div className="app-header-simple" style={{ margin: '-20px -20px 20px', background: 'var(--color-gold)', color: '#000000' }}>
-                    <h3 style={{ color: '#000000' }}><i className="fa-solid fa-wrench"></i> Painel Oficina Credenciada</h3>
+                  <div className="app-header-simple" style={{ margin: '-20px -20px 20px', background: 'var(--color-gold)', color: '#0b0b0b' }}>
+                    <h3 style={{ color: '#0b0b0b' }}><i className="fa-solid fa-wrench"></i> Painel Oficina Parceira</h3>
                   </div>
 
                   {!solicitacao || ['draft', 'submitted', 'community_validation'].includes(cicloEstado) ? (
                     <div className="info-notice-card" style={{ margin: 0 }}>
-                      <p>Nenhuma solicitação de orçamento vinculada à Oficina JN no momento.</p>
+                      <p>Nenhuma solicitação de fomento vinculada à Oficina JN no momento.</p>
                     </div>
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                       <div className="milestone-card glass">
                         <span className="lbl-milestone">OFICINA JN</span>
-                        <h4 style={{ marginBottom: '8px' }}>Solicitação de {membro?.nome || 'João Silva'}</h4>
+                        <h4 style={{ marginBottom: '8px' }}>Solicitação de fomento de {membro?.nome || 'João Silva'}</h4>
                         <div className="q-details" style={{ marginBottom: '10px' }}>
                           <span>Finalidade: <strong>{currentFinalidade}</strong></span>
                           <span>Valor Solicitado: <strong>R$ {currentAmount.toFixed(2)}</strong></span>
                           <span>Urgência declarada: <strong>{currentUrgencia}</strong></span>
-                          <span>Descrição do motoboy: "{currentDescricao}"</span>
+                          <span>Descrição: "{currentDescricao}"</span>
                         </div>
                         
                         <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', borderTop: '1px dashed var(--border-color)', paddingTop: '10px' }}>
@@ -1301,11 +1337,11 @@ function App() {
                       {/* State Action: Confirm quote */}
                       {cicloEstado === 'partner_quote' && (
                         <div className="glass" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                          <h5>Ação 1: Validar Orçamento Técnico</h5>
+                          <h5>Validar Orçamento de R$ {currentAmount}</h5>
                           <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                            Confirme que o valor solicitado de R$ {currentAmount} está de acordo com as necessidades técnicos do veículo.
+                            Confirme que o orçamento é adequado para o reparo necessário do veículo.
                           </p>
-                          <button className="btn-app btn-app-primary" style={{ background: 'var(--color-gold)', color: '#000000' }} onClick={handleOficinaConfirmarOrçamento}>
+                          <button className="btn-app btn-app-primary" style={{ background: 'var(--color-gold)', color: '#0b0b0b' }} onClick={handleOficinaConfirmarOrçamento}>
                             Confirmar Orçamento
                           </button>
                         </div>
@@ -1314,15 +1350,15 @@ function App() {
                       {/* State Action: Confirm service completed */}
                       {cicloEstado === 'evidence_review' && (
                         <div className="glass" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                          <h5>Ação 2: Confirmar Execução do Serviço</h5>
+                          <h5>Confirmar Execução do Serviço</h5>
                           <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                            O motoboy enviou o comprovante/recibo técnico. Confirme que o pneu foi trocado ou a revisão concluída na sua oficina.
+                            João enviou o comprovante técnico. Confirme que o serviço foi finalizado.
                           </p>
                           <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '4px', fontSize: '0.75rem' }}>
-                            <p><strong>Comprovante anexado:</strong> {evidencia.file}</p>
-                            <p><strong>Obs João:</strong> "{evidencia.obs || 'Nenhuma obs.'}"</p>
+                            <p><strong>Arquivo anexado:</strong> {evidencia.file}</p>
+                            <p><strong>Observações João:</strong> "{evidencia.obs || 'Nenhuma obs.'}"</p>
                           </div>
-                          <button className="btn-app btn-app-primary" style={{ background: 'var(--color-gold)', color: '#000000' }} onClick={handleOficinaConfirmarServico}>
+                          <button className="btn-app btn-app-primary" style={{ background: 'var(--color-gold)', color: '#0b0b0b' }} onClick={handleOficinaConfirmarServico}>
                             Confirmar Serviço Realizado
                           </button>
                         </div>
@@ -1330,7 +1366,7 @@ function App() {
 
                       {['under_review', 'approved', 'evidence_pending', 'validated', 'completed'].includes(cicloEstado) && (
                         <div className="info-notice-card plain-border" style={{ margin: 0 }}>
-                          <p><i className="fa-solid fa-circle-check" style={{ color: 'var(--success)' }}></i> Ação técnica concluída para esta etapa do fomento.</p>
+                          <p><i className="fa-solid fa-circle-check" style={{ color: 'var(--success)' }}></i> Ações técnicas concluídas para este ciclo.</p>
                         </div>
                       )}
                     </div>
@@ -1362,7 +1398,7 @@ function App() {
                         <span className="val font-mono">{cicloEstado === 'evidence_review' ? '1' : '0'}</span>
                       </div>
                       <div className="metric-admin-card glass">
-                        <span className="lbl">Reserva Coletiva</span>
+                        <span className="lbl">Fundo Operacional</span>
                         <span className="val font-mono">R$ {fundo}</span>
                       </div>
                     </div>
@@ -1372,7 +1408,7 @@ function App() {
                       <h4>Fila de Ciclos Operacionais</h4>
 
                       {!solicitacao || ['draft', 'submitted', 'community_validation', 'partner_quote'].includes(cicloEstado) ? (
-                        <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Nenhuma solicitação na fila de análise da Gestão.</p>
+                        <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Nenhuma solicitação aguardando análise da Gestão.</p>
                       ) : (
                         <div className="queue-item">
                           <div className="q-header">
@@ -1384,7 +1420,7 @@ function App() {
                             <span>Finalidade: <strong>{currentFinalidade}</strong></span>
                             <span>Oficina indicada: <strong>{currentOficina}</strong></span>
                             <span>Prazo solicitado: <strong>{currentPrazo} dias</strong></span>
-                            <span>Urgência operacional: <strong>{currentUrgencia}</strong></span>
+                            <span>Urgência: <strong>{currentUrgencia}</strong></span>
                             {currentDescricao && <span>Descrição: "{currentDescricao}"</span>}
                           </div>
 
@@ -1397,7 +1433,7 @@ function App() {
                             </span>
                             {['evidence_review', 'validated', 'completed'].includes(cicloEstado) && (
                               <span className={`chk-status ${oficinaConfirmacao.serviceConfirmed ? 'checked' : 'warning'}`}>
-                                <i className={`fa-solid ${oficinaConfirmacao.serviceConfirmed ? 'fa-check' : 'fa-spinner fa-spin'}`}></i> Validação de Serviço Realizado
+                                <i className={`fa-solid ${oficinaConfirmacao.serviceConfirmed ? 'fa-check' : 'fa-spinner fa-spin'}`}></i> Validação de Serviço
                               </span>
                             )}
                           </div>
@@ -1411,7 +1447,7 @@ function App() {
                                 style={{ height: '50px' }}
                                 value={adminJustifyInput} 
                                 onChange={(e) => setAdminJustifyInput(e.target.value)} 
-                                placeholder="Insira o texto de justificativa aqui..."
+                                placeholder="Descreva os motivos caso vá pedir revisão ou recusar."
                               />
                               <div className="admin-actions-row">
                                 <button className="btn-admin btn-admin-approve" onClick={handleGestaoAprovar}>
@@ -1432,7 +1468,7 @@ function App() {
                             <div style={{ marginTop: '10px' }}>
                               <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '4px', fontSize: '0.75rem', marginBottom: '10px' }}>
                                 <p><strong>Serviço realizado confirmado pela oficina.</strong></p>
-                                <p>Pneu instalado e nota fiscal validada em conformidade.</p>
+                                <p>Comprovante técnico validado.</p>
                               </div>
                               <button className="btn-app btn-app-primary" style={{ background: 'var(--color-green)' }} onClick={handleGestaoConcluirCiclo}>
                                 Fechar e Concluir Ciclo de Rota
@@ -1450,14 +1486,14 @@ function App() {
                     </div>
 
                     <div className="admin-alerts-card glass">
-                      <h4>Risco e Inconsistências (IA Abias)</h4>
+                      <h4>Governança de Risco</h4>
                       <div className="alert-log-item warning">
                         <i className="fa-solid fa-circle-info"></i>
                         <span>A IA apoia a análise. A decisão não é automática.</span>
                       </div>
                       <div className="alert-log-item warning">
                         <i className="fa-solid fa-triangle-exclamation"></i>
-                        <span>Aval de rede concluído em 15 minutos. Nenhuma anormalidade territorial.</span>
+                        <span>Ciclo validado pela rede local sem inconsistências.</span>
                       </div>
                     </div>
                   </div>
