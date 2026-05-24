@@ -330,7 +330,7 @@ function App() {
   // Helper para tradução amigável do estado
   const getEstadoLabel = (state) => {
     const dict = {
-      draft: { label: 'Inativo', step: 'Solicitar crédito de rota para iniciar' },
+      draft: { label: 'Inativo', step: 'Solicitar crédito de jornada para iniciar' },
       submitted: { label: 'Plano Sugerido', step: 'Confirmar os termos do plano comunitário' },
       community_validation: { label: 'Validação da Rede', step: 'Acompanhar validação da rede (Marcos e Aline)' },
       partner_quote: { label: 'Aguardando Orçamento', step: 'Oficina JN confirmando valores' },
@@ -354,7 +354,7 @@ function App() {
       case 'draft':
         return (
           <button className="btn-app btn-app-primary" onClick={() => setActiveTab('credito')}>
-            <i className="fa-solid fa-route"></i> Solicitar crédito de rota
+            <i className="fa-solid fa-route"></i> Solicitar crédito de jornada
           </button>
         )
       case 'community_validation':
@@ -463,7 +463,7 @@ function App() {
                       <div className="area-operacional-info-card">
                         <p><strong>Membro:</strong> {membro ? membro.nome : 'Não cadastrado'}</p>
                         <p><strong>Estado do Ciclo:</strong> <span className="font-mono">{getEstadoLabel(cicloEstado).label}</span></p>
-                        <p><strong>Reputação de Rota:</strong> <span className="font-mono">{reputacao}/1000</span></p>
+                        <p><strong>Reputação de Jornada:</strong> <span className="font-mono">{reputacao}/1000</span></p>
                         <p><strong>Fundo Abias:</strong> <span className="font-mono">R$ {fundo.toFixed(2)}</span></p>
                       </div>
 
@@ -527,14 +527,14 @@ function App() {
                             <div className="splash-logo-wrapper" style={{ marginBottom: '20px' }}>
                               <h1 className="splash-logo-text" style={{ fontSize: '3.6rem', fontWeight: 900, letterSpacing: '-0.04em', color: 'var(--text-primary)', margin: 0 }}>ABIAS</h1>
                             </div>
-                            <h2 className="splash-title" style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--color-gold)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '14px' }}>O PODER DA TUA ROTA</h2>
+                            <h2 className="splash-title" style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--color-gold)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '14px' }}>O PODER DA TUA JORNADA</h2>
                             <p className="splash-subtitle" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.4', maxWidth: '280px', margin: '0 auto' }}>
-                              Quando a moto para, a renda para. Crédito produtivo validado para manter sua ferramenta de trabalho funcionando.
+                              Crédito produtivo validado por rede para manter sua ferramenta de trabalho funcionando.
                             </p>
                           </div>
                           <div style={{ width: '100%', paddingBottom: '20px', zIndex: 2 }}>
                             <button className="btn-app btn-app-primary" onClick={() => setOnboardingStep('benefits')}>
-                              Entrar no fluxo <i className="fa-solid fa-arrow-right" style={{ marginLeft: '6px' }}></i>
+                              Entrar na rede <i className="fa-solid fa-arrow-right" style={{ marginLeft: '6px' }}></i>
                             </button>
                           </div>
                         </div>
@@ -547,33 +547,33 @@ function App() {
                               <div className="hero-glow" style={{ position: 'absolute', width: '80px', height: '80px', background: 'rgba(213, 63, 140, 0.15)', filter: 'blur(30px)' }}></div>
                               <i className="fa-solid fa-motorcycle" style={{ fontSize: '3rem', color: 'var(--color-gold)', zIndex: 1 }}></i>
                             </div>
-                            <h2 style={{ fontSize: '1.6rem', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.15', marginBottom: '8px' }}>CONFIANÇA QUE GERA CAPITAL</h2>
+                            <h2 style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.15', marginBottom: '8px' }}>A rua não mente. Mas o banco nem sempre sabe ler.</h2>
                             <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '20px', lineHeight: '1.4' }}>
-                              A comunidade ajuda a provar o que o banco não enxerga. A Abias transforma sua reputação de asfalto e cooperação em fomento para o seu corre.
+                              A Abias reconhece jornadas que o score tradicional ignora: trabalho diário, confiança da rede, território, oficina parceira e evidências reais.
                             </p>
                             
                             <div className="benefits-list" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                               <div className="benefit-item-box" style={{ display: 'flex', gap: '12px', background: 'rgba(255,255,255,0.02)', padding: '12px', border: '1px solid var(--border-color)' }}>
                                 <div style={{ fontSize: '1.2rem', color: 'var(--color-gold)' }}><i className="fa-solid fa-chart-simple"></i></div>
                                 <div>
-                                  <h4 style={{ fontSize: '0.85rem', fontWeight: 800, marginBottom: '2px' }}>Reputação de Rota</h4>
-                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>Seu corre diário e consistência no asfalto valem mais do que score de CPF.</p>
+                                  <h4 style={{ fontSize: '0.85rem', fontWeight: 800, marginBottom: '2px' }}>Reputação de Jornada</h4>
+                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>Sua consistência, seus avais e suas evidências constroem reputação financeira.</p>
                                 </div>
                               </div>
                               
                               <div className="benefit-item-box" style={{ display: 'flex', gap: '12px', background: 'rgba(255,255,255,0.02)', padding: '12px', border: '1px solid var(--border-color)' }}>
                                 <div style={{ fontSize: '1.2rem', color: 'var(--color-gold)' }}><i className="fa-solid fa-route"></i></div>
                                 <div>
-                                  <h4 style={{ fontSize: '0.85rem', fontWeight: 800, marginBottom: '2px' }}>Crédito de Rota</h4>
-                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>Fomento produtivo de R$ 300 a R$ 3.000 exclusivo para manter sua ferramenta ativa.</p>
+                                  <h4 style={{ fontSize: '0.85rem', fontWeight: 800, marginBottom: '2px' }}>Crédito produtivo</h4>
+                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>Fomento para pneu, manutenção, celular, documentação e segurança. Não é empréstimo livre.</p>
                                 </div>
                               </div>
                               
                               <div className="benefit-item-box" style={{ display: 'flex', gap: '12px', background: 'rgba(255,255,255,0.02)', padding: '12px', border: '1px solid var(--border-color)' }}>
                                 <div style={{ fontSize: '1.2rem', color: 'var(--color-gold)' }}><i className="fa-solid fa-users"></i></div>
                                 <div>
-                                  <h4 style={{ fontSize: '0.85rem', fontWeight: 800, marginBottom: '2px' }}>Rede de Oficinas Parceiras</h4>
-                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>Manutenção e peças com orçamento confirmado e serviço validado localmente.</p>
+                                  <h4 style={{ fontSize: '0.85rem', fontWeight: 800, marginBottom: '2px' }}>Quilombo Digital</h4>
+                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>Uma rede aberta de proteção econômica, onde a comunidade valida e fortalece cada ciclo.</p>
                                 </div>
                               </div>
                             </div>
@@ -581,7 +581,7 @@ function App() {
                           
                           <div style={{ width: '100%', marginTop: '10px' }}>
                             <button className="btn-app btn-app-primary" onClick={() => setOnboardingStep('form')}>
-                              Começar Cadastro <i className="fa-solid fa-chevron-right" style={{ marginLeft: '4px' }}></i>
+                              Começar minha jornada <i className="fa-solid fa-chevron-right" style={{ marginLeft: '4px' }}></i>
                             </button>
                           </div>
                         </div>
@@ -601,10 +601,10 @@ function App() {
                           </div>
                           
                           <h2 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '8px', lineHeight: '1.15', letterSpacing: '-0.02em' }}>
-                            O banco vê um CPF.<br />A Abias vê uma rota.
+                            O banco vê um CPF.<br />A Abias reconhece uma jornada.
                           </h2>
-                          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>
-                            Cadastre-se na comunidade para validar sua rota e acessar fomento produtivo.
+                          <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '20px', lineHeight: '1.4' }}>
+                            O sistema financeiro tradicional avalia pessoas como números isolados: CPF, score, renda formal e garantias. A Abias parte de outra ótica. A jornada de um trabalhador negro e periférico carrega território, rede, trabalho, confiança, obstáculos e consistência que o score tradicional não sabe ler. A Abias transforma essa jornada em reputação comunitária e acesso a crédito produtivo.
                           </p>
 
                           <form onSubmit={handleCadastro} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -685,7 +685,7 @@ function App() {
                                 onChange={(e) => setInputAceite(e.target.checked)} 
                               />
                               <label htmlFor="aceite-dados-mvp" style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>
-                                Concordo com os termos de consentimento e aceito o compartilhamento de rota comunitária da Abias.
+                                Concordo com os termos de consentimento e aceito o compartilhamento de jornada comunitária da Abias.
                               </label>
                             </div>
 
@@ -707,7 +707,7 @@ function App() {
                                 <i className="fa-solid fa-motorcycle" style={{ color: 'var(--color-gold)', fontSize: '0.9rem' }}></i>
                               </div>
                               <div>
-                                <span className="greeting-sub">Sua rota também é reputação</span>
+                                <span className="greeting-sub">Sua rota comprova trabalho. Sua jornada constrói reputação.</span>
                                 <h3 className="member-name">Salve, {membro.nome}</h3>
                               </div>
                             </div>
@@ -725,19 +725,19 @@ function App() {
                                 </span>
                               ) : (
                                 <span className="status-indicator-green">
-                                  <i className="fa-solid fa-circle"></i> Sua rota está ativa
+                                  <i className="fa-solid fa-circle"></i> Sua jornada está ativa
                                 </span>
                               )}
                             </div>
                             <div className="home-card-body">
                               <div className="reputacao-summary">
-                                <span className="lbl">Reputação de Rota</span>
+                                <span className="lbl">Reputação de Jornada</span>
                                 <div className="score-display">
                                   <span className="score-num font-mono">{reputacao}</span>
                                   <span className="score-max font-mono">/1000</span>
                                 </div>
                                 <span className="score-level-badge">
-                                  {reputacao <= 720 ? 'Confiança Rota A2' : reputacao <= 745 ? 'Confiança Rota A2+' : 'Confiança Rota A3 (Alta Confiança)'}
+                                  {reputacao <= 720 ? 'Jornada ativa' : reputacao <= 745 ? 'Jornada forte' : 'Jornada de ouro (Referência da rede)'}
                                 </span>
                               </div>
                             </div>
@@ -762,7 +762,7 @@ function App() {
                           {cicloEstado === 'evidence_pending' && (
                             <div className="info-notice-card" style={{ margin: '0 20px 20px', background: 'rgba(154, 79, 47, 0.05)', border: '1px solid rgba(154, 79, 47, 0.2)' }}>
                               <h4 style={{ fontSize: '0.8rem', color: 'var(--color-terra)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 800 }}>
-                                <i className="fa-solid fa-triangle-exclamation"></i> Enviar Comprovantes de Rota
+                                <i className="fa-solid fa-triangle-exclamation"></i> Enviar Evidências de Trabalho
                               </h4>
                               <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '14px', lineHeight: '1.4' }}>
                                 Forneça a comprovação técnica da manutenção do veículo (troca do pneu ou revisão realizada) para validar seu fomento.
@@ -837,7 +837,7 @@ function App() {
                                     <div className="activity-item-card" style={{ display: 'flex', gap: '10px', padding: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-color)' }}>
                                       <div className="activity-icon-badge" style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: 'var(--color-gold)' }}><i className="fa-solid fa-file-invoice"></i></div>
                                       <div>
-                                        <h5 style={{ fontSize: '0.75rem', fontWeight: 800 }}>Crédito de Rota Solicitado</h5>
+                                        <h5 style={{ fontSize: '0.75rem', fontWeight: 800 }}>Crédito de Jornada Solicitado</h5>
                                         <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Fomento de R$ {currentAmount} para {currentFinalidade} registrado.</p>
                                       </div>
                                     </div>
@@ -883,7 +883,7 @@ function App() {
                       {activeTab === 'reputacao' && (
                         <div className="screen active" id="screen-reputacao">
                           <div className="app-header-simple">
-                            <h3>Reputação de Rota</h3>
+                            <h3>Reputação de Jornada</h3>
                           </div>
                           
                           <div className="reputacao-container">
@@ -896,10 +896,10 @@ function App() {
                               </div>
                               <div className="reputacao-level">
                                 <i className="fa-solid fa-shield-halved" style={{ color: 'var(--color-gold)', marginRight: '6px' }}></i>
-                                {reputacao <= 720 ? 'Confiança Rota A2' : reputacao <= 745 ? 'Confiança Rota A2+' : 'Confiança Rota A3'}
+                                {reputacao <= 720 ? 'Jornada ativa' : reputacao <= 745 ? 'Jornada forte' : 'Jornada de ouro (Referência da rede)'}
                               </div>
                               <p className="reputacao-desc">
-                                Seu score representa a integridade de suas rotas e a validação mútua dos parceiros. Evite motos paradas e preserve sua ficha local.
+                                A reputação não nasce de um número isolado. Ela nasce de uma jornada reconhecida pela rede, baseada na integridade do seu trabalho e na confiança mútua.
                               </p>
                             </div>
 
@@ -968,12 +968,12 @@ function App() {
                           {cicloEstado === 'draft' && (
                             <>
                               <div className="app-header-simple">
-                                <h3>Solicitar Crédito de Rota</h3>
+                                <h3>Crédito de Rede Validado</h3>
                               </div>
                               
                               <form className="mobile-form" onSubmit={handleSolicitacaoSubmit}>
                                 <div className="form-banner-info">
-                                  <p><strong>Não é empréstimo livre. É crédito produtivo validado.</strong> O recurso é exclusivo para despesas da sua ferramenta de trabalho.</p>
+                                  <p><strong>Não é empréstimo livre. É crédito produtivo com finalidade clara, validação comunitária e evidência de uso.</strong> Fomento produtivo para manter sua jornada em movimento.</p>
                                 </div>
 
                                 <div className="mobile-form-group">
@@ -1158,8 +1158,8 @@ function App() {
                               <div className="aval-container">
                                 <div className="aval-status-banner glass">
                                   <span className="section-tag tag-yellow">AVAL COMUNITÁRIO</span>
-                                  <h2>Quem valida sua rota?</h2>
-                                  <p>Para ativar este fomento produtivo, Aline e Marcos da rota Leste precisam registrar o aval comunitário atestando que você está ativo.</p>
+                                  <h2>Quem reconhece sua jornada?</h2>
+                                  <p>Na Abias, a rede ajuda a reconhecer o que o banco não sabe ler sozinho: presença, consistência, trabalho, território e confiança.</p>
                                 </div>
 
                                 <div className="aval-peers-list">
@@ -1247,7 +1247,7 @@ function App() {
                                   }}>
                                     <div className="card-brand-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                       <span className="card-brand" style={{ color: 'var(--color-gold)', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 800 }}>
-                                        <i className="fa-solid fa-circle-check" style={{ color: 'var(--success)' }}></i> Ciclo de rota validado
+                                        <i className="fa-solid fa-circle-check" style={{ color: 'var(--success)' }}></i> Ciclo de jornada validado
                                       </span>
                                       <span className="card-contactless" style={{ fontSize: '0.6rem', color: 'var(--text-secondary)' }}><i className="fa-solid fa-shield-halved"></i> ABIAS PRODUTIVO</span>
                                     </div>
@@ -1287,7 +1287,7 @@ function App() {
                                     </div>
                                     <div className="slip-footer" style={{ borderTop: '1px dashed var(--border-color)', paddingTop: '10px', marginTop: '10px', display: 'block', height: 'auto' }}>
                                       <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', fontStyle: 'italic', lineHeight: '1.4', textAlign: 'center', margin: 0 }}>
-                                        “Este ciclo fortaleceu a rota de {membro.nome.split(' ')[0]} e adicionou contribuição ao Fundo Abias.”
+                                        “Este ciclo fortaleceu a jornada de {membro.nome.split(' ')[0]} e adicionou contribuição ao Fundo Abias.”
                                       </p>
                                     </div>
                                   </div>
@@ -1343,8 +1343,9 @@ function App() {
                           <div className="fundo-mobile-container" style={{ padding: '20px' }}>
                             <div className="fundo-headline-card glass" style={{ position: 'relative', overflow: 'hidden' }}>
                               <span className="section-tag tag-yellow">FUNDO ABIAS — AMBIENTE PILOTO</span>
-                              <h2>Crédito circular. Proteção territorial.</h2>
-                              <p>O crédito entra na rede e volta como proteção coletiva. Os retornos de sustentabilidade alimentam a reserva de rotas para assegurar novos fomentos locais.</p>
+                              <h2>Fundo Abias</h2>
+                              <p style={{ fontSize: '0.9rem', color: 'var(--color-gold)', marginBottom: '10px' }}>Proteção coletiva para jornadas individuais.</p>
+                              <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>Cada ciclo validado fortalece uma reserva comunitária em ambiente piloto. O Fundo Abias ajuda a proteger a rede, apoiar emergências e ampliar novos acessos.</p>
                             </div>
 
                             <div className="fundo-reserve-card glass">
@@ -1450,7 +1451,7 @@ function App() {
                       {activeTab === 'perfil' && (
                         <div className="screen active" id="screen-perfil">
                           <div className="app-header-simple">
-                            <h3>Perfil da Rota</h3>
+                            <h3>Meu Perfil</h3>
                           </div>
                           
                           <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -1468,7 +1469,7 @@ function App() {
                             </div>
 
                             <div className="how-to-improve-card glass" style={{ padding: '16px' }}>
-                              <h4 style={{ fontSize: '0.8rem', color: 'var(--color-gold)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px', fontWeight: 800 }}>Conquistas da Rota</h4>
+                              <h4 style={{ fontSize: '0.8rem', color: 'var(--color-gold)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px', fontWeight: 800 }}>Conquistas de Jornada</h4>
                               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', textAlign: 'center' }}>
                                 <div style={{ background: 'rgba(255,255,255,0.02)', padding: '10px 4px', border: '1px solid var(--border-color)' }}>
                                   <i className="fa-solid fa-users" style={{ color: 'var(--color-gold)', fontSize: '1rem', marginBottom: '4px' }}></i>
@@ -1494,7 +1495,7 @@ function App() {
                                 <div style={{ background: 'rgba(255,255,255,0.02)', padding: '12px', border: '1px solid var(--border-color)' }}>
                                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '0.75rem' }}>
                                     <strong>Marcos Santos</strong>
-                                    <span style={{ color: 'var(--success)', fontWeight: 800 }}>✓ Rota Validada</span>
+                                    <span style={{ color: 'var(--success)', fontWeight: 800 }}>✓ Jornada Reconhecida</span>
                                   </div>
                                   <p style={{ fontSize: '0.72rem', fontStyle: 'italic', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
                                     "João é parceiro de confiança, conheço a rota dele na Zona Leste."
@@ -1503,7 +1504,7 @@ function App() {
                                 <div style={{ background: 'rgba(255,255,255,0.02)', padding: '12px', border: '1px solid var(--border-color)' }}>
                                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '0.75rem' }}>
                                     <strong>Aline Souza</strong>
-                                    <span style={{ color: 'var(--success)', fontWeight: 800 }}>✓ Rota Validada</span>
+                                    <span style={{ color: 'var(--success)', fontWeight: 800 }}>✓ Jornada Reconhecida</span>
                                   </div>
                                   <p style={{ fontSize: '0.72rem', fontStyle: 'italic', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
                                     "Grande profissional de entrega. Corre garantido no asfalto."
@@ -1638,7 +1639,7 @@ function App() {
                           </div>
 
                           <div className="q-checklists">
-                            <span className="chk-status checked"><i className="fa-solid fa-check"></i> Rota Validada Comunidade</span>
+                            <span className="chk-status checked"><i className="fa-solid fa-check"></i> Jornada Reconhecida pela Rede</span>
                             <span className="chk-status checked"><i className="fa-solid fa-check"></i> Aval de Marcos Santos registrado</span>
                             <span className="chk-status checked"><i className="fa-solid fa-check"></i> Aval de Aline Souza registrado</span>
                             <span className={`chk-status ${oficinaConfirmacao.quoteConfirmed ? 'checked' : 'warning'}`}>
@@ -1684,7 +1685,7 @@ function App() {
                                 <p>Comprovante técnico validado.</p>
                               </div>
                               <button className="btn-app btn-app-primary" style={{ background: 'var(--color-green)' }} onClick={handleGestaoConcluirCiclo}>
-                                Fechar e Concluir Ciclo de Rota
+                                Fechar e Concluir Ciclo de Jornada
                               </button>
                             </div>
                           )}
