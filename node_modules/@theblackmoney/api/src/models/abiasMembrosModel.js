@@ -10,6 +10,7 @@ function rowToMembro(row) {
     ferramenta: row.ferramenta,
     raca: row.raca || "",
     reputacao: row.reputacao,
+    totalCiclos: Number(row.total_ciclos ?? 0),
     cashbackSaldo: Number(row.cashback_saldo ?? 0),
     aiParecer: row.ai_parecer || null,
     avaliadoEm: row.avaliado_em || null,
@@ -41,8 +42,8 @@ export async function registerAbiasMembro(payload) {
   const usuarioId = userResult.rows[0]?.id || null;
 
   const result = await query(
-    `INSERT INTO abias_membros (nome, telefone, regiao, tempo_atuacao, ferramenta, raca, usuario_id)
-     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+    `INSERT INTO abias_membros (nome, telefone, regiao, tempo_atuacao, ferramenta, raca, usuario_id, reputacao)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
     [
       nome,
       telefone,
@@ -50,7 +51,8 @@ export async function registerAbiasMembro(payload) {
       String(payload.tempo || "").trim() || null,
       String(payload.ferramenta || "Moto").trim(),
       String(payload.raca || "").trim() || null,
-      usuarioId
+      usuarioId,
+      0
     ]
   );
 
@@ -69,6 +71,8 @@ export async function findAbiasMembroComDados(id) {
       m.id, m.nome, m.telefone, m.regiao,
       m.tempo_atuacao, m.ferramenta, m.raca, m.reputacao,
       m.cashback_saldo, m.ai_parecer, m.avaliado_em, m.criado_em,
+
+      c.total_ciclos,
 
       i.entregas_realizadas,
       i.dias_ativos,
@@ -90,6 +94,11 @@ export async function findAbiasMembroComDados(id) {
     FROM abias_membros m
     LEFT JOIN usuarios u
       ON m.usuario_id = u.id
+    LEFT JOIN LATERAL (
+      SELECT COUNT(*)::int AS total_ciclos
+      FROM abias_ciclos c
+      WHERE c.membro_id = m.id
+    ) c ON TRUE
     LEFT JOIN LATERAL (
       SELECT * FROM ifood_dados_operacionais
       WHERE usuario_id = u.id ORDER BY periodo_fim DESC LIMIT 1

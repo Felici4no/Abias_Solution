@@ -30,7 +30,20 @@ export async function vincularMembro(usuarioId, membroId) {
      RETURNING id, email, role, nome, membro_id`,
     [usuarioId, membroId]
   )
-  return result.rows[0]
+  const usuario = result.rows[0] ?? null
+  if (!usuario) return null
+
+  // Tenta vincular o membro ao usuario bancario usando o email como ponte
+  await query(
+    `UPDATE abias_membros m
+     SET usuario_id = u.id
+     FROM usuarios u
+     WHERE m.id = $1
+       AND u.email = $2`,
+    [membroId, usuario.email]
+  )
+
+  return usuario
 }
 
 export async function buscarUsuarioPorEmail(email) {

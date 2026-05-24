@@ -115,6 +115,9 @@ function montarPrompt(ctx) {
   const temIfood = Boolean(ctx.usuario_id);
   const payload = ctx.payload_bruto || {};
 
+  const totalCiclosOperacionais = ctx.entregas_realizadas ?? 0;
+  const diasAtivosOperacionais = ctx.dias_ativos ?? 0;
+
   return `
 Você é um analista de crédito da Abias, plataforma de crédito produtivo comunitário para entregadores negros e periféricos.
 
@@ -135,11 +138,9 @@ Tempo como entregador: ${ctx.tempo_atuacao || "não informado"}
 Autodeclaração racial: ${ctx.raca || "não informada"}
 Reputação Abias (0-1000): ${ctx.reputacao}
 
-HISTÓRICO NA ABIAS:
-Total de ciclos: ${ctx.total_ciclos}
-Ciclos concluídos com sucesso: ${ctx.ciclos_concluidos}
-Ciclos recusados: ${ctx.ciclos_recusados}
-Histórico: ${JSON.stringify(ctx.historico_ciclos, null, 2)}
+HISTÓRICO OPERACIONAL (baseado nas viagens do dia a dia):
+Total de ciclos: ${totalCiclosOperacionais}
+Dias ativos: ${diasAtivosOperacionais} de 90
 
 ${temIfood ? `
 DADOS OPERACIONAIS IFOOD (últimos 90 dias):
@@ -166,14 +167,14 @@ CRITÉRIOS DE SCORE ABIAS (0–1000):
 - 301–500: Dados moderados — trabalhador em desenvolvimento
 - 501–700: Boa consistência — dias ativos regulares, avaliação estável
 - 701–850: Alto desempenho — candidato natural ao empréstimo produtivo
-- 851–1000: Excelência comprovada + histórico Abias — perfil ELITE
+- 851–1000: Excelência comprovada + histórico operacional — perfil ELITE
 
 PESOS PARA O SCORE (equidade-aware):
 - Consistência de dias ativos: 30% (fidelidade ao trabalho)
 - Ganho médio semanal: 25% (capacidade de pagamento)
 - Avaliação média calibrada por região: 20% (qualidade, já considerando viés geográfico)
 - Taxa de conclusão de entregas: 15%
-- Histórico de ciclos concluídos na Abias: 10% (bônus — dado mais confiável que o iFood)
+- Volume de entregas no período: 10% (trabalho consistente no dia a dia)
 
 Responda SOMENTE com um JSON válido, sem markdown, sem explicação fora do JSON, exatamente neste formato:
 
@@ -206,12 +207,11 @@ export async function gerarParecer(membroId) {
   // Verificação: exigir dados operacionais iFood recentes para gerar decisão automática
   // Se não houver registro de entregas/dias ativos nem histórico de ciclos, retornar erro controlado
   const temDadosIfood = ctx.entregas_realizadas !== null && ctx.entregas_realizadas !== undefined;
-  const temHistoricoAbias = (ctx.total_ciclos || 0) > 0;
-  if (!temDadosIfood && !temHistoricoAbias) {
+  if (!temDadosIfood) {
     return {
       ok: false,
       statusCode: 422,
-      error: 'Dados operacionais insuficientes: não é possível gerar decisão automática para membros sem dados iFood ou histórico na Abias.'
+      error: 'Dados operacionais insuficientes: não é possível gerar decisão automática para membros sem dados iFood vinculados.'
     };
   }
 

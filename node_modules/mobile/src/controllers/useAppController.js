@@ -325,7 +325,7 @@ export function useAppController() {
   const handlePedirAnalise = async () => {
     if (!membroId || analisandoIA) return
     if (!membro?.dadosOperacionais) {
-      setAiError('Dados operacionais insuficientes: este usuario ainda nao possui dados iFood vinculados.')
+      setAiError('Dados operacionais insuficientes: não é possível gerar decisão automática para membros sem dados iFood vinculados.')
       return
     }
     setAnalisandoIA(true)
@@ -361,7 +361,7 @@ export function useAppController() {
     localStorage.clear()
     setMembro(null); setMembroId(null); setCicloId(null); setLoginUsuario(null)
     setOnboardingStep('splash'); setSolicitacao(null); setCicloEstado('draft')
-    setReputacao(720); setFundo(4820)
+    setReputacao(0); setFundo(4820)
     setAvaliacoes({ marcos: 'pending', marcosComment: '', aline: 'pending', alineComment: '' })
     setEvidencia({ file: '', obs: '', status: 'pending', type: '' })
     setOficinaConfirmacao({ quoteConfirmed: false, serviceConfirmed: false, note: '' })
