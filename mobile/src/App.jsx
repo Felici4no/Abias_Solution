@@ -1,5 +1,53 @@
 import { useState, useEffect } from 'react'
 
+const getEstadoQualitativo = (state) => {
+  switch (state) {
+    case 'draft':
+      return 'Jornada em registro'
+    case 'submitted':
+    case 'community_validation':
+      return 'Jornada com evidências'
+    case 'partner_quote':
+    case 'under_review':
+      return 'Jornada validada'
+    case 'approved':
+    case 'evidence_pending':
+    case 'evidence_review':
+    case 'validated':
+    case 'needs_revision':
+      return 'Pronta para análise de ciclo'
+    case 'completed':
+      return 'Ciclo acompanhado'
+    case 'rejected':
+      return 'Ciclo pausado para revisão'
+    default:
+      return 'Jornada em registro'
+  }
+}
+
+const getEstadoQualitativoDesc = (state) => {
+  switch (state) {
+    case 'draft':
+      return 'O membro começou a organizar suas informações de trabalho.'
+    case 'submitted':
+    case 'community_validation':
+      return 'O membro adicionou sinais básicos de recorrência, rota, ferramenta ou necessidade.'
+    case 'partner_quote':
+    case 'under_review':
+      return 'A rede ou parceiro local confirmou parte das informações.'
+    case 'approved':
+    case 'evidence_pending':
+    case 'evidence_review':
+    case 'validated':
+    case 'needs_revision':
+      return 'A jornada tem evidências suficientes para solicitar uma Carta de Corre.'
+    case 'completed':
+      return 'A necessidade foi atendida, registrada e acompanhada pela comunidade.'
+    default:
+      return 'O membro começou a organizar suas informações de trabalho.'
+  }
+}
+
 function App() {
   // --- LocalStorage State Initializers ---
   const [membro, setMembro] = useState(() => {
@@ -330,18 +378,18 @@ function App() {
   // Helper para tradução amigável do estado
   const getEstadoLabel = (state) => {
     const dict = {
-      draft: { label: 'Inativo', step: 'Solicitar crédito de jornada para iniciar' },
-      submitted: { label: 'Plano Sugerido', step: 'Confirmar os termos do plano comunitário' },
-      community_validation: { label: 'Validação da Rede', step: 'Acompanhar validação da rede (Marcos e Aline)' },
-      partner_quote: { label: 'Aguardando Orçamento', step: 'Oficina JN confirmando valores' },
-      under_review: { label: 'Em Análise', step: 'Aguardando validação da Gestão Abias' },
-      approved: { label: 'Aprovado', step: 'Recurso liberado para a manutenção' },
+      draft: { label: 'Em registro', step: 'Solicitar análise de ciclo para iniciar' },
+      submitted: { label: 'Aguardando evidências', step: 'Confirmar os termos do plano comunitário' },
+      community_validation: { label: 'Aguardando validação', step: 'Acompanhar validação de Corre (Marcos e Aline)' },
+      partner_quote: { label: 'Aguardando Orçamento', step: 'Oficina JN confirmando necessidade' },
+      under_review: { label: 'Em análise de ciclo', step: 'Aguardando validação da Gestão Abias' },
+      approved: { label: 'Autorização produtiva emitida', step: 'Encaminhando orçamento para a oficina' },
       evidence_pending: { label: 'Comprovação Pendente', step: 'Enviar comprovantes na aba Evidências' },
-      evidence_review: { label: 'Evidência em Análise', step: 'Oficina JN validando serviço realizado' },
-      validated: { label: 'Serviço Validado', step: 'Aguardando finalização pela Gestão Abias' },
-      completed: { label: 'Ciclo Concluído', step: 'Parabéns! Sua reputação subiu' },
-      needs_revision: { label: 'Revisão Solicitada', step: 'Editar dados conforme indicado pela gestão' },
-      rejected: { label: 'Recusado', step: 'Ciclo encerrado sem aprovação' }
+      evidence_review: { label: 'Serviço em execução', step: 'Oficina JN confirmando realização do serviço' },
+      validated: { label: 'Ciclo acompanhado', step: 'Aguardando finalização pela Gestão Abias' },
+      completed: { label: 'Ciclo recomposto', step: 'Ciclo concluído com sucesso e reserva fortalecida!' },
+      needs_revision: { label: 'Ciclo pausado para revisão', step: 'Editar dados conforme indicado pela gestão' },
+      rejected: { label: 'Ciclo pausado para revisão', step: 'Verifique as observações da gestão' }
     }
     return dict[state] || { label: state, step: '' }
   }
@@ -354,13 +402,13 @@ function App() {
       case 'draft':
         return (
           <button className="btn-app btn-app-primary" onClick={() => setActiveTab('credito')}>
-            <i className="fa-solid fa-route"></i> Solicitar crédito de jornada
+            <i className="fa-solid fa-route"></i> Solicitar análise de ciclo
           </button>
         )
       case 'community_validation':
         return (
           <button className="btn-app btn-app-primary" onClick={() => setActiveTab('credito')}>
-            <i className="fa-solid fa-users-double"></i> Acompanhar validação da rede
+            <i className="fa-solid fa-users-double"></i> Acompanhar validação de Corre
           </button>
         )
       case 'evidence_pending':
@@ -463,8 +511,8 @@ function App() {
                       <div className="area-operacional-info-card">
                         <p><strong>Membro:</strong> {membro ? membro.nome : 'Não cadastrado'}</p>
                         <p><strong>Estado do Ciclo:</strong> <span className="font-mono">{getEstadoLabel(cicloEstado).label}</span></p>
-                        <p><strong>Reputação de Jornada:</strong> <span className="font-mono">{reputacao}/1000</span></p>
-                        <p><strong>Fundo Abias:</strong> <span className="font-mono">R$ {fundo.toFixed(2)}</span></p>
+                        <p><strong>Reputação de Corre (Simulado):</strong> <span className="font-mono">{reputacao}/1000</span></p>
+                        <p><strong>Reserva de Ciclos Piloto:</strong> <span className="font-mono">R$ {fundo.toFixed(2)}</span></p>
                       </div>
 
                       <div className="area-operacional-actions">
@@ -529,7 +577,7 @@ function App() {
                             </div>
                             <h2 className="splash-title" style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--color-gold)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '14px' }}>O PODER DA TUA JORNADA</h2>
                             <p className="splash-subtitle" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.4', maxWidth: '280px', margin: '0 auto' }}>
-                              Crédito produtivo validado por rede para manter sua ferramenta de trabalho funcionando.
+                              Uma comunidade de reputação e acesso produtivo para entregadores que precisam manter suas ferramentas de trabalho ativas.
                             </p>
                           </div>
                           <div style={{ width: '100%', paddingBottom: '20px', zIndex: 2 }}>
@@ -549,23 +597,23 @@ function App() {
                             </div>
                             <h2 style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.15', marginBottom: '8px' }}>A rua não mente. Mas o banco nem sempre sabe ler.</h2>
                             <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '20px', lineHeight: '1.4' }}>
-                              A Abias reconhece jornadas que o score tradicional ignora: trabalho diário, confiança da rede, território, oficina parceira e evidências reais.
+                              A Abias reconhece jornadas que os modelos de score tradicionais ignoram: trabalho diário, confiança da rede, território, oficina parceira e evidências reais.
                             </p>
                             
                             <div className="benefits-list" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                               <div className="benefit-item-box" style={{ display: 'flex', gap: '12px', background: 'rgba(255,255,255,0.02)', padding: '12px', border: '1px solid var(--border-color)' }}>
                                 <div style={{ fontSize: '1.2rem', color: 'var(--color-gold)' }}><i className="fa-solid fa-chart-simple"></i></div>
                                 <div>
-                                  <h4 style={{ fontSize: '0.85rem', fontWeight: 800, marginBottom: '2px' }}>Reputação de Jornada</h4>
-                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>Sua consistência, seus avais e suas evidências constroem reputação financeira.</p>
+                                  <h4 style={{ fontSize: '0.85rem', fontWeight: 800, marginBottom: '2px' }}>Reputação de Corre</h4>
+                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>Organize evidências simples da sua jornada produtiva de forma transparente.</p>
                                 </div>
                               </div>
                               
                               <div className="benefit-item-box" style={{ display: 'flex', gap: '12px', background: 'rgba(255,255,255,0.02)', padding: '12px', border: '1px solid var(--border-color)' }}>
                                 <div style={{ fontSize: '1.2rem', color: 'var(--color-gold)' }}><i className="fa-solid fa-route"></i></div>
                                 <div>
-                                  <h4 style={{ fontSize: '0.85rem', fontWeight: 800, marginBottom: '2px' }}>Crédito produtivo</h4>
-                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>Crédito produtivo para pneu, manutenção, celular, documentação e segurança. Não é empréstimo livre.</p>
+                                  <h4 style={{ fontSize: '0.85rem', fontWeight: 800, marginBottom: '2px' }}>Carta de Corre</h4>
+                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>Acesse uma autorização produtiva para resolver necessidades específicas de trabalho em parceiros locais.</p>
                                 </div>
                               </div>
                               
@@ -573,7 +621,7 @@ function App() {
                                 <div style={{ fontSize: '1.2rem', color: 'var(--color-gold)' }}><i className="fa-solid fa-users"></i></div>
                                 <div>
                                   <h4 style={{ fontSize: '0.85rem', fontWeight: 800, marginBottom: '2px' }}>Quilombo Digital</h4>
-                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>Uma rede aberta de proteção econômica, onde a comunidade valida e fortalece cada ciclo.</p>
+                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>Uma rede de apoio mútuo para manter ferramentas de trabalho ativas, onde a comunidade valida e acompanha cada ciclo.</p>
                                 </div>
                               </div>
                             </div>
@@ -604,7 +652,7 @@ function App() {
                             O banco vê um CPF.<br />A Abias reconhece uma jornada.
                           </h2>
                           <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '20px', lineHeight: '1.4' }}>
-                            O sistema financeiro tradicional avalia pessoas como números isolados: CPF, score, renda formal e garantias. A Abias parte de outra ótica. A jornada de um trabalhador negro e periférico carrega território, rede, trabalho, confiança, obstáculos e consistência que o score tradicional não sabe ler. A Abias transforma essa jornada em reputação comunitária e acesso a crédito produtivo.
+                            O sistema financeiro tradicional avalia pessoas como números isolados: CPF, score, renda formal e garantias. A Abias parte de outra ótica. A jornada de um entregador negro e periférico carrega território, rede, trabalho, confiança, obstáculos e consistência que a análise bancária fria não sabe ler. A Abias organiza essa jornada em reputação comunitária e acesso produtivo.
                           </p>
 
                           <form onSubmit={handleCadastro} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -685,7 +733,7 @@ function App() {
                                 onChange={(e) => setInputAceite(e.target.checked)} 
                               />
                               <label htmlFor="aceite-dados-mvp" style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>
-                                Concordo com os termos de consentimento e aceito o compartilhamento de jornada comunitária da Abias.
+                                Concordo com os Termos de Uso e a Política de Privacidade. A participação no piloto não garante acesso automático a ciclos produtivos.
                               </label>
                             </div>
 
@@ -707,7 +755,7 @@ function App() {
                                 <i className="fa-solid fa-motorcycle" style={{ color: 'var(--color-gold)', fontSize: '0.9rem' }}></i>
                               </div>
                               <div>
-                                <span className="greeting-sub">Sua rota comprova trabalho. Sua jornada constrói reputação.</span>
+                                <span className="greeting-sub">Sua rota comprova trabalho. Sua jornada constrói confiança.</span>
                                 <h3 className="member-name">Salve, {membro.nome}</h3>
                               </div>
                             </div>
@@ -721,30 +769,29 @@ function App() {
                               <span className="card-tag">STATUS OPERACIONAL</span>
                               {['evidence_pending', 'evidence_review', 'validated'].includes(cicloEstado) ? (
                                 <span className="status-indicator-green" style={{ color: 'var(--color-gold)' }}>
-                                  <i className="fa-solid fa-circle"></i> Crédito Produtivo Ativo
+                                  <i className="fa-solid fa-circle"></i> Autorização Produtiva Ativa
                                 </span>
                               ) : (
                                 <span className="status-indicator-green">
-                                  <i className="fa-solid fa-circle"></i> Sua jornada está ativa
+                                  <i className="fa-solid fa-circle"></i> Sua jornada está active
                                 </span>
                               )}
                             </div>
                             <div className="home-card-body">
                               <div className="reputacao-summary">
-                                <span className="lbl">Reputação de Jornada</span>
+                                <span className="lbl">Reputação de Corre</span>
                                 <div className="score-display">
-                                  <span className="score-num font-mono">{reputacao}</span>
-                                  <span className="score-max font-mono">/1000</span>
+                                  <span className="score-num font-mono" style={{ fontSize: '1.3rem', fontWeight: 800 }}>{getEstadoQualitativo(cicloEstado)}</span>
                                 </div>
                                 <span className="score-level-badge">
-                                  {reputacao <= 720 ? 'Jornada ativa' : reputacao <= 745 ? 'Jornada forte' : 'Jornada de ouro (Referência da rede)'}
+                                  {getEstadoQualitativoDesc(cicloEstado)}
                                 </span>
                               </div>
                             </div>
                             <div className="home-card-footer">
                               <div className="fundo-summary">
                                 <i className="fa-solid fa-vault"></i>
-                                <span>Fundo Abias: <strong>R$ {fundo.toFixed(2)}</strong> em reserva piloto</span>
+                                <span>Reserva Piloto: <strong>R$ {fundo.toFixed(2)}</strong> em ciclos piloto</span>
                               </div>
                             </div>
                           </div>
@@ -762,10 +809,10 @@ function App() {
                           {cicloEstado === 'evidence_pending' && (
                             <div className="info-notice-card" style={{ margin: '0 20px 20px', background: 'rgba(154, 79, 47, 0.05)', border: '1px solid rgba(154, 79, 47, 0.2)' }}>
                               <h4 style={{ fontSize: '0.8rem', color: 'var(--color-terra)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 800 }}>
-                                <i className="fa-solid fa-triangle-exclamation"></i> Enviar Evidências de Trabalho
+                                <i className="fa-solid fa-triangle-exclamation"></i> Enviar Evidências de Corre
                               </h4>
                               <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '14px', lineHeight: '1.4' }}>
-                                Forneça a comprovação técnica da manutenção do veículo (troca do pneu ou revisão realizada) para validar seu crédito produtivo.
+                                Forneça a comprovação técnica da manutenção do veículo (troca do pneu ou revisão realizada) para registrar o ciclo acompanhado pela comunidade.
                               </p>
                               
                               <div className="upload-methods" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', marginBottom: '12px' }}>
@@ -837,8 +884,8 @@ function App() {
                                     <div className="activity-item-card" style={{ display: 'flex', gap: '10px', padding: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-color)' }}>
                                       <div className="activity-icon-badge" style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: 'var(--color-gold)' }}><i className="fa-solid fa-file-invoice"></i></div>
                                       <div>
-                                        <h5 style={{ fontSize: '0.75rem', fontWeight: 800 }}>Crédito de Jornada Solicitado</h5>
-                                        <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Crédito produtivo de R$ {currentAmount} para {currentFinalidade} registrado.</p>
+                                        <h5 style={{ fontSize: '0.75rem', fontWeight: 800 }}>Carta de Corre Solicitada</h5>
+                                        <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Carta de Corre de R$ {currentAmount} para {currentFinalidade} registrada.</p>
                                       </div>
                                     </div>
                                   )}
@@ -846,7 +893,7 @@ function App() {
                                     <div className="activity-item-card" style={{ display: 'flex', gap: '10px', padding: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-color)' }}>
                                       <div className="activity-icon-badge" style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: 'var(--success)' }}><i className="fa-solid fa-signature"></i></div>
                                       <div>
-                                        <h5 style={{ fontSize: '0.75rem', fontWeight: 800 }}>Aval de Marcos Santos registrado</h5>
+                                        <h5 style={{ fontSize: '0.75rem', fontWeight: 800 }}>Validação de Marcos Santos registrada</h5>
                                         <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Validação territorial efetuada na Zona Leste.</p>
                                       </div>
                                     </div>
@@ -856,7 +903,7 @@ function App() {
                                       <div className="activity-icon-badge" style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: 'var(--color-gold)' }}><i className="fa-solid fa-wrench"></i></div>
                                       <div>
                                         <h5 style={{ fontSize: '0.75rem', fontWeight: 800 }}>Orçamento Oficina JN Confirmado</h5>
-                                        <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Mecânica credenciada validou custos operacionais.</p>
+                                        <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Mecânica credenciada validou necessidade produtiva.</p>
                                       </div>
                                     </div>
                                   )}
@@ -883,67 +930,70 @@ function App() {
                       {activeTab === 'reputacao' && (
                         <div className="screen active" id="screen-reputacao">
                           <div className="app-header-simple">
-                            <h3>Reputação de Jornada</h3>
+                            <h3>Reputação de Corre</h3>
                           </div>
                           
                           <div className="reputacao-container">
                             <div className="reputacao-score-box glass" style={{ position: 'relative', overflow: 'hidden' }}>
                               <div className="card-glow" style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: '160px', height: '160px', background: 'rgba(201, 154, 61, 0.06)', filter: 'blur(34px)', borderRadius: '50%' }}></div>
-                              <span className="lbl-tag">PONTUAÇÃO COLETIVA</span>
-                              <div className="reputacao-number-row font-mono">
-                                <span className="val">{reputacao}</span>
-                                <span className="max">/1000</span>
+                              <span className="lbl-tag">ESTADO DA JORNADA</span>
+                              <div className="reputacao-number-row font-mono" style={{ fontSize: '1.5rem', margin: '12px 0' }}>
+                                <span className="val" style={{ fontSize: '1.6rem' }}>{getEstadoQualitativo(cicloEstado)}</span>
                               </div>
-                              <div className="reputacao-level">
-                                <i className="fa-solid fa-shield-halved" style={{ color: 'var(--color-gold)', marginRight: '6px' }}></i>
-                                {reputacao <= 720 ? 'Jornada ativa' : reputacao <= 745 ? 'Jornada forte' : 'Jornada de ouro (Referência da rede)'}
-                              </div>
-                              <p className="reputacao-desc">
-                                A reputação não nasce de um número isolado. Ela nasce de uma jornada reconhecida pela rede, baseada na integridade do seu trabalho e na confiança mútua.
+                              <p className="reputacao-desc" style={{ marginTop: '8px' }}>
+                                {getEstadoQualitativoDesc(cicloEstado)}
                               </p>
                             </div>
 
-                            <div className="reputacao-factors-list">
-                              <h4>Fatores de Crescimento</h4>
+                            <div className="reputacao-factors-list" style={{ marginTop: '20px' }}>
+                              <h4>Níveis da Reputação de Corre</h4>
                               
-                              <div className="factor-progress-item">
-                                <div className="factor-lbl">
-                                  <span>Frequência Operacional</span>
-                                  <span className="percent font-mono">92%</span>
-                                </div>
-                                <div className="progress-track">
-                                  <div className="progress-bar" style={{ width: '92%', backgroundColor: 'var(--color-green)' }}></div>
-                                </div>
-                              </div>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '10px' }}>
+                                {[
+                                  { state: 'draft', label: '1. Jornada em registro', desc: 'Informações de trabalho iniciadas.' },
+                                  { state: 'submitted', label: '2. Jornada com evidências', desc: 'Necessidades e rotas registradas.' },
+                                  { state: 'community_validation', label: '3. Jornada validada', desc: 'A rede e parceiros locais validaram seu corre.' },
+                                  { state: 'approved', label: '4. Pronta para análise de ciclo', desc: 'Evidências suficientes para Carta de Corre.' },
+                                  { state: 'completed', label: '5. Ciclo acompanhado', desc: 'Necessidade atendida e ciclo recomposto.' }
+                                ].map((step, idx) => {
+                                  const getStepActive = (currentState, stepState) => {
+                                    const statesOrder = ['draft', 'submitted', 'community_validation', 'approved', 'completed'];
+                                    let currentIdx = statesOrder.indexOf(currentState);
+                                    if (currentState === 'partner_quote' || currentState === 'under_review') currentIdx = 2;
+                                    if (['approved', 'evidence_pending', 'evidence_review', 'validated', 'needs_revision'].includes(currentState)) currentIdx = 3;
+                                    if (currentState === 'completed') currentIdx = 4;
+                                    
+                                    const stepIdx = statesOrder.indexOf(stepState);
+                                    return stepIdx <= currentIdx;
+                                  };
+                                  const isActive = getStepActive(cicloEstado, step.state);
+                                  const isHighlight = (step.state === 'draft' && cicloEstado === 'draft') ||
+                                                      (step.state === 'submitted' && (cicloEstado === 'submitted' || cicloEstado === 'community_validation')) ||
+                                                      (step.state === 'community_validation' && (cicloEstado === 'partner_quote' || cicloEstado === 'under_review')) ||
+                                                      (step.state === 'approved' && ['approved', 'evidence_pending', 'evidence_review', 'validated', 'needs_revision'].includes(cicloEstado)) ||
+                                                      (step.state === 'completed' && cicloEstado === 'completed');
 
-                              <div className="factor-progress-item">
-                                <div className="factor-lbl">
-                                  <span>Confiança Comunitária (Avais)</span>
-                                  <span className="percent font-mono">{avaliacoes.marcos === 'approved' && avaliacoes.aline === 'approved' ? '100%' : avaliacoes.marcos === 'approved' || avaliacoes.aline === 'approved' ? '50%' : '0%'}</span>
-                                </div>
-                                <div className="progress-track">
-                                  <div className="progress-bar" style={{ width: avaliacoes.marcos === 'approved' && avaliacoes.aline === 'approved' ? '100%' : avaliacoes.marcos === 'approved' || avaliacoes.aline === 'approved' ? '50%' : '0%', backgroundColor: 'var(--color-gold)' }}></div>
-                                </div>
-                              </div>
-
-                              <div className="factor-progress-item">
-                                <div className="factor-lbl">
-                                  <span>Consistência de Rota</span>
-                                  <span className="percent font-mono">88%</span>
-                                </div>
-                                <div className="progress-track">
-                                  <div className="progress-bar" style={{ width: '88%', backgroundColor: 'var(--color-terra)' }}></div>
-                                </div>
-                              </div>
-
-                              <div className="factor-progress-item">
-                                <div className="factor-lbl">
-                                  <span>Comprovação de Uso (Evidências)</span>
-                                  <span className="percent font-mono">{['evidence_review', 'validated', 'completed'].includes(cicloEstado) ? '100%' : '0%'}</span>
-                                </div>
-                                <div className="progress-track">
-                                  <div className="progress-bar" style={{ width: ['evidence_review', 'validated', 'completed'].includes(cicloEstado) ? '100%' : '0%', backgroundColor: 'var(--color-gold)' }}></div>
-                                </div>
+                                  return (
+                                    <div key={idx} style={{ 
+                                      display: 'flex', 
+                                      alignItems: 'center', 
+                                      gap: '12px', 
+                                      padding: '10px 14px', 
+                                      borderRadius: '6px',
+                                      background: isHighlight ? 'rgba(201, 154, 61, 0.08)' : 'rgba(255, 255, 255, 0.01)',
+                                      border: isHighlight ? '1px solid rgba(201, 154, 61, 0.2)' : '1px solid var(--border-color)',
+                                      opacity: isActive ? 1 : 0.4
+                                    }}>
+                                      <div style={{ color: isActive ? 'var(--color-gold)' : 'var(--text-muted)', fontSize: '1.1rem' }}>
+                                        <i className={isActive ? 'fa-solid fa-circle-check' : 'fa-regular fa-circle'}></i>
+                                      </div>
+                                      <div>
+                                        <h5 style={{ fontSize: '0.85rem', fontWeight: 800, margin: 0, color: isHighlight ? 'var(--color-gold)' : '#ffffff' }}>{step.label}</h5>
+                                        <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', margin: 0 }}>{step.desc}</p>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
                               </div>
                             </div>
 
@@ -951,7 +1001,7 @@ function App() {
                               <h4>Histórico de Conquistas</h4>
                               <ul className="bullet-list-mobile">
                                 <li><i className="fa-solid fa-award text-success"></i> <strong>Corre Histórico</strong>: 4 anos de asfalto cadastrados.</li>
-                                <li><i className="fa-solid fa-award text-success"></i> <strong>Voto Comunitário</strong>: Indicado por 2 avalistas da rede.</li>
+                                <li><i className="fa-solid fa-award text-success"></i> <strong>Validação de Rede</strong>: Indicado por 2 membros da comunidade.</li>
                                 {['validated', 'completed'].includes(cicloEstado) && (
                                   <li><i className="fa-solid fa-award text-success"></i> <strong>Ficha Limpa JN</strong>: Oficina parceira validada sem divergências.</li>
                                 )}
@@ -961,23 +1011,23 @@ function App() {
                         </div>
                       )}
 
-                      {/* TAB 3: CRÉDITO */}
+                      {/* TAB 3: CARTA DE CORRE */}
                       {activeTab === 'credito' && (
                         <div className="screen active" id="screen-solicitar">
                           {/* DRAFT: Solicitação Form */}
                           {cicloEstado === 'draft' && (
                             <>
                               <div className="app-header-simple">
-                                <h3>Crédito de Rede Validado</h3>
+                                <h3>Carta de Corre</h3>
                               </div>
                               
                               <form className="mobile-form" onSubmit={handleSolicitacaoSubmit}>
                                 <div className="form-banner-info">
-                                  <p><strong>Não é empréstimo livre. É crédito produtivo com finalidade clara, validação comunitária e evidência de uso.</strong> Fomento produtivo para manter sua jornada em movimento.</p>
+                                  <p><strong>Não liberamos dinheiro livre. A Carta de Corre é uma autorização produtiva para resolver necessidades específicas de trabalho direcionada a parceiros credenciados.</strong></p>
                                 </div>
 
                                 <div className="mobile-form-group">
-                                  <label className="form-label">Quanto você precisa?</label>
+                                  <label className="form-label">Qual o valor estimado da necessidade?</label>
                                   <div className="money-input-wrapper">
                                     <span className="currency-symbol">R$</span>
                                     <input 
@@ -989,22 +1039,19 @@ function App() {
                                       required 
                                     />
                                   </div>
-                                  <span className="form-helper">Valor alvo sugerido para pneu + revisão: R$ 850</span>
+                                  <span className="form-helper">Valor sugerido para pneu e revisão básica: R$ 850</span>
                                 </div>
 
                                 <div className="mobile-form-group">
-                                  <label className="form-label">Qual a finalidade?</label>
+                                  <label className="form-label">Qual a necessidade de trabalho?</label>
                                   <div className="chips-selector">
                                     {[
-                                      'Pneu + Revisão',
-                                      'Troca de pneu',
-                                      'Revisão da moto',
-                                      'Celular de trabalho',
-                                      'Baú ou Mochila',
+                                      'Pneu',
+                                      'Revisão',
+                                      'Celular',
                                       'Documentação',
-                                      'Seguro contra roubo',
-                                      'Equipamento de segurança',
-                                      'Emergência operacional'
+                                      'Manutenção',
+                                      'Outro item produtivo'
                                     ].map((fin) => (
                                       <label className="chip-option" key={fin}>
                                         <input 
@@ -1021,20 +1068,20 @@ function App() {
                                 </div>
 
                                 <div className="mobile-form-group">
-                                  <label className="form-label">Em quanto tempo pode pagar?</label>
+                                  <label className="form-label">Plano de recomposição do ciclo</label>
                                   <select 
                                     className="form-select" 
                                     value={inputPrazo} 
                                     onChange={(e) => setInputPrazo(e.target.value)}>
-                                    <option value="7">7 dias (Ciclo rápido)</option>
-                                    <option value="15">15 dias (Ciclo quinzenal)</option>
-                                    <option value="30">30 dias (Ciclo mensal)</option>
-                                    <option value="45">45 dias (Ciclo estendido)</option>
+                                    <option value="7">7 dias (Recomposição rápida)</option>
+                                    <option value="15">15 dias (Recomposição quinzenal)</option>
+                                    <option value="30">30 dias (Recomposição mensal)</option>
+                                    <option value="45">45 dias (Recomposição estendida)</option>
                                   </select>
                                 </div>
 
                                 <div className="mobile-form-group">
-                                  <label className="form-label">Qual oficina credenciada?</label>
+                                  <label className="form-label">Indicar oficina parceira</label>
                                   <input 
                                     type="text" 
                                     className="form-text-input" 
@@ -1057,7 +1104,7 @@ function App() {
                                 </div>
 
                                 <div className="mobile-form-group">
-                                  <label className="form-label">Descrição da necessidade</label>
+                                  <label className="form-label">Como essa necessidade impacta sua jornada?</label>
                                   <textarea 
                                     className="form-textarea" 
                                     value={inputDescricao} 
@@ -1068,7 +1115,7 @@ function App() {
                                 </div>
 
                                 <button type="submit" className="btn-app btn-app-primary">
-                                  Gerar plano de crédito produtivo
+                                  Solicitar análise de ciclo
                                 </button>
                               </form>
                             </>
@@ -1078,11 +1125,11 @@ function App() {
                           {cicloEstado === 'submitted' && (
                             <>
                               <div className="app-header-simple">
-                                <h3>Plano de Crédito Sugerido</h3>
+                                <h3>Carta de Corre em Análise</h3>
                               </div>
                               <div className="plano-container">
                                 <div className="plano-notice-badge">
-                                  <span><i className="fa-solid fa-triangle-exclamation"></i> Plano comunitário sugerido. Sujeito à validação.</span>
+                                  <span><i className="fa-solid fa-triangle-exclamation"></i> Carta de Corre sugerida. Sujeita à validação de Corre.</span>
                                 </div>
 
                                 {/* Slip Card */}
@@ -1093,11 +1140,11 @@ function App() {
                                   </div>
                                   <div className="slip-details">
                                     <div className="slip-row">
-                                      <span className="slip-label">FINALIDADE DE CRÉDITO</span>
+                                      <span className="slip-label">NECESSIDADE PRODUTIVA</span>
                                       <span className="slip-value">{currentFinalidade}</span>
                                     </div>
                                     <div className="slip-row">
-                                      <span className="slip-label">PRAZO TOTAL</span>
+                                      <span className="slip-label">PLANO DE RECOMPOSIÇÃO</span>
                                       <span className="slip-value">{currentPrazo} dias</span>
                                     </div>
                                     <div className="slip-row">
@@ -1105,7 +1152,7 @@ function App() {
                                       <span className="slip-value">{currentOficina}</span>
                                     </div>
                                     <div className="slip-row">
-                                      <span className="slip-label">EVIDÊNCIAS COBRADAS</span>
+                                      <span className="slip-label">EVIDÊNCIAS DE CORRE</span>
                                       <span className="slip-value">Nota + Foto da Instalação</span>
                                     </div>
                                     <div className="slip-row">
@@ -1114,7 +1161,7 @@ function App() {
                                     </div>
                                   </div>
                                   <div className="slip-footer">
-                                    <div className="slip-badge">CRÉDITO PRODUTIVO</div>
+                                    <div className="slip-badge">CARTA DE CORRE</div>
                                     <span className="slip-amount">R$ {currentAmount.toFixed(2)}</span>
                                   </div>
                                 </div>
@@ -1122,10 +1169,10 @@ function App() {
                                 <div className="plano-payment-card glass">
                                   <h4>Estrutura do Ciclo Comunitário</h4>
                                   <div className="payment-row">
-                                    <span className="lbl font-bold">Retorno estimado:</span>
+                                    <span className="lbl font-bold">Recomposição estimada:</span>
                                     <span className="val font-mono font-bold">4x de R$ {new Intl.NumberFormat('pt-BR').format(parcelasValor)}</span>
                                   </div>
-                                  <span className="tax-info-footer">Sem taxas abusivas. Juros de 8% voltados a blindar o Fundo.</span>
+                                  <span className="tax-info-footer">Taxa de sustentabilidade do piloto de 8% voltada a fortalecer a Reserva de Ciclos Piloto.</span>
                                 </div>
 
                                 <div className="validacoes-list-card glass">
@@ -1133,16 +1180,16 @@ function App() {
                                   <ul className="bullet-list-mobile">
                                     <li><i className="fa-solid fa-receipt text-success"></i> Orçamento confirmado pela oficina parceira</li>
                                     <li><i className="fa-solid fa-camera text-warning"></i> Foto do pneu/serviço instalado na moto</li>
-                                    <li><i className="fa-solid fa-check-double text-warning"></i> Aval emitido por 2 membros da comunidade</li>
+                                    <li><i className="fa-solid fa-check-double text-warning"></i> Validação de Corre emitida por 2 membros</li>
                                   </ul>
                                 </div>
 
                                 <div className="plano-actions">
                                   <button className="btn-app btn-app-primary" onClick={handleConfirmarPlano}>
-                                    Confirmar solicitação
+                                    Confirmar plano de recomposição
                                   </button>
                                   <button className="btn-app btn-app-secondary" onClick={() => setCicloEstado('draft')}>
-                                    Editar solicitação
+                                    Editar necessidade
                                   </button>
                                 </div>
                               </div>
@@ -1153,13 +1200,13 @@ function App() {
                           {cicloEstado === 'community_validation' && (
                             <>
                               <div className="app-header-simple">
-                                <h3>Validação de Rede</h3>
+                                <h3>Validação de Corre</h3>
                               </div>
                               <div className="aval-container">
                                 <div className="aval-status-banner glass">
-                                  <span className="section-tag tag-yellow">AVAL COMUNITÁRIO</span>
+                                  <span className="section-tag tag-yellow">VALIDAÇÃO DE CORRE</span>
                                   <h2>Quem reconhece sua jornada?</h2>
-                                  <p>Na Abias, a rede ajuda a reconhecer o que o banco não sabe ler sozinho: presença, consistência, trabalho, território e confiança.</p>
+                                  <p>Convide pessoas ou parceiros que conhecem seu corre para validar evidências da sua jornada produtiva.</p>
                                 </div>
 
                                 <div className="aval-peers-list">
@@ -1182,7 +1229,7 @@ function App() {
                                         className="btn-app btn-app-secondary" 
                                         onClick={handleMarcosAval}
                                         style={{ fontSize: '0.75rem', padding: '10px' }}>
-                                        <i className="fa-solid fa-signature"></i> Registrar aval de Marcos
+                                        <i className="fa-solid fa-signature"></i> Registrar validação de Marcos
                                       </button>
                                     ) : (
                                       <p style={{ fontSize: '0.75rem', fontStyle: 'italic', color: 'var(--text-secondary)' }}>
@@ -1210,7 +1257,7 @@ function App() {
                                         className="btn-app btn-app-secondary" 
                                         onClick={handleAlineAval}
                                         style={{ fontSize: '0.75rem', padding: '10px' }}>
-                                        <i className="fa-solid fa-signature"></i> Registrar aval de Aline
+                                        <i className="fa-solid fa-signature"></i> Registrar validação de Aline
                                       </button>
                                     ) : (
                                       <p style={{ fontSize: '0.75rem', fontStyle: 'italic', color: 'var(--text-secondary)' }}>
@@ -1227,11 +1274,11 @@ function App() {
                           {['partner_quote', 'under_review', 'approved', 'evidence_pending', 'evidence_review', 'validated', 'completed', 'needs_revision', 'rejected'].includes(cicloEstado) && (
                             <>
                               <div className="app-header-simple">
-                                <h3>Status do Crédito Produtivo</h3>
+                                <h3>Status da Carta de Corre</h3>
                               </div>
                               <div className="plano-container">
                                 <div className="milestone-card glass">
-                                  <span className="lbl-milestone">ETAPA DO CICLO DE CRÉDITO</span>
+                                  <span className="lbl-milestone">ESTADO DA CARTA DE CORRE</span>
                                   <h4 style={{ margin: 0 }}>{getEstadoLabel(cicloEstado).label}</h4>
                                   <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
                                     {getEstadoLabel(cicloEstado).step}
@@ -1247,17 +1294,17 @@ function App() {
                                   }}>
                                     <div className="card-brand-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                       <span className="card-brand" style={{ color: 'var(--color-gold)', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 800 }}>
-                                        <i className="fa-solid fa-circle-check" style={{ color: 'var(--success)' }}></i> Ciclo de jornada validado
+                                        <i className="fa-solid fa-circle-check" style={{ color: 'var(--success)' }}></i> Carta autorizada e concluída
                                       </span>
                                       <span className="card-contactless" style={{ fontSize: '0.6rem', color: 'var(--text-secondary)' }}><i className="fa-solid fa-shield-halved"></i> ABIAS PRODUTIVO</span>
                                     </div>
                                     <div className="slip-details" style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                       <div className="slip-row" style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '4px' }}>
-                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>VALOR</span>
+                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>VALOR DO CICLO</span>
                                         <span className="slip-value" style={{ fontSize: '0.8rem', fontWeight: 700 }}>R$ {currentAmount.toFixed(2)}</span>
                                       </div>
                                       <div className="slip-row" style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '4px' }}>
-                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>FINALIDADE</span>
+                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>NECESSIDADE PRODUTIVA</span>
                                         <span className="slip-value" style={{ fontSize: '0.8rem', fontWeight: 700 }}>{currentFinalidade}</span>
                                       </div>
                                       <div className="slip-row" style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '4px' }}>
@@ -1265,29 +1312,29 @@ function App() {
                                         <span className="slip-value" style={{ fontSize: '0.8rem', fontWeight: 700 }}>{currentOficina}</span>
                                       </div>
                                       <div className="slip-row" style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '4px' }}>
-                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>VALIDADORES</span>
+                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>VALIDAÇÃO DE CORRE</span>
                                         <span className="slip-value" style={{ fontSize: '0.8rem', fontWeight: 700 }}>Marcos e Aline</span>
                                       </div>
                                       <div className="slip-row" style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '4px' }}>
-                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>EVIDÊNCIA</span>
+                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>COMPROVANTE</span>
                                         <span className="slip-value" style={{ fontSize: '0.8rem', fontWeight: 700 }}>recibo + foto</span>
                                       </div>
                                       <div className="slip-row" style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '4px' }}>
-                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>REPUTAÇÃO</span>
-                                        <span className="slip-value" style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--success)' }}>720 → {reputacao}</span>
+                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>ESTADO DA JORNADA</span>
+                                        <span className="slip-value" style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--success)' }}>{getEstadoQualitativo(cicloEstado)}</span>
                                       </div>
                                       <div className="slip-row" style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.03)', paddingBottom: '4px' }}>
-                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>FUNDO ABIAS</span>
+                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>RESERVA PILOTO</span>
                                         <span className="slip-value" style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-gold)' }}>+R$ {(currentAmount * 0.08).toFixed(0)}</span>
                                       </div>
                                       <div className="slip-row" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>STATUS</span>
-                                        <span className="slip-value" style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--success)' }}>ciclo concluído</span>
+                                        <span className="slip-label" style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>ESTADO</span>
+                                        <span className="slip-value" style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--success)' }}>ciclo recomposto</span>
                                       </div>
                                     </div>
                                     <div className="slip-footer" style={{ borderTop: '1px dashed var(--border-color)', paddingTop: '10px', marginTop: '10px', display: 'block', height: 'auto' }}>
                                       <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', fontStyle: 'italic', lineHeight: '1.4', textAlign: 'center', margin: 0 }}>
-                                        “Este ciclo fortaleceu a jornada de {membro.nome.split(' ')[0]} e adicionou contribuição ao Fundo Abias.”
+                                        “Este ciclo fortaleceu a jornada de {membro.nome.split(' ')[0]} e adicionou contribuição à Reserva de Ciclos Piloto.”
                                       </p>
                                     </div>
                                   </div>
@@ -1303,7 +1350,7 @@ function App() {
                                         <span className="slip-value">{membro.nome}</span>
                                       </div>
                                       <div className="slip-row">
-                                        <span className="slip-label">FINALIDADE PRODUTIVA</span>
+                                        <span className="slip-label">NECESSIDADE PRODUTIVA</span>
                                         <span className="slip-value">{currentFinalidade}</span>
                                       </div>
                                       <div className="slip-row">
@@ -1311,12 +1358,12 @@ function App() {
                                         <span className="slip-value">{currentOficina}</span>
                                       </div>
                                       <div className="slip-row">
-                                        <span className="slip-label">RETORNO ACORDADO</span>
+                                        <span className="slip-label">PLANO DE RECOMPOSIÇÃO</span>
                                         <span className="slip-value">4x de R$ {new Intl.NumberFormat('pt-BR').format(parcelasValor)}</span>
                                       </div>
                                     </div>
                                     <div className="slip-footer">
-                                      <div className="slip-badge">CRÉDITO PRODUTIVO</div>
+                                      <div className="slip-badge">CARTA DE CORRE</div>
                                       <span className="slip-amount">R$ {currentAmount.toFixed(2)}</span>
                                     </div>
                                   </div>
@@ -1342,19 +1389,19 @@ function App() {
 
                           <div className="fundo-mobile-container" style={{ padding: '20px' }}>
                             <div className="fundo-headline-card glass" style={{ position: 'relative', overflow: 'hidden' }}>
-                              <span className="section-tag tag-yellow">FUNDO ABIAS — AMBIENTE PILOTO</span>
-                              <h2>Fundo Abias</h2>
-                              <p style={{ fontSize: '0.9rem', color: 'var(--color-gold)', marginBottom: '10px' }}>Proteção coletiva para jornadas individuais.</p>
-                              <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>Cada ciclo validado fortalece uma reserva comunitária em ambiente piloto. O Fundo Abias ajuda a proteger a rede, apoiar emergências e ampliar novos acessos.</p>
+                              <span className="section-tag tag-yellow">RESERVA DE CICLOS PILOTO — AMBIENTE PILOTO</span>
+                              <h2>Reserva de Ciclos Piloto</h2>
+                              <p style={{ fontSize: '0.9rem', color: 'var(--color-gold)', marginBottom: '10px' }}>Apoio mútuo para jornadas individuais.</p>
+                              <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>A reserva ajuda a entender como novos ciclos podem ser viabilizados com responsabilidade, acompanhamento e transparência. No ambiente piloto, ela serve para aprender como a rede pode sustentar novos acessos produtivos sem prometer garantia, seguro ou aprovação automática.</p>
                             </div>
 
                             <div className="fundo-reserve-card glass">
-                              <span className="lbl">Saldo da Reserva Comunitária</span>
+                              <span className="lbl">Saldo da Reserva de Ciclos Piloto</span>
                               <div className="amount-val font-mono">R$ {fundo.toFixed(2)}</div>
                               <div className="fundo-bar-wrapper">
                                 <div className="fundo-bar-fill-mobile" style={{ width: `${Math.min(100, (fundo / 8000) * 100)}%` }}></div>
                               </div>
-                              <span className="fundo-subtext-meta">Meta de blindagem do piloto: R$ 8.000,00</span>
+                              <span className="fundo-subtext-meta">Meta de sustentabilidade do piloto: R$ 8.000,00</span>
                             </div>
 
                             {/* Circular Economy loop visual */}
@@ -1371,8 +1418,8 @@ function App() {
                                   background: (cicloEstado === 'submitted' || cicloEstado === 'community_validation') ? 'rgba(201, 154, 61, 0.15)' : 'rgba(255,255,255,0.02)',
                                   border: (cicloEstado === 'submitted' || cicloEstado === 'community_validation') ? '1px solid var(--color-gold)' : '1px solid transparent'
                                 }}>
-                                  <span style={{ fontWeight: 700, color: 'var(--color-gold)' }}>1. Crédito na Rede</span>
-                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Crédito produtivo para a moto.</span>
+                                  <span style={{ fontWeight: 700, color: 'var(--color-gold)' }}>1. Jornada reconhecida</span>
+                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Comunidade organiza evidências do corre.</span>
                                 </div>
 
                                 <div style={{ 
@@ -1384,8 +1431,8 @@ function App() {
                                   background: (cicloEstado === 'partner_quote' || cicloEstado === 'evidence_review' || cicloEstado === 'validated') ? 'rgba(22, 61, 47, 0.4)' : 'rgba(255,255,255,0.02)',
                                   border: (cicloEstado === 'partner_quote' || cicloEstado === 'evidence_review' || cicloEstado === 'validated') ? '1px solid var(--color-green)' : '1px solid transparent'
                                 }}>
-                                  <span style={{ fontWeight: 700, color: 'var(--success)' }}>2. Oficina Recebe</span>
-                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Recursos circulam nos comércios da rota.</span>
+                                  <span style={{ fontWeight: 700, color: 'var(--success)' }}>2. Necessidade validada</span>
+                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Oficina e rede confirmam a necessidade.</span>
                                 </div>
 
                                 <div style={{ 
@@ -1397,8 +1444,8 @@ function App() {
                                   background: (cicloEstado === 'evidence_pending') ? 'rgba(154, 79, 47, 0.15)' : 'rgba(255,255,255,0.02)',
                                   border: (cicloEstado === 'evidence_pending') ? '1px solid var(--color-terra)' : '1px solid transparent'
                                 }}>
-                                  <span style={{ fontWeight: 700, color: 'var(--color-terra)' }}>3. Moto na Rota</span>
-                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Membro segue rodando e gerando renda.</span>
+                                  <span style={{ fontWeight: 700, color: 'var(--color-terra)' }}>3. Ciclo acompanhado</span>
+                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Carta de Corre usada no parceiro local.</span>
                                 </div>
 
                                 <div style={{ 
@@ -1410,8 +1457,8 @@ function App() {
                                   background: (cicloEstado === 'completed') ? 'rgba(201, 154, 61, 0.15)' : 'rgba(255,255,255,0.02)',
                                   border: (cicloEstado === 'completed') ? '1px solid var(--color-gold)' : '1px solid transparent'
                                 }}>
-                                  <span style={{ fontWeight: 700, color: 'var(--color-gold)' }}>4. Fundo Cresce</span>
-                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Retorno de taxa blindando o fundo piloto.</span>
+                                  <span style={{ fontWeight: 700, color: 'var(--color-gold)' }}>4. Reserva recomposta</span>
+                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Ciclo retorna aprendizado e capacidade.</span>
                                 </div>
                               </div>
                             </div>
@@ -1462,6 +1509,26 @@ function App() {
                               <div>
                                 <h4 style={{ fontSize: '1.1rem', fontWeight: 900, color: '#ffffff', margin: 0 }}>{membro.nome}</h4>
                                 <span style={{ fontSize: '0.7rem', color: 'var(--color-gold)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Membro Indicador Leste</span>
+                                <div className="how-to-improve-card glass" style={{ padding: '16px' }}>
+                                  <h4 style={{ fontSize: '0.8rem', color: 'var(--color-gold)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px', fontWeight: 800 }}>Conquistas de Jornada</h4>
+                                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', textAlign: 'center' }}>
+                                    <div style={{ background: 'rgba(255,255,255,0.02)', padding: '10px 4px', border: '1px solid var(--border-color)' }}>
+                                      <i className="fa-solid fa-users" style={{ color: 'var(--color-gold)', fontSize: '1rem', marginBottom: '4px' }}></i>
+                                      <h6 style={{ fontSize: '0.65rem', fontWeight: 800, color: '#ffffff' }}>Validador</h6>
+                                      <span style={{ fontSize: '0.55rem', color: 'var(--text-muted)' }}>Confiança</span>
+                                    </div>
+                                    <div style={{ background: 'rgba(255,255,255,0.02)', padding: '10px 4px', border: '1px solid var(--border-color)' }}>
+                                      <i className="fa-solid fa-check-double" style={{ color: 'var(--success)', fontSize: '1rem', marginBottom: '4px' }}></i>
+                                      <h6 style={{ fontSize: '0.65rem', fontWeight: 800, color: '#ffffff' }}>Evidências</h6>
+                                      <span style={{ fontSize: '0.55rem', color: 'var(--text-muted)' }}>Confirmadas</span>
+                                    </div>
+                                    <div style={{ background: 'rgba(255,255,255,0.02)', padding: '10px 4px', border: '1px solid var(--border-color)' }}>
+                                      <i className="fa-solid fa-vault" style={{ color: 'var(--color-terra)', fontSize: '1rem', marginBottom: '4px' }}></i>
+                                      <h6 style={{ fontSize: '0.65rem', fontWeight: 800, color: '#ffffff' }}>Circularidade</h6>
+                                      <span style={{ fontSize: '0.55rem', color: 'var(--text-muted)' }}>Recompositor</span>
+                                    </div>
+                                  </div>
+                                </div>
                                 <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
                                   {membro.ferramenta} • {membro.tempo} de asfalto • {membro.regiao}
                                 </p>
@@ -1469,28 +1536,7 @@ function App() {
                             </div>
 
                             <div className="how-to-improve-card glass" style={{ padding: '16px' }}>
-                              <h4 style={{ fontSize: '0.8rem', color: 'var(--color-gold)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px', fontWeight: 800 }}>Conquistas de Jornada</h4>
-                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', textAlign: 'center' }}>
-                                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '10px 4px', border: '1px solid var(--border-color)' }}>
-                                  <i className="fa-solid fa-users" style={{ color: 'var(--color-gold)', fontSize: '1rem', marginBottom: '4px' }}></i>
-                                  <h6 style={{ fontSize: '0.65rem', fontWeight: 800, color: '#ffffff' }}>Avalista</h6>
-                                  <span style={{ fontSize: '0.55rem', color: 'var(--text-muted)' }}>Validado</span>
-                                </div>
-                                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '10px 4px', border: '1px solid var(--border-color)' }}>
-                                  <i className="fa-solid fa-check-double" style={{ color: 'var(--success)', fontSize: '1rem', marginBottom: '4px' }}></i>
-                                  <h6 style={{ fontSize: '0.65rem', fontWeight: 800, color: '#ffffff' }}>Ficha Limpa</h6>
-                                  <span style={{ fontSize: '0.55rem', color: 'var(--text-muted)' }}>100% Evidência</span>
-                                </div>
-                                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '10px 4px', border: '1px solid var(--border-color)' }}>
-                                  <i className="fa-solid fa-vault" style={{ color: 'var(--color-terra)', fontSize: '1rem', marginBottom: '4px' }}></i>
-                                  <h6 style={{ fontSize: '0.65rem', fontWeight: 800, color: '#ffffff' }}>Builder</h6>
-                                  <span style={{ fontSize: '0.55rem', color: 'var(--text-muted)' }}>Reserva local</span>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="how-to-improve-card glass" style={{ padding: '16px' }}>
-                              <h4 style={{ fontSize: '0.8rem', color: 'var(--color-gold)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px', fontWeight: 800 }}>Depoimentos e Avais Comunitários</h4>
+                              <h4 style={{ fontSize: '0.8rem', color: 'var(--color-gold)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px', fontWeight: 800 }}>Depoimentos e Validações de Corre</h4>
                               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                 <div style={{ background: 'rgba(255,255,255,0.02)', padding: '12px', border: '1px solid var(--border-color)' }}>
                                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '0.75rem' }}>
@@ -1612,7 +1658,7 @@ function App() {
                         <span className="val font-mono">{cicloEstado === 'evidence_review' ? '1' : '0'}</span>
                       </div>
                       <div className="metric-admin-card glass">
-                        <span className="lbl">Fundo Operacional</span>
+                        <span className="lbl">Reserva Operacional</span>
                         <span className="val font-mono">R$ {fundo}</span>
                       </div>
                     </div>
@@ -1640,8 +1686,8 @@ function App() {
 
                           <div className="q-checklists">
                             <span className="chk-status checked"><i className="fa-solid fa-check"></i> Jornada Reconhecida pela Rede</span>
-                            <span className="chk-status checked"><i className="fa-solid fa-check"></i> Aval de Marcos Santos registrado</span>
-                            <span className="chk-status checked"><i className="fa-solid fa-check"></i> Aval de Aline Souza registrado</span>
+                            <span className="chk-status checked"><i className="fa-solid fa-check"></i> Validação de Marcos Santos registrada</span>
+                            <span className="chk-status checked"><i className="fa-solid fa-check"></i> Validação de Aline Souza registrada</span>
                             <span className={`chk-status ${oficinaConfirmacao.quoteConfirmed ? 'checked' : 'warning'}`}>
                               <i className={`fa-solid ${oficinaConfirmacao.quoteConfirmed ? 'fa-check' : 'fa-spinner fa-spin'}`}></i> Orçamento Oficina JN
                             </span>
@@ -1739,7 +1785,7 @@ function App() {
                   className={`tab-item ${activeTab === 'credito' ? 'active' : ''}`} 
                   onClick={() => setActiveTab('credito')}>
                   <i className="fa-solid fa-route"></i>
-                  <span>Crédito</span>
+                  <span>Carta de Corre</span>
                 </button>
                 <button 
                   className={`tab-item ${activeTab === 'rede' ? 'active' : ''}`} 
