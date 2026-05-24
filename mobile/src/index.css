@@ -144,6 +144,7 @@ body {
     align-items: center;
     gap: 10px;
     transition: var(--transition-smooth);
+    width: 100%;
 }
 
 .btn-sidebar:hover {
