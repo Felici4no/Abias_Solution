@@ -5,7 +5,7 @@
 - [x] Task 1: Criar estrutura inicial do back-end em `apps/api` usando MVC.
 - [x] Task 2: Definir entidades centrais do dominio: entregador, conta conectada, score operacional, produto financeiro, transacao, parceiro local e cashback.
 - [x] Task 3: Implementar cadastro inicial de entregadores e validacao de dados.
-- [ ] Task 4: Criar fluxo mockado de conexao com plataformas de entrega para simular dados do iFood/99.
+- [x] Task 4: Criar fluxo mockado de conexao com plataformas de entrega para simular dados do iFood/99.
 - [ ] Task 5: Construir motor inicial de score operacional com regras transparentes e versionadas.
 - [ ] Task 6: Criar modulo de limite dinamico para cartao de credito.
 - [ ] Task 7: Criar modulo de pre-aprovacao de emprestimos com parametros de risco.
@@ -50,3 +50,16 @@ A terceira task implementou o cadastro inicial de entregadores:
 - Bloqueio de cadastro duplicado pelo documento enquanto a API estiver em execucao.
 
 Nesta etapa os dados ficam apenas em memoria. A persistencia definitiva em banco continua reservada para a Task 9.
+
+## Task 4 Entregue
+
+A quarta task implementou o fluxo mockado de conexao com plataformas de entrega:
+
+- `POST /delivery-platform-connections/mock`: conecta um entregador cadastrado a um provider mockado.
+- Providers aceitos: `ifood` e `99`.
+- Validacao de `courierId` e `provider`.
+- Verificacao de existencia do entregador antes da conexao.
+- Bloqueio de provider duplicado para o mesmo entregador enquanto a API estiver em execucao.
+- Retorno de `connectedAccount` e `operationalSnapshot` com dados simulados de atividade.
+
+O snapshot operacional inclui entregas nos ultimos 30 dias, dias ativos, ganhos medios semanais, avaliacao media, tempo de plataforma e taxa de cancelamento. Esses dados serao usados como entrada para o motor de score da Task 5.

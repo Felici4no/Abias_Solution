@@ -52,6 +52,12 @@ export function registerCourier(payload) {
   };
 }
 
+export function findCourierById(courierId) {
+  return couriers.find((courier) => {
+    return courier.id === courierId;
+  });
+}
+
 export function validateCourierPayload(payload) {
   if (!payload || typeof payload !== "object" || payload._invalidJson) {
     return {

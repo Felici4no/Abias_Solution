@@ -54,3 +54,20 @@ Payload esperado:
   "state": "SP"
 }
 ```
+
+Conexao mockada com plataforma de entrega:
+
+```text
+POST /delivery-platform-connections/mock
+```
+
+Payload esperado:
+
+```json
+{
+  "courierId": "uuid-do-entregador",
+  "provider": "ifood"
+}
+```
+
+Providers aceitos nesta etapa: `ifood` e `99`.
