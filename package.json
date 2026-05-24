@@ -7,9 +7,12 @@
     "mobile"
   ],
   "scripts": {
+    "setup": "npm install && npm run db:migrate",
+    "predev": "npm run db:migrate",
     "dev": "concurrently --names \"API,WEB\" --prefix-colors \"cyan,magenta\" \"npm run dev -w apps/api\" \"npm run dev -w mobile\"",
     "dev:api": "npm run dev -w apps/api",
     "dev:web": "npm run dev -w mobile",
+    "db:migrate": "npm run db:migrate -w apps/api",
     "install:all": "npm install"
   },
   "devDependencies": {

@@ -1,6 +1,7 @@
 import { readJsonBody } from "../http/readJsonBody.js";
-import { findAbiasMembro, registerAbiasMembro } from "../models/abiasMembrosModel.js";
+import { findAbiasMembro, findAbiasMembroComDados, registerAbiasMembro } from "../models/abiasMembrosModel.js";
 import { getMembroLimites } from "../models/abiasGestaoModel.js";
+import { avaliarEAplicar } from "../models/abiasAiModel.js";
 import { sendJson } from "../views/jsonView.js";
 
 export async function createAbiasMembro(request, response) {
@@ -11,6 +12,9 @@ export async function createAbiasMembro(request, response) {
     return sendJson(response, result.statusCode, { error: result.error, fields: result.fields });
   }
 
+  // Dispara avaliação IA em background — não bloqueia o retorno do cadastro
+  avaliarEAplicar(result.membro.id).catch(() => {});
+
   return sendJson(response, 201, { membro: result.membro });
 }
 
@@ -18,7 +22,7 @@ export async function getAbiasMembro(request, response) {
   const id = request.params?.id;
   if (!id) return sendJson(response, 400, { error: "ID obrigatório" });
 
-  const membro = await findAbiasMembro(id);
+  const membro = await findAbiasMembroComDados(id);
   if (!membro) return sendJson(response, 404, { error: "Membro não encontrado" });
 
   return sendJson(response, 200, { membro });

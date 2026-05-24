@@ -1,18 +1,61 @@
 import { loadEnv } from "../config/env.js";
 import { query } from "../database/postgresDatabase.js";
+import { aplicarAvaliacaoAoMembro } from "./abiasMembrosModel.js";
 
 // =========================================================
 // PARECER IA — Gemini analisa o perfil completo do membro
 // e emite recomendação de crédito com critérios de equidade
 // =========================================================
 
-async function getGeminiClient() {
+async function callGemini(prompt) {
   loadEnv();
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("GEMINI_API_KEY não configurada");
   const { GoogleGenerativeAI } = await import("@google/generative-ai");
   const genai = new GoogleGenerativeAI(apiKey);
-  return genai.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
+  const model = genai.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
+  const result = await model.generateContent(prompt);
+  return result.response.text().trim();
+}
+
+async function callGroq(prompt) {
+  loadEnv();
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) throw new Error("GROQ_API_KEY não configurada");
+
+  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: "llama-3.3-70b-versatile",
+      messages: [{ role: "user", content: prompt }],
+      temperature: 0.3,
+    }),
+  });
+
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(`Groq API error ${response.status}: ${body}`);
+  }
+
+  const data = await response.json();
+  return data.choices[0].message.content.trim();
+}
+
+async function callAI(prompt) {
+  // Groq (llama-3.3-70b) como primário; Gemini como fallback de cota
+  try {
+    return await callGroq(prompt);
+  } catch (err) {
+    const isQuota = err.message?.includes("429") || err.message?.includes("quota") || err.message?.includes("rate");
+    if (isQuota && process.env.GEMINI_API_KEY) {
+      return await callGemini(prompt);
+    }
+    throw err;
+  }
 }
 
 async function buscarContextoMembro(membroId) {
@@ -117,9 +160,25 @@ DADOS OPERACIONAIS IFOOD: Não disponíveis — analise com base nos dados da Ab
 TAREFA:
 Com base nesses dados e nos princípios acima, emita um parecer de crédito.
 
+CRITÉRIOS DE SCORE ABIAS (0–1000):
+- 0–50:   Sem dados operacionais — membro recém-cadastrado ou sem conexão com plataforma
+- 51–300: Dados iniciais — trabalhador novo, histórico curto
+- 301–500: Dados moderados — trabalhador em desenvolvimento
+- 501–700: Boa consistência — dias ativos regulares, avaliação estável
+- 701–850: Alto desempenho — candidato natural ao empréstimo produtivo
+- 851–1000: Excelência comprovada + histórico Abias — perfil ELITE
+
+PESOS PARA O SCORE (equidade-aware):
+- Consistência de dias ativos: 30% (fidelidade ao trabalho)
+- Ganho médio semanal: 25% (capacidade de pagamento)
+- Avaliação média calibrada por região: 20% (qualidade, já considerando viés geográfico)
+- Taxa de conclusão de entregas: 15%
+- Histórico de ciclos concluídos na Abias: 10% (bônus — dado mais confiável que o iFood)
+
 Responda SOMENTE com um JSON válido, sem markdown, sem explicação fora do JSON, exatamente neste formato:
 
 {
+  "score": <número inteiro 0-1000>,
   "recomendacao": "APROVAR" | "ANALISAR" | "REVISAR" | "NEGAR",
   "limiteCartao": {
     "valor": <número inteiro em reais, 0 se não recomendado>,
@@ -134,7 +193,8 @@ Responda SOMENTE com um JSON válido, sem markdown, sem explicação fora do JSO
   "analise": "<3-5 frases: leitura humana do perfil, considerando equidade e contexto periférico>",
   "fatoresPositivos": ["<fator>", "<fator>"],
   "pontosAtencao": ["<ponto>"],
-  "consideracaoEquidade": "<1-2 frases sobre o que o score tradicional ignoraria nesse perfil e o que a Abias enxerga>"
+  "consideracaoEquidade": "<1-2 frases sobre o que o score tradicional ignoraria nesse perfil e o que a Abias enxerga>",
+  "motivoNegacao": <null se recomendacao não for NEGAR, caso contrário string de 2-3 frases diretas ao membro explicando claramente por que o crédito não pode ser liberado e o que ele precisaria melhorar para ser aprovado futuramente>
 }
 `.trim();
 }
@@ -143,11 +203,8 @@ export async function gerarParecer(membroId) {
   const ctx = await buscarContextoMembro(membroId);
   if (!ctx) return { ok: false, statusCode: 404, error: "Membro não encontrado" };
 
-  const model = await getGeminiClient();
   const prompt = montarPrompt(ctx);
-
-  const result = await model.generateContent(prompt);
-  const text = result.response.text().trim();
+  const text = await callAI(prompt);
 
   // Remove possível markdown residual (```json ... ```)
   const clean = text.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
@@ -179,4 +236,23 @@ export async function gerarParecerComFallback(membroId) {
         : err.message
     };
   }
+}
+
+// Avalia o membro via IA e grava o resultado no banco
+export async function avaliarEAplicar(membroId) {
+  const result = await gerarParecerComFallback(membroId);
+  if (!result.ok) return result;
+
+  const { parecer } = result;
+
+  // NEGAR = sem crédito, score permanece 0 independente do que a IA sugeriu
+  const negado = parecer.recomendacao === "NEGAR";
+  const score  = negado
+    ? 0
+    : Math.max(0, Math.min(1000, typeof parecer.score === "number" ? parecer.score : 0));
+
+  const membro = await aplicarAvaliacaoAoMembro(membroId, score, parecer);
+  if (!membro) return { ok: false, statusCode: 500, error: "Falha ao gravar avaliação" };
+
+  return { ok: true, membro, parecer };
 }

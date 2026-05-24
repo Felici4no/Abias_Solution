@@ -21,6 +21,12 @@ import {
 import { getAbiasFundo } from "../controllers/abiasFundoController.js";
 import { getAbiasPainelGestao, getAbiasCiclosPendentes } from "../controllers/abiasGestaoController.js";
 import { getAbiasParecerAi } from "../controllers/abiasAiController.js";
+import { avaliarMembro } from "../controllers/abiasAvaliacaoController.js";
+import {
+  registrarUsuario,
+  loginUsuario,
+  vincularMembroAoUsuario
+} from "../controllers/abiasAuthController.js";
 
 export const routes = [
   {
@@ -91,5 +97,11 @@ export const routes = [
   { method: "GET",  path: "/abias/fundo",                           handler: getAbiasFundo,                public: true },
   { method: "GET",  path: "/abias/gestao/painel",                   handler: getAbiasPainelGestao,         public: true },
   { method: "GET",  path: "/abias/gestao/ciclos-pendentes",         handler: getAbiasCiclosPendentes,      public: true },
-  { method: "GET",  path: "/abias/gestao/ai-analise/:id",           handler: getAbiasParecerAi,            public: true }
+  { method: "GET",  path: "/abias/gestao/ai-analise/:id",           handler: getAbiasParecerAi,            public: true },
+  { method: "POST", path: "/abias/membros/:id/avaliar",             handler: avaliarMembro,                public: true },
+
+  // --- Auth ---
+  { method: "POST",  path: "/abias/auth/registrar",               handler: registrarUsuario,             public: true },
+  { method: "POST",  path: "/abias/auth/login",                   handler: loginUsuario,                 public: true },
+  { method: "PATCH", path: "/abias/auth/usuarios/:id/membro",     handler: vincularMembroAoUsuario,      public: true }
 ];

@@ -10,6 +10,9 @@ function rowToMembro(row) {
     ferramenta: row.ferramenta,
     raca: row.raca || "",
     reputacao: row.reputacao,
+    cashbackSaldo: Number(row.cashback_saldo ?? 0),
+    aiParecer: row.ai_parecer || null,
+    avaliadoEm: row.avaliado_em || null,
     criadoEm: row.criado_em
   };
 }
@@ -51,10 +54,87 @@ export async function findAbiasMembro(id) {
   return result.rows.length > 0 ? rowToMembro(result.rows[0]) : null;
 }
 
+// Retorna o membro com todos os dados operacionais do iFood e score ranking
+export async function findAbiasMembroComDados(id) {
+  const result = await query(`
+    SELECT
+      m.id, m.nome, m.telefone, m.regiao,
+      m.tempo_atuacao, m.ferramenta, m.raca, m.reputacao,
+      m.cashback_saldo, m.ai_parecer, m.avaliado_em, m.criado_em,
+
+      i.entregas_realizadas,
+      i.dias_ativos,
+      i.ganhos_brutos,
+      i.ganhos_liquidos,
+      i.ganho_medio_semanal,
+      i.avaliacao_media,
+      i.cancelamentos,
+      i.taxa_cancelamento,
+      i.tempo_plataforma_dias,
+      i.payload_bruto,
+      i.periodo_inicio,
+      i.periodo_fim,
+
+      s.pontuacao          AS score_operacional,
+      s.classificacao      AS classificacao_operacional,
+      s.percentual_ranking
+
+    FROM abias_membros m
+    LEFT JOIN usuarios u
+      ON REGEXP_REPLACE(m.telefone, '[^0-9]', '', 'g') = u.telefone
+    LEFT JOIN LATERAL (
+      SELECT * FROM ifood_dados_operacionais
+      WHERE usuario_id = u.id ORDER BY periodo_fim DESC LIMIT 1
+    ) i ON u.id IS NOT NULL
+    LEFT JOIN score_operacional s ON s.usuario_id = u.id
+    WHERE m.id = $1
+  `, [id]);
+
+  if (!result.rows.length) return null;
+  const row = result.rows[0];
+
+  const membro = rowToMembro(row);
+
+  membro.dadosOperacionais = row.entregas_realizadas != null ? {
+    entregasRealizadas:  row.entregas_realizadas,
+    diasAtivos:          row.dias_ativos,
+    ganhosBrutos:        Number(row.ganhos_brutos),
+    ganhosLiquidos:      Number(row.ganhos_liquidos),
+    ganhoMedioSemanal:   Number(row.ganho_medio_semanal),
+    avaliacaoMedia:      Number(row.avaliacao_media),
+    cancelamentos:       row.cancelamentos,
+    taxaCancelamento:    Number(row.taxa_cancelamento),
+    tempoPlatformaDias:  row.tempo_plataforma_dias,
+    nivel:               row.payload_bruto?.nivel || null,
+    metasBatidas:        row.payload_bruto?.metas_batidas ?? null,
+    bonusPeriodo:        Number(row.payload_bruto?.bonus_periodo || 0),
+    periodoInicio:       row.periodo_inicio,
+    periodoFim:          row.periodo_fim,
+  } : null;
+
+  membro.rankingOperacional = row.score_operacional != null ? {
+    pontuacao:       row.score_operacional,
+    classificacao:   row.classificacao_operacional,
+    percentilRanking: Number(row.percentual_ranking),
+  } : null;
+
+  return membro;
+}
+
 export async function updateAbiasMembroReputacao(id, delta) {
   const result = await query(
     `UPDATE abias_membros SET reputacao = GREATEST(0, reputacao + $1) WHERE id = $2 RETURNING *`,
     [delta, id]
+  );
+  return result.rows.length > 0 ? rowToMembro(result.rows[0]) : null;
+}
+
+export async function aplicarAvaliacaoAoMembro(id, score, parecer) {
+  const result = await query(
+    `UPDATE abias_membros
+     SET reputacao = $1, ai_parecer = $2, avaliado_em = NOW()
+     WHERE id = $3 RETURNING *`,
+    [score, JSON.stringify(parecer), id]
   );
   return result.rows.length > 0 ? rowToMembro(result.rows[0]) : null;
 }
