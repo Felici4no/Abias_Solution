@@ -123,15 +123,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (profileSelect.value === "apoiador") profileLabel = "apoiador";
 
             setTimeout(() => {
-                // Success feedback replacing the form
+                // Success feedback replacing the form (No VIP terms)
                 ctaForm.innerHTML = `
                     <div style="text-align: center; padding: 30px 10px; animation: fadeIn 0.5s ease-out; color: #ffffff;">
                         <i class="fa-solid fa-circle-check" style="font-size: 3.5rem; color: var(--success); margin-bottom: 20px;"></i>
-                        <h3 style="font-size: 1.8rem; margin-bottom: 10px; font-family: var(--font-heading);">Solicitação Enviada!</h3>
+                        <h3 style="font-size: 1.8rem; margin-bottom: 10px; font-family: var(--font-heading);">Pré-cadastro Abdias Gerado!</h3>
                         <p style="color: var(--text-secondary); font-size: 1rem; margin-bottom: 20px;">
-                            Obrigado, <strong style="color: #ffffff;">${nameInput.value}</strong>. Seu cadastro como <strong style="color: var(--color-accent-gold);">${profileLabel}</strong> foi enviado para a fila de espera da nossa rota piloto.
+                            Obrigado, <strong style="color: #ffffff;">${nameInput.value}</strong>. Sua solicitação de entrada como <strong style="color: var(--color-accent-gold);">${profileLabel}</strong> foi enviada com sucesso para a nossa lista da comunidade.
                         </p>
-                        <span style="font-size: 0.85rem; color: var(--color-accent-pink); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Código de Fila: #AB${Math.floor(1000 + Math.random() * 9000)}</span>
+                        <span style="font-size: 0.85rem; color: var(--color-accent-pink); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Protocolo de Entrada: #AD${Math.floor(1000 + Math.random() * 9000)}</span>
                     </div>
                 `;
             }, 1600);
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const sectionHeight = current.offsetHeight;
             const sectionTop = current.offsetTop - 180;
             const sectionId = current.getAttribute('id');
-            const navLink = document.querySelector(`.nav-menu a[href*=${sectionId}]`);
+            const navLink = document.querySelector(`.nav-link[href*=${sectionId}]`);
             
             if (navLink) {
                 if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {

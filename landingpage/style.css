@@ -228,7 +228,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .main-header.scrolled {
-    background: rgba(6, 6, 8, 0.9);
+    background: rgba(6, 6, 8, 0.95);
     backdrop-filter: blur(12px);
     padding: 16px 0;
     border-bottom: 1px solid var(--border-color);
@@ -1004,13 +1004,28 @@ h1, h2, h3, h4, h5 {
     background: var(--bg-secondary);
 }
 
+.economy-flow-text {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    max-width: 800px;
+    margin: 20px auto 40px;
+    line-height: 1.6;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    border-radius: var(--border-radius-md);
+}
+
+.economy-flow-text strong {
+    color: var(--color-accent-gold);
+}
+
 .flow-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 40px;
     border-radius: var(--border-radius-lg);
-    margin-top: 60px;
     gap: 16px;
 }
 
@@ -1068,45 +1083,61 @@ h1, h2, h3, h4, h5 {
     50% { opacity: 1; transform: translateX(3px); color: var(--color-accent-pink); }
 }
 
-/* Seção Anti Fintech */
+/* Seção Não somos uma fintech comum */
 .anti-fintech-section {
     padding: 100px 0;
     background: var(--bg-primary);
 }
 
-.anti-fintech-grid {
+.anti-fintech-grid-new {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    margin-top: 60px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 40px;
 }
 
-.anti-fintech-card {
-    padding: 30px;
+.anti-fintech-card-new {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 24px;
     border-radius: var(--border-radius-md);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: var(--transition-smooth);
 }
 
-.anti-fintech-card:hover {
-    border-color: rgba(255, 255, 255, 0.1);
-    transform: translateY(-4px);
+.anti-fintech-card-new:hover {
+    border-color: rgba(225, 29, 72, 0.25);
+    transform: translateX(4px);
 }
 
-.anti-icon {
-    font-size: 1.6rem;
+.anti-fintech-card-new i {
     color: var(--color-accent-pink);
-    margin-bottom: 20px;
+    font-size: 1.15rem;
+    flex-shrink: 0;
 }
 
-.anti-fintech-card h4 {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 12px;
+.anti-fintech-card-new span {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #e4e4e7;
 }
 
-.anti-fintech-card p {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    line-height: 1.45;
+.anti-fintech-footer-banner {
+    margin-top: 40px;
+    padding: 30px;
+    border-radius: var(--border-radius-lg);
+    border: 1px solid rgba(234, 179, 8, 0.25);
+    background: rgba(234, 179, 8, 0.02);
+    text-align: center;
+}
+
+.anti-fintech-footer-banner p {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.6;
 }
 
 /* Testimonials / Casos de Uso Section */
@@ -1230,10 +1261,10 @@ h1, h2, h3, h4, h5 {
 
 .mvp-grid-box {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.2fr 0.8fr;
     padding: 50px;
     gap: 50px;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .mvp-text-panel h2 {
@@ -1243,26 +1274,39 @@ h1, h2, h3, h4, h5 {
 
 .mvp-text-panel p {
     color: var(--text-secondary);
-    margin-bottom: 24px;
+    margin-bottom: 30px;
 }
 
-.mvp-details-checklist {
+.mvp-success-metrics {
+    border-top: 1px solid var(--border-color);
+    padding-top: 24px;
+}
+
+.mvp-success-metrics h4 {
+    font-size: 1.15rem;
+    margin-bottom: 16px;
+    color: var(--color-accent-gold);
+}
+
+.mvp-metrics-list {
+    list-style: none;
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.chk-item {
+.mvp-metrics-list li {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
-    font-size: 0.95rem;
-    color: var(--text-primary);
 }
 
-.chk-item i {
-    color: var(--success);
-    font-size: 1rem;
+.mvp-metrics-list li i {
+    color: var(--color-accent-pink);
+    font-size: 0.85rem;
+    margin-top: 4px;
 }
 
 .mvp-stats-panel {
@@ -1469,8 +1513,8 @@ h1, h2, h3, h4, h5 {
         margin: 10px 0;
     }
     
-    .anti-fintech-grid {
-        grid-template-columns: 1fr 1fr;
+    .anti-fintech-grid-new {
+        grid-template-columns: 1fr;
     }
     
     .testimonials-grid {
@@ -1572,10 +1616,6 @@ h1, h2, h3, h4, h5 {
     }
     
     .grid-features-blocks {
-        grid-template-columns: 1fr;
-    }
-    
-    .anti-fintech-grid {
         grid-template-columns: 1fr;
     }
     
