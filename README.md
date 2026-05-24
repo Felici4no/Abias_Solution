@@ -1,8 +1,9 @@
 # Abias - Crédito apra seu corre
 
-<p align="center"<a href="https://res.cloudinary.com/dhlzexsce/image/upload/v1779632466/abiaslogo_xwwc9v.png">" alt="Abias - Logo" border="0"></a>
-</p>
-
+  <a href="">
+          <img src="https://res.cloudinary.com/dhlzexsce/image/upload/v1779632466/abiaslogo_xwwc9v.png" style="border-radius: 10%; width: 150px;" alt="Abias - Logotipo"/><br>
+          <sub><b>Abias - Crédito para seu corre</b></sub>
+        </a>
 
 ## Integrantes: 
 
