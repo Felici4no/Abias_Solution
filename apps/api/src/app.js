@@ -4,14 +4,15 @@ import { sendJson } from "./views/jsonView.js";
 
 export function createApp() {
   return createServer(async (request, response) => {
+    const requestUrl = new URL(request.url, "http://localhost");
     const route = routes.find((candidate) => {
-      return candidate.method === request.method && candidate.path === request.url;
+      return candidate.method === request.method && candidate.path === requestUrl.pathname;
     });
 
     if (!route) {
       return sendJson(response, 404, {
         error: "Route not found",
-        path: request.url
+        path: requestUrl.pathname
       });
     }
 

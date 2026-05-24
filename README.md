@@ -35,3 +35,22 @@ E tambem expoe os contratos iniciais das entidades de dominio:
 ```text
 GET /domain/entities
 ```
+
+Cadastro inicial de entregadores:
+
+```text
+POST /couriers
+```
+
+Payload esperado:
+
+```json
+{
+  "fullName": "Maria Silva",
+  "document": "12345678901",
+  "phone": "11999999999",
+  "email": "maria@example.com",
+  "city": "Sao Paulo",
+  "state": "SP"
+}
+```

@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "node src/server.js",
     "start": "node src/server.js",
-    "check": "node --check src/server.js && node --check src/app.js && node --check src/routes/index.js && node --check src/controllers/healthController.js && node --check src/controllers/domainController.js && node --check src/models/healthModel.js && node --check src/models/entities/index.js && node --check src/models/entities/cashbackModel.js && node --check src/models/entities/connectedAccountModel.js && node --check src/models/entities/courierModel.js && node --check src/models/entities/financialProductModel.js && node --check src/models/entities/localPartnerModel.js && node --check src/models/entities/operationalScoreModel.js && node --check src/models/entities/transactionModel.js && node --check src/views/jsonView.js"
+    "check": "node --check src/server.js && node --check src/app.js && node --check src/routes/index.js && node --check src/controllers/courierController.js && node --check src/controllers/healthController.js && node --check src/controllers/domainController.js && node --check src/http/readJsonBody.js && node --check src/models/courierRegistrationModel.js && node --check src/models/healthModel.js && node --check src/models/entities/index.js && node --check src/models/entities/cashbackModel.js && node --check src/models/entities/connectedAccountModel.js && node --check src/models/entities/courierModel.js && node --check src/models/entities/financialProductModel.js && node --check src/models/entities/localPartnerModel.js && node --check src/models/entities/operationalScoreModel.js && node --check src/models/entities/transactionModel.js && node --check src/views/jsonView.js"
   },
   "engines": {
     "node": ">=20"

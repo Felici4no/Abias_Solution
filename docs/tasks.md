@@ -4,7 +4,7 @@
 
 - [x] Task 1: Criar estrutura inicial do back-end em `apps/api` usando MVC.
 - [x] Task 2: Definir entidades centrais do dominio: entregador, conta conectada, score operacional, produto financeiro, transacao, parceiro local e cashback.
-- [ ] Task 3: Implementar cadastro inicial de entregadores e validacao de dados.
+- [x] Task 3: Implementar cadastro inicial de entregadores e validacao de dados.
 - [ ] Task 4: Criar fluxo mockado de conexao com plataformas de entrega para simular dados do iFood/99.
 - [ ] Task 5: Construir motor inicial de score operacional com regras transparentes e versionadas.
 - [ ] Task 6: Criar modulo de limite dinamico para cartao de credito.
@@ -39,3 +39,14 @@ A segunda task definiu os contratos iniciais das entidades centrais do dominio:
 - `cashback`: beneficio aplicado como desconto em fatura.
 
 Essas entidades ainda nao possuem persistencia em banco. Elas funcionam como mapa inicial do dominio para orientar as proximas implementacoes.
+
+## Task 3 Entregue
+
+A terceira task implementou o cadastro inicial de entregadores:
+
+- `POST /couriers`: cria um entregador com status `pending_onboarding`.
+- Validacao de `fullName`, `document`, `phone`, `email`, `city` e `state`.
+- Normalizacao basica de texto, CPF/documento, telefone, e-mail e UF.
+- Bloqueio de cadastro duplicado pelo documento enquanto a API estiver em execucao.
+
+Nesta etapa os dados ficam apenas em memoria. A persistencia definitiva em banco continua reservada para a Task 9.
