@@ -1,6 +1,6 @@
 export function RedeScreen({ ctrl }) {
   const {
-    fundo, reputacao, parecerAi, foiAvaliado, foiNegado,
+    fundo, reputacao, parecerAi, foiNegado,
     cashbackSaldo, TETO_CASHBACK, dadosOp, membro
   } = ctrl
 

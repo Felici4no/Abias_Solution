@@ -4,11 +4,11 @@ const fmtPct = (v) => `${(v * 100).toFixed(1)}%`
 export function CreditoScreen({ ctrl }) {
   const {
     cicloEstado, setCicloEstado, membro,
-    currentAmount, currentFinalidade, currentOficina, currentPrazo, currentUrgencia, currentDescricao,
+    currentAmount, currentFinalidade, currentOficina, currentPrazo, currentUrgencia,
     limiteCredito, taxaMensalJuros,
     valorOriginacao, valorJuros, totalMembro,
     parcelasValor, numParcelas,
-    reputacao, avaliacoes,
+    avaliacoes,
     foiNegado, motivoNegacao, parecerAi,
     inputAmount, setInputAmount, inputFinalidade, setInputFinalidade,
     inputPrazo, setInputPrazo, inputOficina, setInputOficina,

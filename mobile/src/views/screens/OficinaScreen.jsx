@@ -1,7 +1,7 @@
 export function OficinaScreen({ ctrl }) {
   const {
     membro, solicitacao, cicloEstado, evidencia,
-    currentAmount, currentFinalidade, currentOficina, currentUrgencia, currentDescricao,
+    currentAmount, currentFinalidade, currentUrgencia, currentDescricao,
     handleOficinaConfirmarOrcamento, handleOficinaConfirmarServico,
     getEstadoLabel
   } = ctrl

@@ -33,16 +33,24 @@ export async function registerAbiasMembro(payload) {
     return { ok: false, statusCode: 400, error: "Dados inválidos", fields };
   }
 
+  const cleanPhone = telefone.replace(/\D/g, "");
+  const userResult = await query(
+    "SELECT id FROM usuarios WHERE REGEXP_REPLACE(telefone, '[^0-9]', '', 'g') = $1",
+    [cleanPhone]
+  );
+  const usuarioId = userResult.rows[0]?.id || null;
+
   const result = await query(
-    `INSERT INTO abias_membros (nome, telefone, regiao, tempo_atuacao, ferramenta, raca)
-     VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+    `INSERT INTO abias_membros (nome, telefone, regiao, tempo_atuacao, ferramenta, raca, usuario_id)
+     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
     [
       nome,
       telefone,
       String(payload.regiao || "").trim() || null,
       String(payload.tempo || "").trim() || null,
       String(payload.ferramenta || "Moto").trim(),
-      String(payload.raca || "").trim() || null
+      String(payload.raca || "").trim() || null,
+      usuarioId
     ]
   );
 
@@ -81,7 +89,7 @@ export async function findAbiasMembroComDados(id) {
 
     FROM abias_membros m
     LEFT JOIN usuarios u
-      ON REGEXP_REPLACE(m.telefone, '[^0-9]', '', 'g') = u.telefone
+      ON m.usuario_id = u.id
     LEFT JOIN LATERAL (
       SELECT * FROM ifood_dados_operacionais
       WHERE usuario_id = u.id ORDER BY periodo_fim DESC LIMIT 1

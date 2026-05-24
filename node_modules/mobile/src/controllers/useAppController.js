@@ -18,6 +18,7 @@ export function useAppController() {
   const [oficinaConfirmacao, setOficinaConfirmacao] = useState({ quoteConfirmed: false, serviceConfirmed: false, note: '' })
   const [gestaoJustificativa, setGestaoJustificativa] = useState('')
   const [analisandoIA, setAnalisandoIA] = useState(false)
+  const [aiError, setAiError] = useState(null)
 
   const [loginRole, setLoginRole] = useState(() => localStorage.getItem('abias_login_role'))
   const [loginUsuario, setLoginUsuario] = useState(() => {
@@ -59,6 +60,7 @@ export function useAppController() {
   )
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (!membroId) { setLoading(false); return }
     async function carregarEstado() {
       try {
@@ -80,7 +82,7 @@ export function useAppController() {
       }
     }
     carregarEstado()
-  }, [])
+  }, [membroId])
 
   useEffect(() => {
     const updateTime = () => {
@@ -322,13 +324,22 @@ export function useAppController() {
 
   const handlePedirAnalise = async () => {
     if (!membroId || analisandoIA) return
+    if (!membro?.dadosOperacionais) {
+      setAiError('Dados operacionais insuficientes: este usuario ainda nao possui dados iFood vinculados.')
+      return
+    }
     setAnalisandoIA(true)
+    setAiError(null)
     try {
       const { membro: avMembro, parecer } = await apiFetch(`/abias/membros/${membroId}/avaliar`, { method: 'POST' })
       if (avMembro) { setMembro(avMembro); setReputacao(avMembro.reputacao) }
       if (parecer) setParecerAi(parecer)
     } catch (err) {
-      alert('Erro ao solicitar análise: ' + err.message)
+      if (err?.message?.includes('Dados operacionais insuficientes')) {
+        setAiError(err.message)
+      } else {
+        alert('Erro ao solicitar análise: ' + err.message)
+      }
     } finally {
       setAnalisandoIA(false)
     }
@@ -447,7 +458,7 @@ export function useAppController() {
     valorLiberadoOficina,
     receitaTotal, receitaFundo, receitaOperacoes, receitaInterchange,
     currentStatus, activeIndex,
-    analisandoIA, handlePedirAnalise,
+    analisandoIA, aiError, handlePedirAnalise,
     handleCadastro, handleSolicitacaoSubmit, handleConfirmarPlano,
     handleMarcosAval, handleAlineAval,
     handleOficinaConfirmarOrcamento,

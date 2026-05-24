@@ -93,7 +93,7 @@ async function buscarContextoMembro(membroId) {
 
     FROM abias_membros m
     LEFT JOIN usuarios u
-      ON REGEXP_REPLACE(m.telefone, '[^0-9]', '', 'g') = u.telefone
+      ON m.usuario_id = u.id
     LEFT JOIN LATERAL (
       SELECT * FROM ifood_dados_operacionais
       WHERE usuario_id = u.id ORDER BY periodo_fim DESC LIMIT 1
@@ -202,6 +202,18 @@ Responda SOMENTE com um JSON válido, sem markdown, sem explicação fora do JSO
 export async function gerarParecer(membroId) {
   const ctx = await buscarContextoMembro(membroId);
   if (!ctx) return { ok: false, statusCode: 404, error: "Membro não encontrado" };
+
+  // Verificação: exigir dados operacionais iFood recentes para gerar decisão automática
+  // Se não houver registro de entregas/dias ativos nem histórico de ciclos, retornar erro controlado
+  const temDadosIfood = ctx.entregas_realizadas !== null && ctx.entregas_realizadas !== undefined;
+  const temHistoricoAbias = (ctx.total_ciclos || 0) > 0;
+  if (!temDadosIfood && !temHistoricoAbias) {
+    return {
+      ok: false,
+      statusCode: 422,
+      error: 'Dados operacionais insuficientes: não é possível gerar decisão automática para membros sem dados iFood ou histórico na Abias.'
+    };
+  }
 
   const prompt = montarPrompt(ctx);
   const text = await callAI(prompt);

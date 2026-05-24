@@ -1,5 +1,5 @@
 export function ReputacaoScreen({ ctrl }) {
-  const { reputacao, parecerAi, avaliacoes, dadosOp, consistenciaRota, entregasPorDia, topPct, classificacao, analisandoIA, handlePedirAnalise, membroId } = ctrl
+  const { reputacao, parecerAi, avaliacoes, dadosOp, consistenciaRota, entregasPorDia, topPct, classificacao, analisandoIA, aiError, handlePedirAnalise, membroId } = ctrl
 
   const score = reputacao
   const semAvaliacao = score === 0 && !parecerAi
@@ -22,6 +22,7 @@ export function ReputacaoScreen({ ctrl }) {
   ]
 
   const rec = parecerAi?.recomendacao
+  const podeAnalisar = Boolean(dadosOp)
   const recColor = rec === 'APROVAR' ? 'var(--success)' : rec === 'ANALISAR' ? 'var(--color-gold)' : rec === 'NEGAR' ? 'var(--color-magenta)' : 'var(--text-secondary)'
   const recBg   = rec === 'APROVAR' ? 'rgba(16,185,129,0.1)' : rec === 'ANALISAR' ? 'rgba(201,154,61,0.1)' : rec === 'NEGAR' ? 'rgba(224,36,124,0.1)' : 'rgba(255,255,255,0.04)'
   const recBorder = rec === 'APROVAR' ? 'rgba(16,185,129,0.3)' : rec === 'ANALISAR' ? 'rgba(201,154,61,0.3)' : rec === 'NEGAR' ? 'rgba(224,36,124,0.3)' : 'var(--border-color)'
@@ -115,15 +116,15 @@ export function ReputacaoScreen({ ctrl }) {
             {membroId && (
               <button
                 onClick={handlePedirAnalise}
-                disabled={analisandoIA}
+                disabled={analisandoIA || !podeAnalisar}
                 style={{
                   marginTop: '14px', width: '100%', padding: '13px',
-                  background: analisandoIA ? 'rgba(201,154,61,0.08)' : 'rgba(201,154,61,0.14)',
+                  background: analisandoIA || !podeAnalisar ? 'rgba(201,154,61,0.08)' : 'rgba(201,154,61,0.14)',
                   border: '1px solid rgba(201,154,61,0.4)',
                   borderRadius: '8px',
-                  color: analisandoIA ? 'rgba(201,154,61,0.5)' : 'var(--color-gold)',
+                  color: analisandoIA || !podeAnalisar ? 'rgba(201,154,61,0.5)' : 'var(--color-gold)',
                   fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.06em',
-                  cursor: analisandoIA ? 'not-allowed' : 'pointer',
+                  cursor: analisandoIA || !podeAnalisar ? 'not-allowed' : 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                   transition: 'all 0.2s ease'
                 }}
@@ -131,6 +132,19 @@ export function ReputacaoScreen({ ctrl }) {
                 <i className={`fa-solid ${analisandoIA ? 'fa-spinner fa-spin' : 'fa-brain'}`} style={{ fontSize: '0.8rem' }}></i>
                 {analisandoIA ? 'ANALISANDO...' : 'PEDIR ANÁLISE DA IA'}
               </button>
+            )}
+            {!podeAnalisar && (
+              <div style={{ marginTop: '10px', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border-color)', borderRadius: '10px', padding: '10px 12px' }}>
+                <p style={{ fontSize: '0.64rem', color: 'var(--text-secondary)', lineHeight: 1.45 }}>
+                  Conecte sua conta iFood para habilitar a analise. Sem dados operacionais vinculados, nao e possivel gerar decisao.
+                </p>
+              </div>
+            )}
+            {aiError && (
+              <div style={{ marginTop: '10px', background: 'rgba(224,36,124,0.08)', border: '1px solid rgba(224,36,124,0.25)', borderRadius: '10px', padding: '10px 12px' }}>
+                <p style={{ fontSize: '0.65rem', color: 'var(--color-magenta)', fontWeight: 800, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '4px' }}>Dados insuficientes</p>
+                <p style={{ fontSize: '0.66rem', color: 'var(--text-secondary)', lineHeight: 1.45 }}>{aiError}</p>
+              </div>
             )}
           </div>
         )}

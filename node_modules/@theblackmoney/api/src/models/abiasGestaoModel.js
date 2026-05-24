@@ -126,7 +126,7 @@ function calcRecomendacao(scoreIfood) {
 const JOIN_IFOOD = `
   FROM abias_membros m
   LEFT JOIN usuarios u
-    ON REGEXP_REPLACE(m.telefone, '[^0-9]', '', 'g') = u.telefone
+    ON m.usuario_id = u.id
   LEFT JOIN LATERAL (
     SELECT * FROM ifood_dados_operacionais
     WHERE usuario_id = u.id
@@ -298,7 +298,7 @@ export async function getCiclosPendentes() {
     JOIN abias_membros m ON m.id = c.membro_id
 
     LEFT JOIN usuarios u
-      ON REGEXP_REPLACE(m.telefone, '[^0-9]', '', 'g') = u.telefone
+      ON m.usuario_id = u.id
     LEFT JOIN LATERAL (
       SELECT * FROM ifood_dados_operacionais
       WHERE usuario_id = u.id

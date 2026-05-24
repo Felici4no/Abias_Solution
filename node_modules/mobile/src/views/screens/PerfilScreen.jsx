@@ -1,5 +1,5 @@
 export function PerfilScreen({ ctrl }) {
-  const { membro, reputacao, cicloEstado, handleLogout } = ctrl
+  const { membro, reputacao, handleLogout } = ctrl
 
   const tierLabel = reputacao >= 800 ? 'MASTER TIER' : reputacao >= 700 ? 'GOLD TIER' : 'MEMBER TIER'
   const tierColor = reputacao >= 800 ? 'var(--color-gold)' : reputacao >= 700 ? '#c8a84b' : 'var(--text-secondary)'

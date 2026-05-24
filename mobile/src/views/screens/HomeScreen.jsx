@@ -2,11 +2,11 @@ export function HomeScreen({ ctrl }) {
   const {
     membro, cicloEstado, reputacao, parecerAi,
     foiNegado, motivoNegacao,
-    dadosOp, topPct, classificacao, sparkYs,
+    topPct, classificacao, sparkYs,
     avaliacoes,
     limiteCreditoCartao, taxaRotativoCartao,
     limiteEmprestimo, taxaMensalJuros,
-    cashbackSaldo, cashbackPct, TETO_CASHBACK,
+    cashbackSaldo, TETO_CASHBACK,
     currentAmount, currentFinalidade,
     handleNovoCiclo, setActiveTab
   } = ctrl
