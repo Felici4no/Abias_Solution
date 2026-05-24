@@ -1,0 +1,236 @@
+{
+  "schemaVersion": 1,
+  "couriers": [
+    {
+      "id": "d921b785-410c-4bea-a3fd-12f0038fff5f",
+      "fullName": "Camila Pereira",
+      "document": "32192935851",
+      "phone": "11988887777",
+      "email": "camila@example.com",
+      "city": "Sao Paulo",
+      "state": "SP",
+      "status": "pending_onboarding",
+      "createdAt": "2026-05-24T03:22:15.853Z",
+      "updatedAt": "2026-05-24T03:22:15.853Z"
+    }
+  ],
+  "connectedAccounts": [
+    {
+      "id": "11b0c3f3-9d80-4a69-b36b-a88397eb8938",
+      "courierId": "d921b785-410c-4bea-a3fd-12f0038fff5f",
+      "provider": "ifood",
+      "providerAccountId": "ifood_d921b785",
+      "connectionStatus": "connected",
+      "lastSyncedAt": "2026-05-24T03:22:15.858Z",
+      "createdAt": "2026-05-24T03:22:15.858Z",
+      "updatedAt": "2026-05-24T03:22:15.858Z",
+      "operationalSnapshot": {
+        "provider": "ifood",
+        "deliveryCount30d": 60,
+        "activeDays30d": 10,
+        "averageWeeklyEarnings": 696,
+        "averageRating": 4.6,
+        "platformTenureDays": 486,
+        "cancellationRate": 0,
+        "sampledAt": "2026-05-24T03:22:15.858Z"
+      }
+    }
+  ],
+  "operationalScores": [
+    {
+      "id": "fb911076-772b-4b9c-a3d3-c798bb2ed26e",
+      "courierId": "d921b785-410c-4bea-a3fd-12f0038fff5f",
+      "score": 631,
+      "version": "operational-score-v1",
+      "riskBand": "medium",
+      "inputs": {
+        "connectedProviders": [
+          "ifood"
+        ],
+        "deliveryCount30d": 60,
+        "activeDays30d": 10,
+        "averageWeeklyEarnings": 696,
+        "averageRating": 4.6,
+        "platformTenureDays": 486,
+        "cancellationRate": 0
+      },
+      "breakdown": {
+        "activityRecurrence": {
+          "points": 104,
+          "weight": 250,
+          "value": 10,
+          "target": 24,
+          "reason": "Premia recorrencia de trabalho nos ultimos 30 dias."
+        },
+        "deliveryVolume": {
+          "points": 67,
+          "weight": 200,
+          "value": 60,
+          "target": 180,
+          "reason": "Premia volume de entregas como sinal de capacidade operacional."
+        },
+        "earningsPredictability": {
+          "points": 116,
+          "weight": 200,
+          "value": 696,
+          "target": 1200,
+          "reason": "Premia ganhos semanais recorrentes como proxy de renda previsivel."
+        },
+        "reputation": {
+          "points": 144,
+          "weight": 150,
+          "value": 4.6,
+          "target": 4.8,
+          "reason": "Premia avaliacao media alta nas plataformas."
+        },
+        "platformTenure": {
+          "points": 100,
+          "weight": 100,
+          "value": 486,
+          "target": 365,
+          "reason": "Premia tempo de atuacao como indicio de estabilidade."
+        },
+        "cancellationBehavior": {
+          "points": 100,
+          "weight": 100,
+          "value": 0.12,
+          "target": 0.12,
+          "reason": "Premia baixa taxa de cancelamento."
+        }
+      },
+      "calculatedAt": "2026-05-24T03:22:15.860Z"
+    }
+  ],
+  "creditCardLimits": [
+    {
+      "id": "ba2e7a52-0cc4-40f9-be1f-66191d893d18",
+      "courierId": "d921b785-410c-4bea-a3fd-12f0038fff5f",
+      "productType": "credit_card",
+      "policyVersion": "credit-card-limit-v1",
+      "operationalScoreId": "fb911076-772b-4b9c-a3d3-c798bb2ed26e",
+      "score": 631,
+      "riskBand": "medium",
+      "currency": "BRL",
+      "limitAmount": 850,
+      "status": "pre_approved",
+      "breakdown": {
+        "incomeProxy": {
+          "weeklyEarnings": 696,
+          "estimatedMonthlyIncome": 2784,
+          "reason": "Usa ganhos semanais medios como proxy de renda mensal recorrente."
+        },
+        "scorePolicy": {
+          "score": 631,
+          "riskBand": "medium",
+          "multiplier": 0.3,
+          "reason": "Quanto maior o score operacional, maior a parcela da renda usada para limite."
+        },
+        "guardrails": {
+          "minimumLimit": 100,
+          "maximumLimit": 5000,
+          "finalLimit": 850,
+          "reason": "Aplica limites minimos e maximos para controlar exposicao inicial."
+        }
+      },
+      "calculatedAt": "2026-05-24T03:22:15.861Z"
+    }
+  ],
+  "loanPreApprovals": [
+    {
+      "id": "cd76ff62-087d-4aa8-bc59-29a313f81000",
+      "courierId": "d921b785-410c-4bea-a3fd-12f0038fff5f",
+      "productType": "personal_loan",
+      "policyVersion": "personal-loan-pre-approval-v1",
+      "operationalScoreId": "fb911076-772b-4b9c-a3d3-c798bb2ed26e",
+      "score": 631,
+      "riskBand": "medium",
+      "currency": "BRL",
+      "status": "pre_approved",
+      "approvedAmount": 1700,
+      "termMonths": 6,
+      "monthlyInterestRate": 0.059,
+      "estimatedInstallment": 344.63,
+      "breakdown": {
+        "incomeProxy": {
+          "weeklyEarnings": 696,
+          "estimatedMonthlyIncome": 2784,
+          "reason": "Usa ganhos semanais medios como proxy de renda mensal recorrente."
+        },
+        "riskPolicy": {
+          "score": 631,
+          "riskBand": "medium",
+          "exposureMultiplier": 0.6,
+          "monthlyInterestRate": 0.059,
+          "termMonths": 6,
+          "reason": "Score define exposicao, prazo e taxa mensal da pre-aprovacao."
+        },
+        "affordability": {
+          "approvedAmount": 1700,
+          "estimatedInstallment": 344.63,
+          "installmentToIncomeRatio": 0.12,
+          "reason": "Monitora se a parcela estimada cabe na renda operacional observada."
+        }
+      },
+      "calculatedAt": "2026-05-24T03:22:15.862Z"
+    }
+  ],
+  "localPartners": [
+    {
+      "id": "partner-mercado-quilombo",
+      "tradeName": "Mercado Quilombo",
+      "category": "grocery",
+      "neighborhood": "Capao Redondo",
+      "city": "Sao Paulo",
+      "state": "SP",
+      "cashbackRate": 0.06,
+      "status": "active"
+    },
+    {
+      "id": "partner-padaria-ubuntu",
+      "tradeName": "Padaria Ubuntu",
+      "category": "bakery",
+      "neighborhood": "Cidade Tiradentes",
+      "city": "Sao Paulo",
+      "state": "SP",
+      "cashbackRate": 0.04,
+      "status": "active"
+    },
+    {
+      "id": "partner-auto-corre",
+      "tradeName": "Auto Corre Periferia",
+      "category": "maintenance",
+      "neighborhood": "Brasilandia",
+      "city": "Sao Paulo",
+      "state": "SP",
+      "cashbackRate": 0.08,
+      "status": "active"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "984877b8-917c-442e-a3eb-fa223723a026",
+      "courierId": "d921b785-410c-4bea-a3fd-12f0038fff5f",
+      "localPartnerId": "partner-mercado-quilombo",
+      "amount": 200,
+      "currency": "BRL",
+      "category": "grocery",
+      "status": "settled",
+      "occurredAt": "2026-05-24T03:22:15.864Z"
+    }
+  ],
+  "cashbacks": [
+    {
+      "id": "6a2ac3f2-01f1-4043-b891-63a55f6bdb27",
+      "courierId": "d921b785-410c-4bea-a3fd-12f0038fff5f",
+      "transactionId": "984877b8-917c-442e-a3eb-fa223723a026",
+      "amount": 12,
+      "currency": "BRL",
+      "status": "applied_to_invoice",
+      "invoiceId": "invoice-test",
+      "policyVersion": "community-cashback-v1",
+      "createdAt": "2026-05-24T03:22:15.864Z",
+      "appliedAt": "2026-05-24T03:22:15.864Z"
+    }
+  ],
+  "invoices": []
+}
