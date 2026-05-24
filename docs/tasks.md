@@ -12,8 +12,8 @@
 - [x] Task 8: Implementar cashback comunitario aplicado como desconto na proxima fatura.
 - [x] Task 9: Adicionar persistencia com banco de dados e migrations.
 - [x] Task 10: Adicionar autenticacao, autorizacao e protecao de rotas.
-- [ ] Task 11: Criar testes automatizados para regras de score, credito e cashback.
-- [ ] Task 12: Preparar observabilidade basica, logs estruturados e documentacao de API.
+- [x] Task 11: Criar testes automatizados para regras de score, credito e cashback.
+- [x] Task 12: Preparar observabilidade basica, logs estruturados e documentacao de API.
 
 ## Task 1 Entregue
 
@@ -143,3 +143,26 @@ A decima task adicionou autenticacao e protecao de rotas:
 - Em ambientes reais, a API deve receber `API_AUTH_TOKEN` via variavel de ambiente.
 
 Essa protecao e simples de proposito, adequada para o estagio inicial do back-end. Autenticacao por usuario final pode ser substituida por JWT ou provedor externo quando o banco e o produto forem definidos.
+
+## Task 11 Entregue
+
+A decima primeira task adicionou testes automatizados com o test runner nativo do Node:
+
+- Validacao de payload de cadastro de entregadores.
+- Fluxo principal completo: cadastro, conexao mockada, score, limite de cartao, pre-aprovacao de emprestimo e cashback.
+- Autorizacao por Bearer token.
+- Registro de metricas basicas.
+
+Os testes usam banco local JSON separado via `LOCAL_DATABASE_PATH`, sem depender de servicos externos.
+
+## Task 12 Entregue
+
+A decima segunda task adicionou a base de observabilidade e documentacao:
+
+- Logs estruturados em JSON por requisicao.
+- `X-Request-Id` em todas as respostas.
+- Registro de quantidade de requisicoes por rota e status.
+- `GET /metrics` como rota publica de metricas basicas.
+- Documentacao inicial de rotas em `docs/api.md`.
+
+Com isso, o back-end basico fica pronto para evoluir para banco definitivo, autenticacao de usuario final e integracoes reais.

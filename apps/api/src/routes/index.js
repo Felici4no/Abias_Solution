@@ -6,6 +6,7 @@ import { listDomainEntities } from "../controllers/domainController.js";
 import { getHealth } from "../controllers/healthController.js";
 import { listPartners } from "../controllers/localPartnerController.js";
 import { createLoanPreApproval } from "../controllers/loanPreApprovalController.js";
+import { getMetrics } from "../controllers/metricsController.js";
 import { createOperationalScore } from "../controllers/operationalScoreController.js";
 
 export const routes = [
@@ -19,6 +20,12 @@ export const routes = [
     method: "GET",
     path: "/domain/entities",
     handler: listDomainEntities,
+    public: true
+  },
+  {
+    method: "GET",
+    path: "/metrics",
+    handler: getMetrics,
     public: true
   },
   {

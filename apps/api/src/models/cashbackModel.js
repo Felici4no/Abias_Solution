@@ -29,7 +29,7 @@ const seedPartners = [
     id: "partner-auto-corre",
     tradeName: "Auto Corre Periferia",
     category: "maintenance",
-    neighborhood: "Brasilândia",
+    neighborhood: "Brasilandia",
     city: "Sao Paulo",
     state: "SP",
     cashbackRate: 0.08,

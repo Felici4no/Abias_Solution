@@ -38,6 +38,12 @@ Por enquanto a API expoe apenas um health check:
 GET /health
 ```
 
+Metricas basicas:
+
+```text
+GET /metrics
+```
+
 E tambem expoe os contratos iniciais das entidades de dominio:
 
 ```text
@@ -148,3 +154,13 @@ Nesta etapa a API usa um banco local em JSON em `apps/api/data/local-db.json`, i
 ```text
 apps/api/src/database/migrations
 ```
+
+## Testes
+
+```bash
+npm test
+```
+
+## Documentacao
+
+A referencia basica de rotas fica em `docs/api.md`.
