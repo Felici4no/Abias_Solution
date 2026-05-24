@@ -11,6 +11,8 @@
     --color-gold: #C99A3D;       /* Dourado território */
     --color-terra: #9A4F2F;      /* Terra queimada */
     --color-line: #D9D2C5;       /* Cinza linha */
+    --color-magenta: #E0247C;    /* Rosa/magenta de destaque */
+    --color-accent-pink: #E0247C; /* Acento secundário */
     
     --bg-card: #141414;
     --border-color: rgba(217, 210, 197, 0.12); /* Cinza linha translúcido */
@@ -2046,4 +2048,195 @@ h2, h3, h4, h5 {
 .badge-status-membro, .score-level-badge, .badge-admin, .flow-dot-step {
     border-radius: var(--border-radius-md) !important;
 }
+
+/* ==========================================================================
+   PREMIUM DARK VISUAL STYLES & GLOW EFFECT CLASSES
+   ========================================================================== */
+
+/* Splash Screen & Onboarding Glows */
+.splash-glow {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, rgba(201, 154, 61, 0.12) 0%, rgba(224, 36, 124, 0.04) 50%, transparent 100%);
+    filter: blur(40px);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.splash-logo-text {
+    font-family: var(--font-heading);
+    font-size: 4rem !important;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    background: linear-gradient(135deg, var(--text-primary) 30%, var(--color-gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 4px 20px rgba(201, 154, 61, 0.15);
+    margin: 0;
+}
+
+.splash-title {
+    font-family: var(--font-heading);
+    font-size: 1.15rem !important;
+    font-weight: 800;
+    color: var(--color-gold);
+    letter-spacing: 0.2em !important;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    opacity: 0.9;
+}
+
+.splash-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    max-width: 290px;
+    margin: 0 auto;
+    font-weight: 500;
+}
+
+/* Onboarding Screen */
+.benefits-hero-card {
+    height: 160px;
+    background: linear-gradient(180deg, rgba(20, 20, 20, 0.8) 0%, rgba(11, 11, 11, 0.95) 100%);
+    border: 1px solid rgba(217, 210, 197, 0.1);
+    border-radius: var(--border-radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 24px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.hero-glow {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, rgba(224, 36, 124, 0.15) 0%, transparent 70%);
+    filter: blur(25px);
+    pointer-events: none;
+}
+
+.benefit-item-box {
+    display: flex;
+    gap: 16px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 0.02) 100%);
+    padding: 16px;
+    border: 1px solid rgba(217, 210, 197, 0.08);
+    border-radius: var(--border-radius-md);
+    transition: var(--transition-smooth);
+}
+
+.benefit-item-box:hover {
+    border-color: rgba(201, 154, 61, 0.25);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.benefit-item-box i {
+    font-size: 1.3rem;
+    color: var(--color-gold);
+    background: rgba(201, 154, 61, 0.08);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(201, 154, 61, 0.15);
+}
+
+/* Home / Dashboard Upgrades */
+.card-glow {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(201, 154, 61, 0.06) 0%, transparent 70%);
+    filter: blur(30px);
+    pointer-events: none;
+}
+
+.recommended-partner-card {
+    display: flex;
+    gap: 16px;
+    padding: 18px;
+    background: linear-gradient(135deg, rgba(201, 154, 61, 0.02) 0%, rgba(201, 154, 61, 0.04) 100%);
+    border: 1px solid rgba(201, 154, 61, 0.18);
+    border-radius: var(--border-radius-lg);
+    transition: var(--transition-smooth);
+}
+
+.recommended-partner-card:hover {
+    border-color: rgba(201, 154, 61, 0.3);
+    background: rgba(201, 154, 61, 0.06);
+}
+
+.partner-circle-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(201, 154, 61, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gold);
+    border: 1px solid rgba(201, 154, 61, 0.2);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.activity-item-card {
+    display: flex;
+    gap: 14px;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(217, 210, 197, 0.06);
+    border-radius: var(--border-radius-md);
+    transition: var(--transition-smooth);
+}
+
+.activity-item-card:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(217, 210, 197, 0.1);
+}
+
+.activity-icon-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.03);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    border: 1px solid rgba(217, 210, 197, 0.08);
+    flex-shrink: 0;
+}
+
+/* Chips & Categories UI */
+.chips-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.chip-option span {
+    border-radius: 20px !important;
+    padding: 10px 18px !important;
+    font-weight: 700 !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid rgba(217, 210, 197, 0.08) !important;
+}
+
+.chip-option input[type="radio"]:checked + span {
+    background: var(--color-gold) !important;
+    border-color: var(--color-gold) !important;
+    color: #0b0b0b !important;
+}
+
 

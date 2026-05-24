@@ -50,6 +50,7 @@ function App() {
   const [activeTab, setActiveTab] = useState('inicio') // 'inicio' | 'credito' | 'evidencia' | 'reputacao' | 'fundo'
   const [clockTime, setClockTime] = useState('00:00')
   const [showAreaOperacional, setShowAreaOperacional] = useState(false)
+  const [onboardingStep, setOnboardingStep] = useState('splash') // 'splash' | 'benefits' | 'form'
 
   // --- Temporary inputs for forms ---
   const [inputNome, setInputNome] = useState('João Silva')
@@ -290,6 +291,7 @@ function App() {
   const handleResetDemo = () => {
     localStorage.clear()
     setMembro(null)
+    setOnboardingStep('splash')
     setSolicitacao(null)
     setCicloEstado('draft')
     setReputacao(720)
@@ -397,7 +399,7 @@ function App() {
     }
   }
 
-  const tabIds = ['inicio', 'credito', 'evidencia', 'reputacao', 'fundo']
+  const tabIds = ['inicio', 'reputacao', 'credito', 'rede', 'perfil']
   const activeIndex = tabIds.indexOf(activeTab)
 
   return (
@@ -518,101 +520,183 @@ function App() {
                 <>
                   {/* If not registered, force registration onboarding */}
                   {!membro ? (
-                    <div className="screen active" style={{ padding: '20px' }}>
-                      <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '8px', lineHeight: '1.2' }}>
-                        O banco vê um CPF.<br />A Abias vê uma rota.
-                      </h2>
-                      <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>
-                        Cadastre-se na comunidade para validar sua rota e acessar fomento produtivo.
-                      </p>
-
-                      <form onSubmit={handleCadastro} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                        <div className="mobile-form-group">
-                          <label className="form-label">Nome Completo</label>
-                          <input 
-                            type="text" 
-                            className="form-text-input"
-                            value={inputNome} 
-                            onChange={(e) => setInputNome(e.target.value)} 
-                            required 
-                          />
+                    <>
+                      {onboardingStep === 'splash' && (
+                        <div className="screen active" style={{ padding: '30px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '680px', position: 'relative' }}>
+                          <div className="splash-glow"></div>
+                          <div style={{ margin: 'auto 0', textAlign: 'center', zIndex: 2 }}>
+                            <div className="splash-logo-wrapper" style={{ marginBottom: '20px' }}>
+                              <h1 className="splash-logo-text" style={{ fontSize: '3.6rem', fontWeight: 900, letterSpacing: '-0.04em', color: 'var(--text-primary)', margin: 0 }}>ABIAS</h1>
+                            </div>
+                            <h2 className="splash-title" style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--color-gold)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '14px' }}>O PODER DA TUA ROTA</h2>
+                            <p className="splash-subtitle" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.4', maxWidth: '280px', margin: '0 auto' }}>
+                              Quando a moto para, a renda para. Crédito produtivo validado para manter sua ferramenta de trabalho funcionando.
+                            </p>
+                          </div>
+                          <div style={{ width: '100%', paddingBottom: '20px', zIndex: 2 }}>
+                            <button className="btn-app btn-app-primary" onClick={() => setOnboardingStep('benefits')}>
+                              Entrar no fluxo <i className="fa-solid fa-arrow-right" style={{ marginLeft: '6px' }}></i>
+                            </button>
+                          </div>
                         </div>
+                      )}
 
-                        <div className="mobile-form-group">
-                          <label className="form-label">Telefone / WhatsApp</label>
-                          <input 
-                            type="text" 
-                            className="form-text-input"
-                            value={inputTelefone} 
-                            onChange={(e) => setInputTelefone(e.target.value)} 
-                            required 
-                          />
+                      {onboardingStep === 'benefits' && (
+                        <div className="screen active" style={{ padding: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '680px' }}>
+                          <div>
+                            <div className="benefits-hero-card" style={{ height: '140px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', marginBottom: '20px' }}>
+                              <div className="hero-glow" style={{ position: 'absolute', width: '80px', height: '80px', background: 'rgba(213, 63, 140, 0.15)', filter: 'blur(30px)' }}></div>
+                              <i className="fa-solid fa-motorcycle" style={{ fontSize: '3rem', color: 'var(--color-gold)', zIndex: 1 }}></i>
+                            </div>
+                            <h2 style={{ fontSize: '1.6rem', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: '1.15', marginBottom: '8px' }}>CONFIANÇA QUE GERA CAPITAL</h2>
+                            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '20px', lineHeight: '1.4' }}>
+                              A comunidade ajuda a provar o que o banco não enxerga. A Abias transforma sua reputação de asfalto e cooperação em fomento para o seu corre.
+                            </p>
+                            
+                            <div className="benefits-list" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                              <div className="benefit-item-box" style={{ display: 'flex', gap: '12px', background: 'rgba(255,255,255,0.02)', padding: '12px', border: '1px solid var(--border-color)' }}>
+                                <div style={{ fontSize: '1.2rem', color: 'var(--color-gold)' }}><i className="fa-solid fa-chart-simple"></i></div>
+                                <div>
+                                  <h4 style={{ fontSize: '0.85rem', fontWeight: 800, marginBottom: '2px' }}>Reputação de Rota</h4>
+                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>Seu corre diário e consistência no asfalto valem mais do que score de CPF.</p>
+                                </div>
+                              </div>
+                              
+                              <div className="benefit-item-box" style={{ display: 'flex', gap: '12px', background: 'rgba(255,255,255,0.02)', padding: '12px', border: '1px solid var(--border-color)' }}>
+                                <div style={{ fontSize: '1.2rem', color: 'var(--color-gold)' }}><i className="fa-solid fa-route"></i></div>
+                                <div>
+                                  <h4 style={{ fontSize: '0.85rem', fontWeight: 800, marginBottom: '2px' }}>Crédito de Rota</h4>
+                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>Fomento produtivo de R$ 300 a R$ 3.000 exclusivo para manter sua ferramenta ativa.</p>
+                                </div>
+                              </div>
+                              
+                              <div className="benefit-item-box" style={{ display: 'flex', gap: '12px', background: 'rgba(255,255,255,0.02)', padding: '12px', border: '1px solid var(--border-color)' }}>
+                                <div style={{ fontSize: '1.2rem', color: 'var(--color-gold)' }}><i className="fa-solid fa-users"></i></div>
+                                <div>
+                                  <h4 style={{ fontSize: '0.85rem', fontWeight: 800, marginBottom: '2px' }}>Rede de Oficinas Parceiras</h4>
+                                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>Manutenção e peças com orçamento confirmado e serviço validado localmente.</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div style={{ width: '100%', marginTop: '10px' }}>
+                            <button className="btn-app btn-app-primary" onClick={() => setOnboardingStep('form')}>
+                              Começar Cadastro <i className="fa-solid fa-chevron-right" style={{ marginLeft: '4px' }}></i>
+                            </button>
+                          </div>
                         </div>
+                      )}
 
-                        <div className="mobile-form-group">
-                          <label className="form-label">Região principal de atuação</label>
-                          <input 
-                            type="text" 
-                            className="form-text-input"
-                            value={inputRegiao} 
-                            onChange={(e) => setInputRegiao(e.target.value)} 
-                            required 
-                          />
+                      {onboardingStep === 'form' && (
+                        <div className="screen active" style={{ padding: '20px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+                            <button 
+                              type="button"
+                              style={{ background: 'transparent', border: 'none', color: 'var(--text-primary)', cursor: 'pointer', fontSize: '1rem' }} 
+                              onClick={() => setOnboardingStep('benefits')} 
+                              aria-label="Voltar">
+                              <i className="fa-solid fa-arrow-left"></i>
+                            </button>
+                            <span style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--color-gold)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>ETAPA FINAL</span>
+                          </div>
+                          
+                          <h2 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '8px', lineHeight: '1.15', letterSpacing: '-0.02em' }}>
+                            O banco vê um CPF.<br />A Abias vê uma rota.
+                          </h2>
+                          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+                            Cadastre-se na comunidade para validar sua rota e acessar fomento produtivo.
+                          </p>
+
+                          <form onSubmit={handleCadastro} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                            <div className="mobile-form-group">
+                              <label className="form-label">Nome Completo</label>
+                              <input 
+                                type="text" 
+                                className="form-text-input"
+                                value={inputNome} 
+                                onChange={(e) => setInputNome(e.target.value)} 
+                                required 
+                              />
+                            </div>
+
+                            <div className="mobile-form-group">
+                              <label className="form-label">Telefone / WhatsApp</label>
+                              <input 
+                                type="text" 
+                                className="form-text-input"
+                                value={inputTelefone} 
+                                onChange={(e) => setInputTelefone(e.target.value)} 
+                                required 
+                              />
+                            </div>
+
+                            <div className="mobile-form-group">
+                              <label className="form-label">Região principal de atuação</label>
+                              <input 
+                                type="text" 
+                                className="form-text-input"
+                                value={inputRegiao} 
+                                onChange={(e) => setInputRegiao(e.target.value)} 
+                                required 
+                              />
+                            </div>
+
+                            <div className="mobile-form-group">
+                              <label className="form-label">Tempo como Motoboy</label>
+                              <input 
+                                type="text" 
+                                className="form-text-input"
+                                value={inputTempo} 
+                                onChange={(e) => setInputTempo(e.target.value)} 
+                                required 
+                              />
+                            </div>
+
+                            <div className="mobile-form-group">
+                              <label className="form-label">Ferramenta Principal de Trabalho</label>
+                              <select 
+                                className="form-select" 
+                                value={inputFerramenta} 
+                                onChange={(e) => setInputFerramenta(e.target.value)}>
+                                <option value="Moto">Motocicleta (Combustão / Elétrica)</option>
+                                <option value="Bicicleta">Bicicleta / Bike Elétrica</option>
+                                <option value="Outro">Outro veículo</option>
+                              </select>
+                            </div>
+
+                            <div className="mobile-form-group">
+                              <label className="form-label">Autodeclaração Racial (Opcional)</label>
+                              <select 
+                                className="form-select" 
+                                value={inputRaca} 
+                                onChange={(e) => setInputRaca(e.target.value)}>
+                                <option value="Negro">Negro (Preto ou Pardo)</option>
+                                <option value="Indigena">Indígena</option>
+                                <option value="Outro">Outro</option>
+                              </select>
+                            </div>
+
+                            <div className="mobile-form-group" style={{ flexDirection: 'row', alignItems: 'flex-start', gap: '10px', marginTop: '10px' }}>
+                              <input 
+                                type="checkbox" 
+                                id="aceite-dados-mvp" 
+                                checked={inputAceite} 
+                                style={{ marginTop: '2px' }}
+                                onChange={(e) => setInputAceite(e.target.checked)} 
+                              />
+                              <label htmlFor="aceite-dados-mvp" style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>
+                                Concordo com os termos de consentimento e aceito o compartilhamento de rota comunitária da Abias.
+                              </label>
+                            </div>
+
+                            <button type="submit" className="btn-app btn-app-primary" style={{ marginTop: '10px' }}>
+                              Registrar membro
+                            </button>
+                          </form>
                         </div>
-
-                        <div className="mobile-form-group">
-                          <label className="form-label">Tempo como Motoboy</label>
-                          <input 
-                            type="text" 
-                            className="form-text-input"
-                            value={inputTempo} 
-                            onChange={(e) => setInputTempo(e.target.value)} 
-                            required 
-                          />
-                        </div>
-
-                        <div className="mobile-form-group">
-                          <label className="form-label">Ferramenta Principal de Trabalho</label>
-                          <select 
-                            className="form-select" 
-                            value={inputFerramenta} 
-                            onChange={(e) => setInputFerramenta(e.target.value)}>
-                            <option value="Moto">Motocicleta (Combustão / Elétrica)</option>
-                            <option value="Bicicleta">Bicicleta / Bike Elétrica</option>
-                            <option value="Outro">Outro veículo</option>
-                          </select>
-                        </div>
-
-                        <div className="mobile-form-group">
-                          <label className="form-label">Autodeclaração Racial (Opcional)</label>
-                          <select 
-                            className="form-select" 
-                            value={inputRaca} 
-                            onChange={(e) => setInputRaca(e.target.value)}>
-                            <option value="Negro">Negro (Preto ou Pardo)</option>
-                            <option value="Indigena">Indígena</option>
-                            <option value="Outro">Outro</option>
-                          </select>
-                        </div>
-
-                        <div className="mobile-form-group" style={{ flexDirection: 'row', alignItems: 'flex-start', gap: '10px', marginTop: '10px' }}>
-                          <input 
-                            type="checkbox" 
-                            id="aceite-dados-mvp" 
-                            checked={inputAceite} 
-                            style={{ marginTop: '2px' }}
-                            onChange={(e) => setInputAceite(e.target.checked)} 
-                          />
-                          <label htmlFor="aceite-dados-mvp" style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>
-                            Concordo com os termos de consentimento e aceito o compartilhamento de rota comunitária da Abias.
-                          </label>
-                        </div>
-
-                        <button type="submit" className="btn-app btn-app-primary" style={{ marginTop: '10px' }}>
-                          Registrar membro
-                        </button>
-                      </form>
-                    </div>
+                      )}
+                    </>
                   ) : (
                     <>
                       {/* TAB 1: INÍCIO */}
@@ -620,9 +704,11 @@ function App() {
                         <div className="screen active" id="screen-home">
                           <div className="app-header" style={{ borderBottom: 'none', paddingBottom: '0' }}>
                             <div className="member-profile">
-                              <div className="member-avatar"><i className="fa-solid fa-motorcycle"></i></div>
+                              <div className="member-avatar" style={{ background: 'rgba(201, 154, 61, 0.15)', border: '1px solid var(--color-gold)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <i className="fa-solid fa-motorcycle" style={{ color: 'var(--color-gold)', fontSize: '0.9rem' }}></i>
+                              </div>
                               <div>
-                                <span className="greeting-sub">CORRE ATIVO</span>
+                                <span className="greeting-sub">Sua rota também é reputação</span>
                                 <h3 className="member-name">Salve, {membro.nome}</h3>
                               </div>
                             </div>
@@ -630,7 +716,8 @@ function App() {
                           </div>
 
                           {/* Cycle Active Status Card */}
-                          <div className="home-main-card" style={{ marginTop: '16px' }}>
+                          <div className="home-main-card" style={{ marginTop: '16px', position: 'relative', overflow: 'hidden' }}>
+                            <div className="card-glow" style={{ position: 'absolute', right: '-20px', top: '-20px', width: '120px', height: '120px', background: 'rgba(201, 154, 61, 0.05)', filter: 'blur(30px)', borderRadius: '50%' }}></div>
                             <div className="home-card-header">
                               <span className="card-tag">STATUS OPERACIONAL</span>
                               {['evidence_pending', 'evidence_review', 'validated'].includes(cicloEstado) ? (
@@ -658,62 +745,226 @@ function App() {
                             <div className="home-card-footer">
                               <div className="fundo-summary">
                                 <i className="fa-solid fa-vault"></i>
-                                <span>Fundo Abias: <strong>R$ {fundo}</strong> em reserva piloto</span>
+                                <span>Fundo Abias: <strong>R$ {fundo.toFixed(2)}</strong> em reserva piloto</span>
                               </div>
                             </div>
                           </div>
 
-                          {/* Dynamic CTA button conforme estado */}
-                          <div className="home-actions-group">
-                            {renderHomeCTA()}
-                          </div>
-
-                          {/* Quick Metrics display */}
-                          <div className="home-stats-section" style={{ marginTop: '24px', marginBottom: '20px' }}>
-                            <h4 className="section-title-mobile">Indicadores do Fomento</h4>
-                            <div className="stats-mobile-grid">
-                              <div className="stat-mobile-card">
-                                <span className="val font-mono">{cicloEstado !== 'draft' && cicloEstado !== 'completed' ? '1' : '0'}</span>
-                                <span className="lbl">Solicitação ativa</span>
-                              </div>
-                              <div className="stat-mobile-card">
-                                <span className="val font-mono">
-                                  {cicloEstado === 'community_validation' ? (
-                                    (avaliacoes.marcos === 'approved' ? 0 : 1) + (avaliacoes.aline === 'approved' ? 0 : 1)
-                                  ) : cicloEstado === 'draft' || cicloEstado === 'submitted' ? '2' : '0'}
-                                </span>
-                                <span className="lbl">Avais comunitários</span>
-                              </div>
-                              <div className="stat-mobile-card">
-                                <span className="val font-mono">{cicloEstado !== 'draft' ? '1' : '0'}</span>
-                                <span className="lbl">Oficina vinculada</span>
-                              </div>
-                              <div className="stat-mobile-card">
-                                <span className="val font-mono">R$ {currentAmount}</span>
-                                <span className="lbl">Valor solicitado</span>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Cycle Timeline */}
+                          {/* Timeline / Cycle status notice */}
                           {cicloEstado !== 'draft' && (
-                            <div className="info-notice-card plain-border" style={{ margin: '0 20px 20px' }}>
-                              <h4 style={{ fontSize: '0.8rem', color: 'var(--color-gold)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Acompanhar ciclo</h4>
+                            <div className="info-notice-card plain-border" style={{ margin: '0 20px 20px', position: 'relative' }}>
+                              <h4 style={{ fontSize: '0.8rem', color: 'var(--color-gold)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 800 }}>Acompanhar ciclo</h4>
                               <p style={{ fontSize: '0.8rem', color: '#ffffff', fontWeight: 'bold' }}>Passo Atual: {currentStatus.label}</p>
-                              <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '2px' }}>Próximo passo: {currentStatus.step}</p>
+                              <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '2px', lineHeight: '1.4' }}>Próximo passo: {currentStatus.step}</p>
                             </div>
                           )}
 
-                          <div className="info-notice-card" style={{ margin: '0 20px' }}>
-                            <p><i className="fa-solid fa-quote-left"></i> A comunidade ajuda a provar o que o banco não enxerga.</p>
+                          {/* EVIDENCIAS UPLOAD INTEGRATION DIRECTLY ON HOME IF PENDING */}
+                          {cicloEstado === 'evidence_pending' && (
+                            <div className="info-notice-card" style={{ margin: '0 20px 20px', background: 'rgba(154, 79, 47, 0.05)', border: '1px solid rgba(154, 79, 47, 0.2)' }}>
+                              <h4 style={{ fontSize: '0.8rem', color: 'var(--color-terra)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 800 }}>
+                                <i className="fa-solid fa-triangle-exclamation"></i> Enviar Comprovantes de Rota
+                              </h4>
+                              <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '14px', lineHeight: '1.4' }}>
+                                Forneça a comprovação técnica da manutenção do veículo (troca do pneu ou revisão realizada) para validar seu fomento.
+                              </p>
+                              
+                              <div className="upload-methods" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', marginBottom: '12px' }}>
+                                <div 
+                                  className="upload-box-action" 
+                                  onClick={handleSimularFoto} 
+                                  style={{ padding: '12px 8px', border: uploadFileType === 'foto' ? '1px solid var(--color-gold)' : '1px solid var(--border-color)', background: 'rgba(0,0,0,0.2)' }}>
+                                  <div className="box-icon" style={{ fontSize: '1rem' }}><i className="fa-solid fa-camera"></i></div>
+                                  <span style={{ fontSize: '0.65rem' }}>Foto do Pneu Instalado</span>
+                                </div>
+                                <div 
+                                  className="upload-box-action" 
+                                  onClick={handleSimularRecibo} 
+                                  style={{ padding: '12px 8px', border: uploadFileType === 'recibo' ? '1px solid var(--color-gold)' : '1px solid var(--border-color)', background: 'rgba(0,0,0,0.2)' }}>
+                                  <div className="box-icon" style={{ fontSize: '1rem' }}><i className="fa-solid fa-file-invoice-dollar"></i></div>
+                                  <span style={{ fontSize: '0.65rem' }}>Recibo da Oficina</span>
+                                </div>
+                              </div>
+
+                              {uploadFileSelected && (
+                                <div className="simulated-file-badge" style={{ marginBottom: '12px', fontSize: '0.75rem', padding: '6px 10px' }}>
+                                  <div>
+                                    <i className="fa-solid fa-paperclip" style={{ marginRight: '6px' }}></i> 
+                                    <span>{uploadFileSelected}</span>
+                                  </div>
+                                  <button className="btn-remove-file" onClick={() => { setUploadFileSelected(''); setUploadFileType(''); }} style={{ fontSize: '0.9rem' }}>&times;</button>
+                                </div>
+                              )}
+
+                              <div className="mobile-form-group" style={{ marginBottom: '12px' }}>
+                                <label className="form-label" style={{ fontSize: '0.7rem' }}>O que foi feito? (Observação)</label>
+                                <textarea 
+                                  className="form-textarea" 
+                                  style={{ height: '50px', padding: '8px 10px', fontSize: '0.75rem' }}
+                                  value={uploadFileObs} 
+                                  onChange={(e) => setUploadFileObs(e.target.value)} 
+                                  placeholder="Ex: Trocado pneu traseiro na Oficina JN."
+                                />
+                              </div>
+
+                              <button className="btn-app btn-app-primary" style={{ padding: '10px 14px', fontSize: '0.8rem' }} onClick={handleEnviarEvidencia}>
+                                Enviar evidência
+                              </button>
+                            </div>
+                          )}
+
+                          {/* Dynamic CTA button conforme estado */}
+                          {cicloEstado !== 'evidence_pending' && (
+                            <div className="home-actions-group">
+                              {renderHomeCTA()}
+                            </div>
+                          )}
+
+                          {/* Recent Activity Feed */}
+                          <div className="home-stats-section" style={{ marginTop: '20px', padding: '0 20px' }}>
+                            <h4 className="section-title-mobile">Fluxo e Atividade Recente</h4>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                              {cicloEstado === 'draft' ? (
+                                <div className="activity-item-card" style={{ display: 'flex', gap: '10px', padding: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-color)' }}>
+                                  <div className="activity-icon-badge" style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem' }}><i className="fa-solid fa-circle-check text-success"></i></div>
+                                  <div>
+                                    <h5 style={{ fontSize: '0.75rem', fontWeight: 800 }}>Comunidade Abias criada</h5>
+                                    <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Membro João Silva integrado com sucesso.</p>
+                                  </div>
+                                </div>
+                              ) : (
+                                <>
+                                  {['community_validation', 'partner_quote', 'under_review', 'approved', 'evidence_pending', 'evidence_review', 'validated', 'completed'].includes(cicloEstado) && (
+                                    <div className="activity-item-card" style={{ display: 'flex', gap: '10px', padding: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-color)' }}>
+                                      <div className="activity-icon-badge" style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: 'var(--color-gold)' }}><i className="fa-solid fa-file-invoice"></i></div>
+                                      <div>
+                                        <h5 style={{ fontSize: '0.75rem', fontWeight: 800 }}>Crédito de Rota Solicitado</h5>
+                                        <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Fomento de R$ {currentAmount} para {currentFinalidade} registrado.</p>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {avaliacoes.marcos === 'approved' && (
+                                    <div className="activity-item-card" style={{ display: 'flex', gap: '10px', padding: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-color)' }}>
+                                      <div className="activity-icon-badge" style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: 'var(--success)' }}><i className="fa-solid fa-signature"></i></div>
+                                      <div>
+                                        <h5 style={{ fontSize: '0.75rem', fontWeight: 800 }}>Aval de Marcos Santos Emitido</h5>
+                                        <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Validação territorial efetuada na Zona Leste.</p>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {oficinaConfirmacao.quoteConfirmed && (
+                                    <div className="activity-item-card" style={{ display: 'flex', gap: '10px', padding: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-color)' }}>
+                                      <div className="activity-icon-badge" style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: 'var(--color-gold)' }}><i className="fa-solid fa-wrench"></i></div>
+                                      <div>
+                                        <h5 style={{ fontSize: '0.75rem', fontWeight: 800 }}>Orçamento Oficina JN Confirmado</h5>
+                                        <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Mecânica credenciada validou custos operacionais.</p>
+                                      </div>
+                                    </div>
+                                  )}
+                                </>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Local Recommended Partner */}
+                          <div className="home-stats-section" style={{ marginTop: '20px', marginBottom: '20px', padding: '0 20px' }}>
+                            <h4 className="section-title-mobile">Parceiro Recomendado Local</h4>
+                            <div className="recommended-partner-card" style={{ display: 'flex', gap: '12px', padding: '16px', background: 'rgba(201, 154, 61, 0.03)', border: '1px solid rgba(201, 154, 61, 0.2)' }}>
+                              <div className="partner-circle-icon" style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(201, 154, 61, 0.1)', display: 'flex', alignItems: 'center', justify: 'center', color: 'var(--color-gold)' }}><i className="fa-solid fa-warehouse"></i></div>
+                              <div>
+                                <h5 style={{ fontSize: '0.8rem', fontWeight: 800, marginBottom: '2px' }}>Oficina JN — 1.2km</h5>
+                                <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>Mecânica autorizada da comunidade Abias. Especialistas em kit relação, pneus e revisões rápidas.</p>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       )}
 
-                      {/* TAB 2: CRÉDITO */}
+                      {/* TAB 2: REPUTAÇÃO */}
+                      {activeTab === 'reputacao' && (
+                        <div className="screen active" id="screen-reputacao">
+                          <div className="app-header-simple">
+                            <h3>Reputação de Rota</h3>
+                          </div>
+                          
+                          <div className="reputacao-container">
+                            <div className="reputacao-score-box glass" style={{ position: 'relative', overflow: 'hidden' }}>
+                              <div className="card-glow" style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: '160px', height: '160px', background: 'rgba(201, 154, 61, 0.06)', filter: 'blur(34px)', borderRadius: '50%' }}></div>
+                              <span className="lbl-tag">PONTUAÇÃO COLETIVA</span>
+                              <div className="reputacao-number-row font-mono">
+                                <span className="val">{reputacao}</span>
+                                <span className="max">/1000</span>
+                              </div>
+                              <div className="reputacao-level">
+                                <i className="fa-solid fa-shield-halved" style={{ color: 'var(--color-gold)', marginRight: '6px' }}></i>
+                                {reputacao <= 720 ? 'Confiança Rota A2' : reputacao <= 745 ? 'Confiança Rota A2+' : 'Confiança Rota A3'}
+                              </div>
+                              <p className="reputacao-desc">
+                                Seu score representa a integridade de suas rotas e a validação mútua dos parceiros. Evite motos paradas e preserve sua ficha local.
+                              </p>
+                            </div>
+
+                            <div className="reputacao-factors-list">
+                              <h4>Fatores de Crescimento</h4>
+                              
+                              <div className="factor-progress-item">
+                                <div className="factor-lbl">
+                                  <span>Frequência Operacional</span>
+                                  <span className="percent font-mono">92%</span>
+                                </div>
+                                <div className="progress-track">
+                                  <div className="progress-bar" style={{ width: '92%', backgroundColor: 'var(--color-green)' }}></div>
+                                </div>
+                              </div>
+
+                              <div className="factor-progress-item">
+                                <div className="factor-lbl">
+                                  <span>Confiança Comunitária (Avais)</span>
+                                  <span className="percent font-mono">{avaliacoes.marcos === 'approved' && avaliacoes.aline === 'approved' ? '100%' : avaliacoes.marcos === 'approved' || avaliacoes.aline === 'approved' ? '50%' : '0%'}</span>
+                                </div>
+                                <div className="progress-track">
+                                  <div className="progress-bar" style={{ width: avaliacoes.marcos === 'approved' && avaliacoes.aline === 'approved' ? '100%' : avaliacoes.marcos === 'approved' || avaliacoes.aline === 'approved' ? '50%' : '0%', backgroundColor: 'var(--color-gold)' }}></div>
+                                </div>
+                              </div>
+
+                              <div className="factor-progress-item">
+                                <div className="factor-lbl">
+                                  <span>Consistência de Rota</span>
+                                  <span className="percent font-mono">88%</span>
+                                </div>
+                                <div className="progress-track">
+                                  <div className="progress-bar" style={{ width: '88%', backgroundColor: 'var(--color-terra)' }}></div>
+                                </div>
+                              </div>
+
+                              <div className="factor-progress-item">
+                                <div className="factor-lbl">
+                                  <span>Comprovação de Uso (Evidências)</span>
+                                  <span className="percent font-mono">{['evidence_review', 'validated', 'completed'].includes(cicloEstado) ? '100%' : '0%'}</span>
+                                </div>
+                                <div className="progress-track">
+                                  <div className="progress-bar" style={{ width: ['evidence_review', 'validated', 'completed'].includes(cicloEstado) ? '100%' : '0%', backgroundColor: 'var(--color-gold)' }}></div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="how-to-improve-card glass">
+                              <h4>Histórico de Conquistas</h4>
+                              <ul className="bullet-list-mobile">
+                                <li><i className="fa-solid fa-award text-success"></i> <strong>Corre Histórico</strong>: 4 anos de asfalto cadastrados.</li>
+                                <li><i className="fa-solid fa-award text-success"></i> <strong>Voto Comunitário</strong>: Indicado por 2 avalistas da rede.</li>
+                                {['validated', 'completed'].includes(cicloEstado) && (
+                                  <li><i className="fa-solid fa-award text-success"></i> <strong>Ficha Limpa JN</strong>: Oficina parceira validada sem divergências.</li>
+                                )}
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* TAB 3: CRÉDITO */}
                       {activeTab === 'credito' && (
                         <div className="screen active" id="screen-solicitar">
-                          
                           {/* DRAFT: Solicitação Form */}
                           {cicloEstado === 'draft' && (
                             <>
@@ -723,7 +974,7 @@ function App() {
                               
                               <form className="mobile-form" onSubmit={handleSolicitacaoSubmit}>
                                 <div className="form-banner-info">
-                                  <p><strong>Não é empréstimo livre.</strong> O recurso é exclusivo para despesas da sua ferramenta de trabalho.</p>
+                                  <p><strong>Não é empréstimo livre. É crédito produtivo validado.</strong> O recurso é exclusivo para despesas da sua ferramenta de trabalho.</p>
                                 </div>
 
                                 <div className="mobile-form-group">
@@ -818,7 +1069,7 @@ function App() {
                                 </div>
 
                                 <button type="submit" className="btn-app btn-app-primary">
-                                  Gerar plano de crédito
+                                  Gerar plano de fomento
                                 </button>
                               </form>
                             </>
@@ -832,11 +1083,11 @@ function App() {
                               </div>
                               <div className="plano-container">
                                 <div className="plano-notice-badge">
-                                  <span><i className="fa-solid fa-triangle-exclamation"></i> Plano sugerido. Sujeito à validação da rede Abias.</span>
+                                  <span><i className="fa-solid fa-triangle-exclamation"></i> Plano comunitário sugerido. Sujeito à validação.</span>
                                 </div>
 
                                 {/* Slip Card */}
-                                <div className="premium-credit-card compact-slip">
+                                <div className="premium-credit-card compact-slip" style={{ position: 'relative', overflow: 'hidden' }}>
                                   <div className="card-brand-row">
                                     <span className="card-brand">Abias</span>
                                     <span className="card-contactless"><i className="fa-solid fa-receipt"></i> COMPROVANTE OPERACIONAL</span>
@@ -892,7 +1143,7 @@ function App() {
                                     Confirmar solicitação
                                   </button>
                                   <button className="btn-app btn-app-secondary" onClick={() => setCicloEstado('draft')}>
-                                    Editar plano
+                                    Editar fomento
                                   </button>
                                 </div>
                               </div>
@@ -917,7 +1168,7 @@ function App() {
                                   <div className="peer-item-card glass" style={{ flexDirection: 'column', alignItems: 'stretch', gap: '8px' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                        <div className="peer-avatar"><i className="fa-solid fa-user"></i></div>
+                                        <div className="peer-avatar" style={{ background: 'rgba(217, 210, 197, 0.05)', color: 'var(--color-gold)', borderRadius: '50%' }}><i className="fa-solid fa-user"></i></div>
                                         <div className="peer-info" style={{ marginLeft: 0 }}>
                                           <h5>Marcos Santos</h5>
                                           <span className="peer-sub">Membro Indicador Leste</span>
@@ -930,7 +1181,8 @@ function App() {
                                     {avaliacoes.marcos === 'pending' ? (
                                       <button 
                                         className="btn-app btn-app-secondary" 
-                                        onClick={handleMarcosAval}>
+                                        onClick={handleMarcosAval}
+                                        style={{ fontSize: '0.75rem', padding: '10px' }}>
                                         <i className="fa-solid fa-signature"></i> Confirmar Aval de Marcos
                                       </button>
                                     ) : (
@@ -944,7 +1196,7 @@ function App() {
                                   <div className="peer-item-card glass" style={{ flexDirection: 'column', alignItems: 'stretch', gap: '8px' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                        <div className="peer-avatar"><i className="fa-solid fa-user"></i></div>
+                                        <div className="peer-avatar" style={{ background: 'rgba(217, 210, 197, 0.05)', color: 'var(--color-gold)', borderRadius: '50%' }}><i className="fa-solid fa-user"></i></div>
                                         <div className="peer-info" style={{ marginLeft: 0 }}>
                                           <h5>Aline Souza</h5>
                                           <span className="peer-sub">Parceira de Rota Leste</span>
@@ -957,7 +1209,8 @@ function App() {
                                     {avaliacoes.aline === 'pending' ? (
                                       <button 
                                         className="btn-app btn-app-secondary" 
-                                        onClick={handleAlineAval}>
+                                        onClick={handleAlineAval}
+                                        style={{ fontSize: '0.75rem', padding: '10px' }}>
                                         <i className="fa-solid fa-signature"></i> Confirmar Aval de Aline
                                       </button>
                                     ) : (
@@ -967,31 +1220,26 @@ function App() {
                                     )}
                                   </div>
                                 </div>
-
-                                <div className="info-notice-card plain-border">
-                                  <p><strong>Roteamento de Confiança:</strong> O aval comunitário valida seu corre diário e reduz a dependência de scores genéricos de CPF.</p>
-                                </div>
                               </div>
                             </>
                           )}
 
-                          {/* OTHER CYCLE STATES: Status display */}
+                          {/* OTHER STATES: Status view */}
                           {['partner_quote', 'under_review', 'approved', 'evidence_pending', 'evidence_review', 'validated', 'completed', 'needs_revision', 'rejected'].includes(cicloEstado) && (
                             <>
                               <div className="app-header-simple">
                                 <h3>Status do Fomento</h3>
                               </div>
                               <div className="plano-container">
-                                
                                 <div className="milestone-card glass">
-                                  <span className="lbl-milestone">MÁQUINA DE ESTADO</span>
-                                  <h4 style={{ margin: 0 }}>Ciclo: {getEstadoLabel(cicloEstado).label}</h4>
+                                  <span className="lbl-milestone">ETAPA DO CICLO DE CRÉDITO</span>
+                                  <h4 style={{ margin: 0 }}>{getEstadoLabel(cicloEstado).label}</h4>
                                   <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
                                     {getEstadoLabel(cicloEstado).step}
                                   </p>
                                 </div>
 
-                                <div className="premium-credit-card compact-slip">
+                                <div className="premium-credit-card compact-slip" style={{ position: 'relative', overflow: 'hidden' }}>
                                   <div className="card-brand-row">
                                     <span className="card-brand">Abias</span>
                                     <span className="card-contactless"><i className="fa-solid fa-receipt"></i> COMPROVANTE OPERACIONAL</span>
@@ -1010,12 +1258,12 @@ function App() {
                                       <span className="slip-value">{currentOficina}</span>
                                     </div>
                                     <div className="slip-row">
-                                      <span className="slip-label">PARCELAS ESTABELECIDAS</span>
+                                      <span className="slip-label">RETORNO ACORDADO</span>
                                       <span className="slip-value">4x de R$ {new Intl.NumberFormat('pt-BR').format(parcelasValor)}</span>
                                     </div>
                                   </div>
                                   <div className="slip-footer">
-                                    <div className="slip-badge">FOMENTO APROVADO</div>
+                                    <div className="slip-badge">FOMENTO ATIVO</div>
                                     <span className="slip-amount">R$ {currentAmount.toFixed(2)}</span>
                                   </div>
                                 </div>
@@ -1025,209 +1273,24 @@ function App() {
                                     Iniciar Novo Ciclo Comunitário
                                   </button>
                                 )}
-
-                                {cicloEstado === 'needs_revision' && (
-                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                                    <div className="info-notice-card" style={{ background: 'rgba(239, 68, 68, 0.05)', borderColor: 'rgba(239, 68, 68, 0.2)', margin: 0 }}>
-                                      <p style={{ color: 'var(--danger)', fontWeight: 'bold' }}>Motivo da Revisão:</p>
-                                      <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', marginTop: '2px' }}>"{gestaoJustificativa}"</p>
-                                    </div>
-                                    <button className="btn-app btn-app-primary" onClick={() => setCicloEstado('draft')}>
-                                      Editar Solicitação
-                                    </button>
-                                  </div>
-                                )}
-
-                                {cicloEstado === 'rejected' && (
-                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                                    <div className="info-notice-card" style={{ background: 'rgba(239, 68, 68, 0.05)', borderColor: 'rgba(239, 68, 68, 0.2)', margin: 0 }}>
-                                      <p style={{ color: 'var(--danger)', fontWeight: 'bold' }}>Motivo da Recusa:</p>
-                                      <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', marginTop: '2px' }}>"{gestaoJustificativa}"</p>
-                                    </div>
-                                    <button className="btn-app btn-app-primary" onClick={handleNovoCiclo}>
-                                      Solicitar Novo Fomento
-                                    </button>
-                                  </div>
-                                )}
                               </div>
                             </>
                           )}
                         </div>
                       )}
 
-                      {/* TAB 3: EVIDÊNCIAS */}
-                      {activeTab === 'evidencia' && (
-                        <div className="screen active" id="screen-upload">
+                      {/* TAB 4: REDE / ECONOMIA LOCAL */}
+                      {activeTab === 'rede' && (
+                        <div className="screen active" id="screen-rede">
                           <div className="app-header-simple">
-                            <h3>Comprovar Uso de Crédito</h3>
+                            <h3>Rede & Economia Local</h3>
                           </div>
 
-                          <div className="upload-container">
-                            <div className="form-banner-info border-terra">
-                              <p><strong>Quando a moto para, a renda para.</strong> Mantenha seu ciclo saudável provando que o recurso foi aplicado na finalidade acordada.</p>
-                            </div>
-
-                            {['approved', 'evidence_pending'].includes(cicloEstado) ? (
-                              <>
-                                <div className="milestone-card glass">
-                                  <span className="lbl-milestone">CICLO EM EXECUÇÃO</span>
-                                  <h4>Manutenção da Moto ({currentFinalidade})</h4>
-                                  <div className="milestone-status-row">
-                                    <span className="lbl">Estado da Evidência:</span>
-                                    <span className="val-status text-warning">Pendente de Envio</span>
-                                  </div>
-                                </div>
-
-                                <div className="upload-methods">
-                                  <div className="upload-box-action" onClick={handleSimularFoto} style={{ border: uploadFileType === 'foto' ? '1px solid var(--color-gold)' : '' }}>
-                                    <div className="box-icon"><i className="fa-solid fa-camera"></i></div>
-                                    <span>Tirar foto do pneu instalado</span>
-                                  </div>
-                                  <div className="upload-box-action" onClick={handleSimularRecibo} style={{ border: uploadFileType === 'recibo' ? '1px solid var(--color-gold)' : '' }}>
-                                    <div className="box-icon"><i className="fa-solid fa-file-invoice-dollar"></i></div>
-                                    <span>Anexar recibo da oficina</span>
-                                  </div>
-                                </div>
-
-                                {uploadFileSelected && (
-                                  <div className="simulated-file-badge" id="file-upload-display">
-                                    <div>
-                                      <i className="fa-solid fa-paperclip" style={{ marginRight: '6px' }}></i> 
-                                      <span>{uploadFileSelected}</span>
-                                    </div>
-                                    <button className="btn-remove-file" onClick={() => { setUploadFileSelected(''); setUploadFileType(''); }}>&times;</button>
-                                  </div>
-                                )}
-
-                                <div className="mobile-form-group" style={{ marginTop: '10px' }}>
-                                  <label className="form-label">O que foi feito? (Observação)</label>
-                                  <textarea 
-                                    className="form-textarea" 
-                                    value={uploadFileObs} 
-                                    onChange={(e) => setUploadFileObs(e.target.value)} 
-                                    placeholder="Ex: Trocado pneu traseiro careca e alinhamento concluído na Oficina JN."
-                                  />
-                                </div>
-
-                                <button className="btn-app btn-app-primary" onClick={handleEnviarEvidencia}>
-                                  Enviar evidência
-                                </button>
-                              </>
-                            ) : ['evidence_review', 'validated', 'completed'].includes(cicloEstado) ? (
-                              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                                <div className="milestone-card glass">
-                                  <span className="lbl-milestone">EVIDÊNCIA SUBMETIDA</span>
-                                  <h4>Status: {getEstadoLabel(cicloEstado).label}</h4>
-                                  <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-                                    Arquivo enviado: <strong>{evidencia.file}</strong>
-                                  </p>
-                                  {evidencia.obs && (
-                                    <p style={{ fontSize: '0.75rem', fontStyle: 'italic', marginTop: '6px', color: 'var(--text-muted)' }}>
-                                      Observações: "{evidencia.obs}"
-                                    </p>
-                                  )}
-                                </div>
-                                <div className="info-notice-card plain-border" style={{ margin: 0 }}>
-                                  <p><i className="fa-solid fa-circle-info"></i> O próximo passo é a confirmação do serviço pela Oficina JN.</p>
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="info-notice-card" style={{ margin: 0 }}>
-                                <p>Não há nenhum fomento ativo que precise de comprovação de serviço no momento.</p>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* TAB 4: REPUTAÇÃO */}
-                      {activeTab === 'reputacao' && (
-                        <div className="screen active" id="screen-reputacao">
-                          <div className="app-header-simple">
-                            <h3>Reputação de Rota</h3>
-                          </div>
-
-                          <div className="reputacao-container">
-                            <div className="reputacao-score-box glass">
-                              <span className="lbl-tag font-mono">SUA NOTA EXPLICÁVEL</span>
-                              <div className="reputacao-number-row">
-                                <span className="val font-mono">{reputacao}</span>
-                                <span className="max font-mono">/1000</span>
-                              </div>
-                              <h4 className="reputacao-level">
-                                {reputacao <= 720 ? 'Rota Confiável' : reputacao <= 745 ? 'Rota Consolidada' : 'Alta Confiança de Rota'}
-                              </h4>
-                              <p className="reputacao-desc">
-                                Sua reputação de rota cresce com o cumprimento de ciclos em dia, envio rápido de evidências e apoio mútuo a outros entregadores da rede Abias.
-                              </p>
-                            </div>
-
-                            <div className="reputacao-factors-list">
-                              <h4>Fatores explicativos</h4>
-                              
-                              <div className="factor-progress-item">
-                                <div className="factor-lbl">
-                                  <span>Ciclos produtivos concluídos</span>
-                                  <span className="percent font-mono">{reputacao >= 765 ? '100%' : '85%'}</span>
-                                </div>
-                                <div className="progress-track">
-                                  <div className="progress-bar" style={{ width: reputacao >= 765 ? '100%' : '85%', backgroundColor: 'var(--color-green)' }}></div>
-                                </div>
-                              </div>
-
-                              <div className="factor-progress-item">
-                                <div className="factor-lbl">
-                                  <span>Evidências validadas</span>
-                                  <span className="percent font-mono">{cicloEstado === 'completed' ? '100%' : '75%'}</span>
-                                </div>
-                                <div className="progress-track">
-                                  <div className="progress-bar" style={{ width: cicloEstado === 'completed' ? '100%' : '75%', backgroundColor: 'var(--color-green)' }}></div>
-                                </div>
-                              </div>
-
-                              <div className="factor-progress-item">
-                                <div className="factor-lbl">
-                                  <span>Aval de rede emitido</span>
-                                  <span className="percent font-mono">90%</span>
-                                </div>
-                                <div className="progress-track">
-                                  <div className="progress-bar" style={{ width: '90%', backgroundColor: 'var(--color-gold)' }}></div>
-                                </div>
-                              </div>
-
-                              <div className="factor-progress-item">
-                                <div className="factor-lbl">
-                                  <span>Uso de oficina parceira local</span>
-                                  <span className="percent font-mono">100%</span>
-                                </div>
-                                <div className="progress-track">
-                                  <div className="progress-bar" style={{ width: '100%', backgroundColor: 'var(--color-gold)' }}></div>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="how-to-improve-card glass">
-                              <h4>Fatores de Crescimento</h4>
-                              <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-                                Cada etapa do ciclo ativo que você conclui melhora seu histórico e nota. "Sua rota também é reputação."
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* TAB 5: FUNDO & ECONOMIA LOCAL */}
-                      {activeTab === 'fundo' && (
-                        <div className="screen active" id="screen-fundo">
-                          <div className="app-header-simple">
-                            <h3>Fundo Abias</h3>
-                          </div>
-
-                          <div className="fundo-mobile-container">
-                            <div className="fundo-headline-card glass">
+                          <div className="fundo-mobile-container" style={{ padding: '20px' }}>
+                            <div className="fundo-headline-card glass" style={{ position: 'relative', overflow: 'hidden' }}>
                               <span className="section-tag tag-yellow">FUNDO ABIAS — AMBIENTE PILOTO</span>
-                              <h2>Crédito individual. Proteção coletiva.</h2>
-                              <p>A margem dos ciclos operacionais não é juro bancário para lucro de terceiros. Ela retorna para a base como reserva coletiva da rota.</p>
+                              <h2>Crédito circular. Proteção territorial.</h2>
+                              <p>O crédito entra na rede e volta como proteção coletiva. Os retornos de sustentabilidade alimentam a reserva de rotas para assegurar novos fomentos locais.</p>
                             </div>
 
                             <div className="fundo-reserve-card glass">
@@ -1240,8 +1303,8 @@ function App() {
                             </div>
 
                             {/* Circular Economy loop visual */}
-                            <div className="rede-flow-card glass" style={{ marginTop: '0' }}>
-                              <h5>Circulação de Crédito Circular</h5>
+                            <div className="rede-flow-card glass" style={{ marginTop: '0', padding: '16px' }}>
+                              <h5 style={{ fontSize: '0.85rem', fontWeight: 800 }}>Circulação Circular de Recursos</h5>
                               
                               <div className="economy-flow-vertical" style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.75rem', marginTop: '10px' }}>
                                 <div style={{ 
@@ -1254,7 +1317,7 @@ function App() {
                                   border: (cicloEstado === 'submitted' || cicloEstado === 'community_validation') ? '1px solid var(--color-gold)' : '1px solid transparent'
                                 }}>
                                   <span style={{ fontWeight: 700, color: 'var(--color-gold)' }}>1. Crédito na Rede</span>
-                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Fomento exclusivo para a ferramenta.</span>
+                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Fomento produtivo para a moto.</span>
                                 </div>
 
                                 <div style={{ 
@@ -1267,7 +1330,7 @@ function App() {
                                   border: (cicloEstado === 'partner_quote' || cicloEstado === 'evidence_review' || cicloEstado === 'validated') ? '1px solid var(--color-green)' : '1px solid transparent'
                                 }}>
                                   <span style={{ fontWeight: 700, color: 'var(--success)' }}>2. Oficina Recebe</span>
-                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Recurso circula em mecânicas locais.</span>
+                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Recursos circulam nos comércios da rota.</span>
                                 </div>
 
                                 <div style={{ 
@@ -1280,7 +1343,7 @@ function App() {
                                   border: (cicloEstado === 'evidence_pending') ? '1px solid var(--color-terra)' : '1px solid transparent'
                                 }}>
                                   <span style={{ fontWeight: 700, color: 'var(--color-terra)' }}>3. Moto na Rota</span>
-                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>João mantém entregas sem dias parados.</span>
+                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Membro segue rodando e gerando renda.</span>
                                 </div>
 
                                 <div style={{ 
@@ -1293,13 +1356,106 @@ function App() {
                                   border: (cicloEstado === 'completed') ? '1px solid var(--color-gold)' : '1px solid transparent'
                                 }}>
                                   <span style={{ fontWeight: 700, color: 'var(--color-gold)' }}>4. Fundo Cresce</span>
-                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Retorno de taxa retroalimenta a rede piloto.</span>
+                                  <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Retorno de taxa blindando o fundo piloto.</span>
                                 </div>
                               </div>
+                            </div>
 
-                              <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '10px', fontStyle: 'italic' }}>
-                                "O crédito entra na rede e volta como proteção coletiva."
-                              </p>
+                            {/* Partners directory */}
+                            <div className="how-to-improve-card glass" style={{ marginTop: '20px' }}>
+                              <h4 style={{ color: 'var(--color-gold)', textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '0.05em', marginBottom: '10px', fontWeight: 800 }}>Oficinas e Comércios Credenciados</h4>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                <div style={{ background: 'rgba(255,255,255,0.01)', padding: '10px', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <div>
+                                    <h5 style={{ fontSize: '0.8rem', fontWeight: 700 }}>Oficina JN</h5>
+                                    <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Serviço Mecânico e Reparos — Zona Leste</span>
+                                  </div>
+                                  <span style={{ fontSize: '0.65rem', padding: '3px 8px', background: 'rgba(22, 61, 47, 0.2)', border: '1px solid var(--color-green)', color: 'var(--success)' }}>Ativa</span>
+                                </div>
+                                <div style={{ background: 'rgba(255,255,255,0.01)', padding: '10px', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <div>
+                                    <h5 style={{ fontSize: '0.8rem', fontWeight: 700 }}>Motopeças Silva</h5>
+                                    <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Venda de Peças e Acessórios — Zona Leste</span>
+                                  </div>
+                                  <span style={{ fontSize: '0.65rem', padding: '3px 8px', background: 'rgba(22, 61, 47, 0.2)', border: '1px solid var(--color-green)', color: 'var(--success)' }}>Ativa</span>
+                                </div>
+                                <div style={{ background: 'rgba(255,255,255,0.01)', padding: '10px', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <div>
+                                    <h5 style={{ fontSize: '0.8rem', fontWeight: 700 }}>Borracharia do Ponto</h5>
+                                    <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Reparo e Venda de Pneus — Zona Leste</span>
+                                  </div>
+                                  <span style={{ fontSize: '0.65rem', padding: '3px 8px', background: 'rgba(22, 61, 47, 0.2)', border: '1px solid var(--color-green)', color: 'var(--success)' }}>Ativa</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* TAB 5: PERFIL */}
+                      {activeTab === 'perfil' && (
+                        <div className="screen active" id="screen-perfil">
+                          <div className="app-header-simple">
+                            <h3>Perfil da Rota</h3>
+                          </div>
+                          
+                          <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                            <div className="reputacao-score-box glass" style={{ padding: '20px', display: 'flex', gap: '16px', alignItems: 'center', textAlign: 'left' }}>
+                              <div className="member-avatar" style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(201, 154, 61, 0.1)', border: '2px solid var(--color-gold)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem', color: 'var(--color-gold)' }}>
+                                <i className="fa-solid fa-user"></i>
+                              </div>
+                              <div>
+                                <h4 style={{ fontSize: '1.1rem', fontWeight: 900, color: '#ffffff', margin: 0 }}>{membro.nome}</h4>
+                                <span style={{ fontSize: '0.7rem', color: 'var(--color-gold)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Membro Indicador Leste</span>
+                                <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                                  {membro.ferramenta} • {membro.tempo} de asfalto • {membro.regiao}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="how-to-improve-card glass" style={{ padding: '16px' }}>
+                              <h4 style={{ fontSize: '0.8rem', color: 'var(--color-gold)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px', fontWeight: 800 }}>Conquistas da Rota</h4>
+                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', textAlign: 'center' }}>
+                                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '10px 4px', border: '1px solid var(--border-color)' }}>
+                                  <i className="fa-solid fa-users" style={{ color: 'var(--color-gold)', fontSize: '1rem', marginBottom: '4px' }}></i>
+                                  <h6 style={{ fontSize: '0.65rem', fontWeight: 800, color: '#ffffff' }}>Avalista</h6>
+                                  <span style={{ fontSize: '0.55rem', color: 'var(--text-muted)' }}>Validado</span>
+                                </div>
+                                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '10px 4px', border: '1px solid var(--border-color)' }}>
+                                  <i className="fa-solid fa-check-double" style={{ color: 'var(--success)', fontSize: '1rem', marginBottom: '4px' }}></i>
+                                  <h6 style={{ fontSize: '0.65rem', fontWeight: 800, color: '#ffffff' }}>Ficha Limpa</h6>
+                                  <span style={{ fontSize: '0.55rem', color: 'var(--text-muted)' }}>100% Evidência</span>
+                                </div>
+                                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '10px 4px', border: '1px solid var(--border-color)' }}>
+                                  <i className="fa-solid fa-vault" style={{ color: 'var(--color-terra)', fontSize: '1rem', marginBottom: '4px' }}></i>
+                                  <h6 style={{ fontSize: '0.65rem', fontWeight: 800, color: '#ffffff' }}>Builder</h6>
+                                  <span style={{ fontSize: '0.55rem', color: 'var(--text-muted)' }}>Reserva local</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="how-to-improve-card glass" style={{ padding: '16px' }}>
+                              <h4 style={{ fontSize: '0.8rem', color: 'var(--color-gold)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '10px', fontWeight: 800 }}>Depoimentos e Avais Comunitários</h4>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '12px', border: '1px solid var(--border-color)' }}>
+                                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '0.75rem' }}>
+                                    <strong>Marcos Santos</strong>
+                                    <span style={{ color: 'var(--success)', fontWeight: 800 }}>✓ Rota Validada</span>
+                                  </div>
+                                  <p style={{ fontSize: '0.72rem', fontStyle: 'italic', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
+                                    "João é parceiro de confiança, conheço a rota dele na Zona Leste."
+                                  </p>
+                                </div>
+                                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '12px', border: '1px solid var(--border-color)' }}>
+                                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '0.75rem' }}>
+                                    <strong>Aline Souza</strong>
+                                    <span style={{ color: 'var(--success)', fontWeight: 800 }}>✓ Rota Validada</span>
+                                  </div>
+                                  <p style={{ fontSize: '0.72rem', fontStyle: 'italic', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
+                                    "Grande profissional de entrega. Corre garantido no asfalto."
+                                  </p>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -1519,28 +1675,28 @@ function App() {
                   <span>Início</span>
                 </button>
                 <button 
-                  className={`tab-item ${activeTab === 'credito' ? 'active' : ''}`} 
-                  onClick={() => setActiveTab('credito')}>
-                  <i className="fa-solid fa-route"></i>
-                  <span>Crédito</span>
-                </button>
-                <button 
-                  className={`tab-item ${activeTab === 'evidencia' ? 'active' : ''}`} 
-                  onClick={() => setActiveTab('evidencia')}>
-                  <i className="fa-solid fa-upload"></i>
-                  <span>Evidências</span>
-                </button>
-                <button 
                   className={`tab-item ${activeTab === 'reputacao' ? 'active' : ''}`} 
                   onClick={() => setActiveTab('reputacao')}>
                   <i className="fa-solid fa-chart-simple"></i>
                   <span>Reputação</span>
                 </button>
                 <button 
-                  className={`tab-item ${activeTab === 'fundo' ? 'active' : ''}`} 
-                  onClick={() => setActiveTab('fundo')}>
-                  <i className="fa-solid fa-vault"></i>
-                  <span>Fundo</span>
+                  className={`tab-item ${activeTab === 'credito' ? 'active' : ''}`} 
+                  onClick={() => setActiveTab('credito')}>
+                  <i className="fa-solid fa-route"></i>
+                  <span>Crédito</span>
+                </button>
+                <button 
+                  className={`tab-item ${activeTab === 'rede' ? 'active' : ''}`} 
+                  onClick={() => setActiveTab('rede')}>
+                  <i className="fa-solid fa-users"></i>
+                  <span>Rede</span>
+                </button>
+                <button 
+                  className={`tab-item ${activeTab === 'perfil' ? 'active' : ''}`} 
+                  onClick={() => setActiveTab('perfil')}>
+                  <i className="fa-solid fa-user"></i>
+                  <span>Perfil</span>
                 </button>
               </div>
             )}
