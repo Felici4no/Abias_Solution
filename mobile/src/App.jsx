@@ -17,7 +17,7 @@ const ROLE_COLOR = { membro: 'var(--color-gold)', oficina: '#4ade80', gestao: 'v
 
 function App() {
   const ctrl = useAppController()
-  const { loginRole, handleLogin, handleLogout, loading, membro, profileMode, activeTab, activeIndex, clockTime, showAreaOperacional, setShowAreaOperacional } = ctrl
+  const { loginRole, handleLogin, handleLogout, loading, membro, profileMode, activeTab, activeIndex, showAreaOperacional, setShowAreaOperacional } = ctrl
 
   if (!loginRole) return (
     <div className="desktop-showcase-container">
@@ -28,15 +28,6 @@ function App() {
           <div className="phone-button volume-down"></div>
           <div className="phone-button power-button"></div>
           <div className="phone-screen-container">
-            <div className="mobile-status-bar">
-              <span className="status-time">{clockTime}</span>
-              <div className="status-icons">
-                <i className="fa-solid fa-signal"></i>
-                <span className="network-type">5G</span>
-                <i className="fa-solid fa-wifi"></i>
-                <i className="fa-solid fa-battery-three-quarters"></i>
-              </div>
-            </div>
             <div className="screen-scroll-area" style={{ paddingBottom: 0 }}>
               <LoginScreen onLogin={handleLogin} />
             </div>
@@ -65,17 +56,6 @@ function App() {
           <div className="phone-button power-button"></div>
 
           <div className="phone-screen-container">
-            {/* Status bar */}
-            <div className="mobile-status-bar">
-              <span className="status-time">{clockTime}</span>
-              <div className="status-icons">
-                <i className="fa-solid fa-signal"></i>
-                <span className="network-type">5G</span>
-                <i className="fa-solid fa-wifi"></i>
-                <i className="fa-solid fa-battery-three-quarters"></i>
-              </div>
-            </div>
-
             {/* Header ABIAS */}
             <div className="abias-top-header">
               <div className="abias-header-logo">

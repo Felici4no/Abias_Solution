@@ -26,7 +26,6 @@ export function useAppController() {
   })
   const [profileMode, setProfileMode] = useState(() => localStorage.getItem('abias_login_role') || 'membro')
   const [activeTab, setActiveTab] = useState('inicio')
-  const [clockTime, setClockTime] = useState('00:00')
   const [showAreaOperacional, setShowAreaOperacional] = useState(false)
   const [onboardingStep, setOnboardingStep] = useState('splash')
 
@@ -84,16 +83,6 @@ export function useAppController() {
     }
     carregarEstado()
   }, [membroId])
-
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date()
-      setClockTime(`${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`)
-    }
-    updateTime()
-    const timer = setInterval(updateTime, 30000)
-    return () => clearInterval(timer)
-  }, [])
 
   const currentAmount     = solicitacao ? solicitacao.valor      : inputAmount
   const currentFinalidade = solicitacao ? solicitacao.finalidade : inputFinalidade
@@ -417,7 +406,6 @@ export function useAppController() {
     avaliacoes, evidencia, oficinaConfirmacao, gestaoJustificativa,
     profileMode, setProfileMode,
     activeTab, setActiveTab,
-    clockTime,
     showAreaOperacional, setShowAreaOperacional,
     onboardingStep, setOnboardingStep,
     inputNome, setInputNome,
